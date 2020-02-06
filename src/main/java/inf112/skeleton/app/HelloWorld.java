@@ -2,15 +2,20 @@ package inf112.skeleton.app;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.math.Vector2;
 
 public class HelloWorld implements ApplicationListener {
     private static final float MAP_SIZE_X = 5;
@@ -22,6 +27,9 @@ public class HelloWorld implements ApplicationListener {
     private OrthographicCamera camera;
 
     private TiledMapTileLayer boardLayer, playerLayer, holeLayer, flagLayer;
+    private TiledMapTileLayer.Cell playerWonCell, playerDiedCell, playerCell;
+    private Vector2 playerPos;
+
 
     @Override
     public void create() {
@@ -41,6 +49,14 @@ public class HelloWorld implements ApplicationListener {
         camera.position.x = 2.5f;
         camera.update();
         renderer.setView(camera);
+
+        Texture playerTexture = new Texture("player.png");
+        TextureRegion[][] playerTextureSplit = TextureRegion.split(playerTexture, 300, 300);
+        playerCell = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(playerTextureSplit[0][0]));
+        playerDiedCell = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(playerTextureSplit[0][1]));
+        playerWonCell = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(playerTextureSplit[0][2]));
+        playerPos = new Vector2(0,0);
+
     }
 
     @Override
@@ -55,6 +71,7 @@ public class HelloWorld implements ApplicationListener {
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
         renderer.render();
+        playerLayer.setCell((int) playerPos.x,(int) playerPos.y,playerCell);
     }
 
     @Override
