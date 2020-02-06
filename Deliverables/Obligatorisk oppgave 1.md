@@ -1,4 +1,7 @@
-Deloppgave 1:
+# Oblig 1
+
+## Deloppgave 1
+
 Vi har bestemt oss for gruppenavn (WeirdSixters). 
 
 Vi har presentert vår egen kompetanse slik som dette:
@@ -18,12 +21,12 @@ I tillegg har vi fordelt roller ut ifra ønske og evne i plenum:
 
 Vi har opprettet et project board. Vi har også gjort klart kravene som dette prosjektet har.
 
-Deloppgave 2:
+## Deloppgave 2
+
 Vi har en overordnet plan om å lage et spill der spilleren programmerer en robot i et produksjonslokale ved hjelp av programmeringskort 
 og ellers følger alle reglene til Roborally.
 Målet med spillet er å besøke flagg i stigende rekkefølge uten å dø 3 ganger. 
 Det skal være mulig å spille sammen på flere maskiner over LAN.
-
 
 Under er en liste med høynivåkravene
 - ha et spillebrett
@@ -41,14 +44,13 @@ Under er en liste med høynivåkravene
 - elementer på brettet(flagg, vegg, skiftenøkkel, osv)
 - kunne registrere at en robot har vært innom et flagg
 
-
 Våre krav til første innlevering er:
 - Vise brettet.
 - Vise spiller.
 
-Deloppgave 3:
+## Deloppgave 3
 
-Vi har valgt å bruke Kanban med issues og pull-requests som prosjektmetodikk fordi  det er enkelt å bruke og fordi Joakimhar erfaring med det. 
+Vi har valgt å bruke Kanban med issues og pull-requests som prosjektmetodikk fordi  det er enkelt å bruke og fordi Joakim har erfaring med det. 
 I tillegg så vil legge vekt på parprogrammering for å oppnå større oversikt og samarbeid. 
 
 Vår prosjektplan: 
