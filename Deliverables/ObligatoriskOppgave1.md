@@ -66,5 +66,7 @@ På samme tid vil vi fokusere på å ha lav terskel for å spørre om hjelp.
 I tillegg vil vi bruke branches og pull-requests slik at vi kan se gjennom hverandres kode og ha problemfrie commits.
 Videre så vil vi fokusere testing på reglene.
 
+**Vi har ikke med klasse-diagram siden vi ikke har laget noen nye klasser.** Vi har bare fulgt tutorialen. Metodene som har blitt lagt til er alle private og hadde uansett ikke dukket opp på diagrammet.
+
 ## Oppsummering
 Gjennom vårt første prosjekt har vi sett på hva som funket bra, og hva som ikke har funket så bra. Det vi synes har vært bra, er at vi har hatt en god kommunikasjons gjennom hele prosjektet med en god og positiv tone til hverandre. Alle har fått delt sine synspunkt og fått bidratt med sine styrker. Ikke minst, så har vi lært en del om gitHub, men føler enda at vi har en del å lære. Noe som kunne ha gått bedre, er at vi kunne gjerne ha vært mer effektive på våre møter. Dette er noe vi vil ta med oss til neste prosjekt, og forbedre dette. I løpet av neste iterasjon vil vi fortsette med våre prosjekt-metodikker. Dette ettersom at vi syntes at dette var en god måte å jobbe på. Men selvfølgelig, så vil vi ta i bruk andre verktøy om vi ser dette som nødvendig eller om det vil forbedre noe. Ettersom at vi fremdeles er tidlig i oppgaven, så føler vi at vi har for lite forkunnskap til å kunne konkludere om vi har truffet bra på oppgaven eller ikke. Etterhver som at vi får bedre oversikt over prosjektet, så vil det bli lettere å få oversikt over hvor mange oppgaver vi vil få inn i hver iterasjon. 
