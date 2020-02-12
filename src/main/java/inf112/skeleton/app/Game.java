@@ -32,18 +32,6 @@ public class Game extends InputAdapter implements ApplicationListener {
         Gdx.input.setInputProcessor(this);
     }
 
-    private ArrayList<Vector2> findPositions(TiledMapTileLayer layer, Vector2 size) {
-        ArrayList<Vector2> result = new ArrayList<>();
-        float hi = size.y - 1;
-        for (int y = 0; y < size.y; y++){
-            for (int x = 0; x < size.x; x++){
-                if (layer.getCell(x, y) != null)
-                    result.add(new Vector2(x, hi - y));
-            }
-        }
-        return result;
-    }
-
     @Override
     public void dispose() {
         renderer.dispose();
@@ -92,5 +80,17 @@ public class Game extends InputAdapter implements ApplicationListener {
      */
     private void movePlayer(int x, int y){
         playerPos.add((float)x, (float)y);
+    }
+
+    private ArrayList<Vector2> findPositions(TiledMapTileLayer layer, Vector2 size) {
+        ArrayList<Vector2> result = new ArrayList<>();
+        float hi = size.y - 1;
+        for (int y = 0; y < size.y; y++){
+            for (int x = 0; x < size.x; x++){
+                if (layer.getCell(x, y) != null)
+                    result.add(new Vector2(x, hi - y));
+            }
+        }
+        return result;
     }
 }
