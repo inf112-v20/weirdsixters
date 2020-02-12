@@ -11,18 +11,16 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
-    private TiledMapTileLayer playerLayer;
     private Vector2 playerPos;
     private Texture playerTexture;
 
     @Override
     public void create() {
         TiledMap map = new TmxMapLoader().load("testLevel.tmx");
-        playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
+        TiledMapTileLayer playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
         renderer = Renderer.create(map);
         Vector2 mapSize = renderer.getMapSize();
 
@@ -46,7 +44,6 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public void resize(int width, int height) {
-        renderer.resize(new Vector2(width, height));
     }
 
     @Override

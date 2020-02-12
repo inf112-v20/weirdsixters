@@ -20,9 +20,6 @@ public class Renderer {
     private SpriteBatch batch;
     private BitmapFont font;
     private OrthogonalTiledMapRenderer tilemapRenderer;
-    private OrthographicCamera camera;
-    private Vector2 windowSize = new Vector2();
-    private float tileScale;
 
     // private as it should only be called from @create
     private Renderer(TiledMap map) {
@@ -31,7 +28,7 @@ public class Renderer {
         mapSize = getLayerSize(firstLayer);
         float pixelsPerTile = 1 / tileSize.x;
 
-        camera = new OrthographicCamera();
+        OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false, mapSize.x, mapSize.y);
         camera.position.x = mapSize.x / 2;
         camera.update();
@@ -44,13 +41,6 @@ public class Renderer {
 
         font = new BitmapFont();
         font.setColor(Color.RED);
-
-        //this.windowSize = windowSize;
-        calcTileScale();
-    }
-
-    private void calcTileScale() {
-        tileScale = Linear.min(windowSize) / Linear.max(mapSize);
     }
 
     // need this for a matching pair of @create and @dispose
@@ -99,10 +89,5 @@ public class Renderer {
 
     private Vector2 getLayerTileSize(TiledMapTileLayer layer) {
         return new Vector2(layer.getTileWidth(), layer.getTileHeight());
-    }
-
-    public void resize(Vector2 size) {
-        this.windowSize = size;
-        calcTileScale();
     }
 }
