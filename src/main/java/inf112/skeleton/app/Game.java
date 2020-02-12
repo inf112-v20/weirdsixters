@@ -19,7 +19,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
 
-public class HelloWorld extends InputAdapter implements ApplicationListener {
+public class Game extends InputAdapter implements ApplicationListener {
     private static final float MAP_SIZE_X = 5;
     private static final float MAP_SIZE_Y = 5;
     private SpriteBatch batch;
@@ -28,8 +28,8 @@ public class HelloWorld extends InputAdapter implements ApplicationListener {
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
 
-    private TiledMapTileLayer boardLayer, playerLayer, holeLayer, flagLayer;
-    private TiledMapTileLayer.Cell playerWonCell, playerDiedCell, playerCell;
+    private TiledMapTileLayer playerLayer;
+    private TiledMapTileLayer.Cell playerCell;
     private Vector2 playerPos;
 
     @Override
@@ -39,9 +39,6 @@ public class HelloWorld extends InputAdapter implements ApplicationListener {
         font.setColor(Color.RED);
         map = new TmxMapLoader().load("testLevel.tmx");
 
-        boardLayer = (TiledMapTileLayer) map.getLayers().get("Board");
-        holeLayer = (TiledMapTileLayer) map.getLayers().get("Hole");
-        flagLayer = (TiledMapTileLayer) map.getLayers().get("Flag");
         playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
 
         renderer = new OrthogonalTiledMapRenderer(map, 1/300f);
@@ -54,8 +51,6 @@ public class HelloWorld extends InputAdapter implements ApplicationListener {
         Texture playerTexture = new Texture("player.png");
         TextureRegion[][] playerTextureSplit = TextureRegion.split(playerTexture, 300, 300);
         playerCell = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(playerTextureSplit[0][0]));
-        playerDiedCell = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(playerTextureSplit[0][1]));
-        playerWonCell = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(playerTextureSplit[0][2]));
         playerPos = new Vector2(0,0);
 
         Gdx.input.setInputProcessor(this);
