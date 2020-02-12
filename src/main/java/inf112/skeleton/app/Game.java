@@ -4,92 +4,61 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
 
-public class Game extends InputAdapter implements ApplicationListener {
-    private static final float MAP_SIZE_X = 5;
-    private static final float MAP_SIZE_Y = 5;
-    private SpriteBatch batch;
-    private BitmapFont font;
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer renderer;
-    private OrthographicCamera camera;
+import java.util.ArrayList;
+import java.util.Vector;
 
+public class Game extends InputAdapter implements ApplicationListener {
+    private Renderer renderer;
     private TiledMapTileLayer playerLayer;
-    private TiledMapTileLayer.Cell playerCell;
     private Vector2 playerPos;
+    private Texture playerTexture;
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        font.setColor(Color.RED);
-        map = new TmxMapLoader().load("testLevel.tmx");
-
+        TiledMap map = new TmxMapLoader().load("testLevel.tmx");
         playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
+        renderer = Renderer.create(map);
+        Vector2 mapSize = renderer.getMapSize();
 
-        renderer = new OrthogonalTiledMapRenderer(map, 1/300f);
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, MAP_SIZE_X, MAP_SIZE_Y);
-        camera.position.x = 2.5f;
-        camera.update();
-        renderer.setView(camera);
-
-        Texture playerTexture = new Texture("player.png");
-        TextureRegion[][] playerTextureSplit = TextureRegion.split(playerTexture, 300, 300);
-        playerCell = new TiledMapTileLayer.Cell().setTile(new StaticTiledMapTile(playerTextureSplit[0][0]));
-        playerPos = new Vector2(0,0);
+        playerTexture = new Texture("player.png");
+        playerPos = findPositions(playerLayer, mapSize).get(0);
 
         Gdx.input.setInputProcessor(this);
     }
 
+    private ArrayList<Vector2> findPositions(TiledMapTileLayer layer, Vector2 size) {
+        ArrayList<Vector2> result = new ArrayList<>();
+        float hi = size.y - 1;
+        for (int y = 0; y < size.y; y++){
+            for (int x = 0; x < size.x; x++){
+                if (layer.getCell(x, y) != null)
+                    result.add(new Vector2(x, hi - y));
+            }
+        }
+        return result;
+    }
+
     @Override
     public void dispose() {
-        batch.dispose();
-        font.dispose();
+        renderer.dispose();
     }
 
     @Override
     public void render() {
-        clearFramebuffer();
-
-        // I'm not gonna read the player pos from the "presentation layer".
-        // This is a one way street.
-        // We're assigning all player positions each frame, for now.
-        clearCells(playerLayer);
-        playerLayer.setCell((int) playerPos.x,(int) playerPos.y, playerCell);
-
-        renderer.render();
-    }
-
-    private void clearFramebuffer(){
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
-    }
-
-    private void clearCells(TiledMapTileLayer layer){
-        for (int y = 0; y < MAP_SIZE_Y; y++){
-            for (int x = 0; x < MAP_SIZE_X; x++){
-                layer.setCell(x, y, null);
-            }
-        }
+        renderer.begin();
+        renderer.drawTileSprite(playerTexture, new Vector2(), playerPos);
+        renderer.end();
     }
 
     @Override
     public void resize(int width, int height) {
+        renderer.resize(new Vector2(width, height));
     }
 
     @Override
