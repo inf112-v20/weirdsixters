@@ -1,12 +1,14 @@
-#Deloppgave 1
-##Prosjekt og prosjektstruktur
+# Obligatorisk oppgave 2
+
+## Deloppgave 1: Prosjekt og prosjektstruktur
+
 Hittil føler vi at rollene i teamet har fungert fint. Forløpig føler vi ikke behov for å endre noen av rollene.
 
-Teamleader: Holder oversikt over at alle gjør som de skal og holder deltakerne "in line".
-Kundekontakt: Vårt ansikt mot kundene. Det har så langt ikke vært så mye å gjøre for kundekontakten.
-Sekretær: Skriver alt av innleveringer til møtereferat.
-Sjefsprogrammerer: Mest erfaren koder, fokuserer på selve kodingen og lese pull-requests.
-Taskmaster: Har fokus på issues og oppgaver.
+- Teamleader: Holder oversikt over at alle gjør som de skal og holder deltakerne "in line".
+- Kundekontakt: Vårt ansikt mot kundene. Det har så langt ikke vært så mye å gjøre for kundekontakten.
+- Sekretær: Skriver alt av innleveringer til møtereferat.
+- Sjefsprogrammerer: Mest erfaren koder, fokuserer på selve kodingen og lese pull-requests.
+- Taskmaster: Har fokus på issues og oppgaver.
 
 I tillegg til dette så jobber alle med kode og andre innspill.
 
@@ -22,15 +24,12 @@ Som nevnt over så vil vi bli mer effektiv på møter og vi vil forsøke å jobb
 Våre forbedringspunkter er;
 Effektivitet, oppgavefordeling og kommunikasjon.
 
-#Deloppgave 2
-##Krav
+## Deloppgave 2: Krav
+
 Vi tenker å prioritere oppgavene slik at vi får et spillbart spill.
 
 MVP forblir ca slik som vi skrev i forrige innlevering under høynivåkrav. 
 For å nå MVP vil vi nå følgende mål:
- - 
 
-
-
-
-
+- mål 1
+- mål 2
