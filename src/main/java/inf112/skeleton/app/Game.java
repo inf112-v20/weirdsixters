@@ -62,14 +62,14 @@ public class Game extends InputAdapter implements ApplicationListener {
      */
     @Override
     public boolean keyDown(int key) {
-        int x = 0, y = 0;
+        Vector2 deltaPos = new Vector2(0,0);
         switch (key){
-            case Input.Keys.RIGHT: x++; break;
-            case Input.Keys.LEFT: x--; break;
-            case Input.Keys.UP: y++; break;
-            case Input.Keys.DOWN: y--; break;
+            case Input.Keys.RIGHT: deltaPos.x++; break;
+            case Input.Keys.LEFT: deltaPos.x--; break;
+            case Input.Keys.UP: deltaPos.y++; break;
+            case Input.Keys.DOWN: deltaPos.y--; break;
         }
-        movePlayer(x, y);
+        movePlayer(deltaPos);
         return true;
     }
 
@@ -80,11 +80,11 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void checkCardKind(Card card) {
         switch(card.getAction()) {
             case FORWARD:
-                movePlayer(card.getSteps(), 0);
+                //movePlayer(card.getSteps(), 0);
                 // evt findDeltaPosition() som bruker dir for å finne endring i pos og kaller movePlayer()
                 break;
             case REVERSE:
-                movePlayer(-card.getSteps(), 0);
+                //movePlayer(-card.getSteps(), 0);
                 // evt find DeltaPosition
                 break;
             case TURNRIGHT:
@@ -105,8 +105,8 @@ public class Game extends InputAdapter implements ApplicationListener {
      * I'm not checking if the player goes outside of the board
      * because it's a bad idea to write code before we know it's needed.
      */
-    private void movePlayer(int x, int y){
-        playerPos.add((float)x, (float)y);
+    private void movePlayer(Vector2 deltaPos){
+        playerPos.add(deltaPos);
     }
 
     private ArrayList<Vector2> findPositions(TiledMapTileLayer layer, Vector2 size) {
