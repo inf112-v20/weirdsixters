@@ -69,9 +69,8 @@ public class Renderer {
         int h = (int)tileSize.y;
         int x = (int)texIndex.x * w;
         int y = (int)texIndex.y * h;
-        float hi = mapSize.y - 1;
         TextureRegion subTex = new TextureRegion(tex, x, y, w, h);
-        batch.draw(subTex, pos.x, pos.y - hi, 1, 1);
+        batch.draw(subTex, pos.x, pos.y, 1, 1);
     }
 
     public Vector2 getMapSize() {

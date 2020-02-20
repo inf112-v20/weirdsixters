@@ -25,7 +25,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         Vector2 mapSize = renderer.getMapSize();
 
         playerTexture = new Texture("player.png");
-        playerPos = findPositions(playerLayer, mapSize).get(0);
+        playerPos = new Vector2(0,0);
 
         Gdx.input.setInputProcessor(this);
     }
