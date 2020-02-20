@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
     private Vector2 playerPos;
+    private Transform playerTransform; //må etter hvert flyttes inn i en robotklasse sammen med playerpos
     private Texture playerTexture;
 
     @Override
@@ -26,6 +27,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         playerTexture = new Texture("player.png");
         playerPos = findPositions(playerLayer, mapSize).get(0);
+        playerTransform = new Transform(new Vector2(0,1));
 
         Gdx.input.setInputProcessor(this);
     }

@@ -4,13 +4,13 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Transform {
 
-    private Vector2 rotation;
+    private Vector2 direction;
 
-    public Transform(Vector2 rotation) {
-        this.rotation = rotation;
+    public Transform(Vector2 direction) {
+        this.direction = direction;
     }
 
-    public Vector2 getRotation() {
-        return rotation;
+    public Vector2 getDirection() {
+        return direction;
     }
 }
