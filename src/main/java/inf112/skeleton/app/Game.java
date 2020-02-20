@@ -56,10 +56,6 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void resume() {
     }
 
-    /*
-     * @keyUp makes it feel laggy, we're using @keyDown for immediate response.
-     * This won't be a problem because it's not triggered on pressed keys.
-     */
     @Override
     public boolean keyDown(int key) {
         Vector2 deltaPos = new Vector2(0,0);
@@ -68,6 +64,8 @@ public class Game extends InputAdapter implements ApplicationListener {
             case Input.Keys.LEFT: deltaPos.x--; break;
             case Input.Keys.UP: deltaPos.y++; break;
             case Input.Keys.DOWN: deltaPos.y--; break;
+            case Input.Keys.W: checkCardKind(new Card(CardKind.FORWARD, 2, 5)); break;
+            case Input.Keys.S: checkCardKind(new Card(CardKind.REVERSE, 2, 5)); break;
         }
         movePlayer(deltaPos);
         return true;
@@ -80,12 +78,10 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void checkCardKind(Card card) {
         switch(card.getAction()) {
             case FORWARD:
-                //movePlayer(card.getSteps(), 0);
-                // evt findDeltaPosition() som bruker dir for å finne endring i pos og kaller movePlayer()
+                movePlayer(Linear.multiply(playerTransform.getDirection(), card.getSteps()));
                 break;
             case REVERSE:
-                //movePlayer(-card.getSteps(), 0);
-                // evt find DeltaPosition
+                movePlayer(Linear.multiply(playerTransform.getDirection(), -card.getSteps()));
                 break;
             case TURNRIGHT:
                 // need to implement rotatePlayer() (render and logic)
@@ -101,10 +97,6 @@ public class Game extends InputAdapter implements ApplicationListener {
         }
     }
 
-    /*
-     * I'm not checking if the player goes outside of the board
-     * because it's a bad idea to write code before we know it's needed.
-     */
     private void movePlayer(Vector2 deltaPos){
         playerPos.add(deltaPos);
     }
