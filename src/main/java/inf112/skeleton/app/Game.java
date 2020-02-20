@@ -71,6 +71,30 @@ public class Game extends InputAdapter implements ApplicationListener {
         return true;
     }
 
+    private void checkCardKind(Card card) {
+        switch(card.getAction()) {
+            case FORWARD:
+                movePlayer(card.getSteps(), 0);
+                // evt findDeltaPosition() som bruker dir for å finne endring i pos og kaller movePlayer()
+                break;
+            case REVERSE:
+                movePlayer(-card.getSteps(), 0);
+                // evt find DeltaPosition
+                break;
+            case TURNRIGHT:
+                // need to implement rotatePlayer() (render and logic)
+                break;
+            case TURNLEFT:
+                // need to implement rotatePlayer()
+                break;
+            case FLIP:
+                // 180 degree turn. need to implement rotatePlayer()
+                break;
+            default:
+                break;
+        }
+    }
+
     /*
      * I'm not checking if the player goes outside of the board
      * because it's a bad idea to write code before we know it's needed.
