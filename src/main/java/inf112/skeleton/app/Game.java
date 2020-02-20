@@ -71,6 +71,10 @@ public class Game extends InputAdapter implements ApplicationListener {
         return true;
     }
 
+    /**
+     * checks the action of given card
+     * @param card card to check
+     */
     private void checkCardKind(Card card) {
         switch(card.getAction()) {
             case FORWARD:
