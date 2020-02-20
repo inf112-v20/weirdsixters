@@ -19,7 +19,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public void create() {
-        TiledMap map = new TmxMapLoader().load("testLevel.tmx");
+        TiledMap map = new TmxMapLoader().load("newBoard.tmx");
         TiledMapTileLayer playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
         renderer = Renderer.create(map);
         Vector2 mapSize = renderer.getMapSize();
