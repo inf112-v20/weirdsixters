@@ -64,8 +64,14 @@ public class Game extends InputAdapter implements ApplicationListener {
             case Input.Keys.LEFT: deltaPos.x--; break;
             case Input.Keys.UP: deltaPos.y++; break;
             case Input.Keys.DOWN: deltaPos.y--; break;
-            case Input.Keys.W: checkCardKind(new Card(CardKind.FORWARD, 2, 5)); break;
-            case Input.Keys.S: checkCardKind(new Card(CardKind.REVERSE, 2, 5)); break;
+
+            // movement via cards
+            case Input.Keys.W: checkCardKind(new Card(CardKind.FORWARD, 2, 0)); break;
+            case Input.Keys.S: checkCardKind(new Card(CardKind.REVERSE, 2, 0)); break;
+            case Input.Keys.D: checkCardKind(new Card(CardKind.TURNRIGHT, 1, 0)); break;
+            case Input.Keys.A: checkCardKind(new Card(CardKind.TURNLEFT, 1, 0)); break;
+            case Input.Keys.F: checkCardKind(new Card(CardKind.FLIP, 2, 0)); break;
+
         }
         movePlayer(deltaPos);
         return true;
@@ -84,13 +90,13 @@ public class Game extends InputAdapter implements ApplicationListener {
                 movePlayer(Linear.multiply(playerTransform.getDirection(), -card.getSteps()));
                 break;
             case TURNRIGHT:
-                // need to implement rotatePlayer() (render and logic)
+                playerTransform.getDirection().rotate90(-1);
                 break;
             case TURNLEFT:
-                // need to implement rotatePlayer()
+                playerTransform.getDirection().rotate90(1);
                 break;
             case FLIP:
-                // 180 degree turn. need to implement rotatePlayer()
+                playerTransform.getDirection().rotate(180f);
                 break;
             default:
                 break;
