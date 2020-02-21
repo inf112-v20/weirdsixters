@@ -10,6 +10,10 @@ public class Linear {
         return new Vector2(a.x/b.x, a.y/b.y);
     }
 
+    public static Vector2 sub(Vector2 a, Vector2 b){
+        return new Vector2(a.x - b.x, a.y - b.y);
+    }
+
     public static float min(Vector2 v) {
         return Math.min(v.x, v.y);
     }
@@ -35,5 +39,9 @@ public class Linear {
      */
     public static boolean isUnit(Vector2 v) {
         return Math.abs(v.x) == 1 ^ Math.abs(v.y) == 1;
+    }
+
+    public static Vector2 floor(Vector2 v) {
+        return new Vector2((float)Math.floor(v.x), (float)Math.floor(v.y));
     }
 }
