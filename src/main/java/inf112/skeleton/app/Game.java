@@ -16,7 +16,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public void create() {
-        TiledMap map = new TmxMapLoader().load("testLevel.tmx");
+        TiledMap map = new TmxMapLoader().load("newBoard.tmx");
         renderer = Renderer.create(map);
 
         playerTexture = new Texture("player.png");
