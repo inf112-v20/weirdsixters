@@ -19,7 +19,9 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void create() {
         TiledMap map = new TmxMapLoader().load("newBoard.tmx");
         TiledMapTileLayer objLayer = (TiledMapTileLayer)map.getLayers().get("Tiles");
-        Tile[][] tileGrid = TileUtils.importTiledMapTileLayer(objLayer);
+        Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
+        //TileImporter.debugPrint(tileGrid);
+
         renderer = Renderer.create(map);
 
         playerTexture = new Texture("player.png");
@@ -101,5 +103,4 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void movePlayer(Vector2 deltaPos){
         playerTransform.position.add(deltaPos);
     }
-
 }
