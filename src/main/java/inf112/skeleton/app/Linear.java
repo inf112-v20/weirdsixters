@@ -25,4 +25,15 @@ public class Linear {
      * @return scaled copy of given vector without actually scaling the given vector
      */
     public static Vector2 scl(Vector2 v, int i) { return new Vector2(v.x * i, v.y * i); }
+
+    public static Vector2 neg(Vector2 v) {
+        return scl(v, -1);
+    }
+
+    /**
+     * @return true if @v is axis aligned with a length of exactly one
+     */
+    public static boolean isUnit(Vector2 v) {
+        return Math.abs(v.x) == 1 ^ Math.abs(v.y) == 1;
+    }
 }
