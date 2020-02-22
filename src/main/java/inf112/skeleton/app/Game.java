@@ -79,7 +79,7 @@ public class Game extends InputAdapter implements ApplicationListener {
      * @param card card to check
      */
     private void executeCard(Card card) {
-        switch(card.getCardKind()) {
+        switch(card.getKind()) {
             case FORWARD:
                 movePlayer(Linear.scl(playerTransform.direction, card.getSteps()));
                 break;
