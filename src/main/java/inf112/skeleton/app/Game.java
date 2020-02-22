@@ -66,12 +66,11 @@ public class Game extends InputAdapter implements ApplicationListener {
             case Input.Keys.DOWN: deltaPos.y--; break;
 
             // movement via cards
-            case Input.Keys.W: checkCardKind(new Card(CardKind.FORWARD, 2, 0)); break;
-            case Input.Keys.S: checkCardKind(new Card(CardKind.REVERSE, 2, 0)); break;
-            case Input.Keys.D: checkCardKind(new Card(CardKind.TURNRIGHT, 1, 0)); break;
-            case Input.Keys.A: checkCardKind(new Card(CardKind.TURNLEFT, 1, 0)); break;
-            case Input.Keys.F: checkCardKind(new Card(CardKind.FLIP, 2, 0)); break;
-
+            case Input.Keys.W: executeCard(new Card(CardKind.FORWARD, 2, 0)); break;
+            case Input.Keys.S: executeCard(new Card(CardKind.REVERSE, 1, 0)); break;
+            case Input.Keys.D: executeCard(new Card(CardKind.TURNRIGHT, 1, 0)); break;
+            case Input.Keys.A: executeCard(new Card(CardKind.TURNLEFT, 1, 0)); break;
+            case Input.Keys.F: executeCard(new Card(CardKind.FLIP, 2, 0)); break;
         }
         movePlayer(deltaPos);
         return true;
@@ -81,7 +80,7 @@ public class Game extends InputAdapter implements ApplicationListener {
      * checks the action of given card
      * @param card card to check
      */
-    private void checkCardKind(Card card) {
+    private void executeCard(Card card) {
         switch(card.getAction()) {
             case FORWARD:
                 movePlayer(Linear.multiply(playerTransform.getDirection(), card.getSteps()));
