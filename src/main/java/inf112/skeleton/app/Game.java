@@ -14,8 +14,7 @@ import java.util.ArrayList;
 
 public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
-    private Vector2 playerPos;
-    private Transform playerTransform; //må etter hvert flyttes inn i en robotklasse sammen med playerpos
+    private Transform playerTransform; //må etter hvert flyttes inn i en robotklasse
     private Texture playerTexture;
 
     @Override
@@ -26,8 +25,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         Vector2 mapSize = renderer.getMapSize();
 
         playerTexture = new Texture("player.png");
-        playerPos = findPositions(playerLayer, mapSize).get(0);
-        playerTransform = new Transform(new Vector2(0,1));
+        playerTransform = new Transform(findPositions(playerLayer, mapSize).get(0), new Vector2(0,1));
 
         Gdx.input.setInputProcessor(this);
     }
@@ -40,7 +38,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     @Override
     public void render() {
         renderer.begin();
-        renderer.drawTileSprite(playerTexture, new Vector2(), playerPos);
+        renderer.drawTileSprite(playerTexture, new Vector2(), playerTransform.position);
         renderer.end();
     }
 
@@ -83,19 +81,19 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void executeCard(Card card) {
         switch(card.getCardKind()) {
             case FORWARD:
-                movePlayer(Linear.multiply(playerTransform.getDirection(), card.getSteps()));
+                movePlayer(Linear.scl(playerTransform.direction, card.getSteps()));
                 break;
             case REVERSE:
-                movePlayer(Linear.multiply(playerTransform.getDirection(), -card.getSteps()));
+                movePlayer(Linear.scl(playerTransform.direction, -card.getSteps()));
                 break;
             case TURNRIGHT:
-                playerTransform.getDirection().rotate90(-1);
+                playerTransform.direction.rotate90(-1);
                 break;
             case TURNLEFT:
-                playerTransform.getDirection().rotate90(1);
+                playerTransform.direction.rotate90(1);
                 break;
             case FLIP:
-                playerTransform.getDirection().rotate(180f);
+                playerTransform.direction.rotate(180f);
                 break;
             default:
                 break;
@@ -103,7 +101,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     private void movePlayer(Vector2 deltaPos){
-        playerPos.add(deltaPos);
+        playerTransform.position.add(deltaPos);
     }
 
     private ArrayList<Vector2> findPositions(TiledMapTileLayer layer, Vector2 size) {

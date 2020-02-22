@@ -22,7 +22,7 @@ public class Linear {
      *
      * @param v vector to multiply
      * @param i integer to multiply with
-     * @return scaled copy of given vector
+     * @return scaled copy of given vector without actually scaling the given vector
      */
-    public static Vector2 multiply(Vector2 v, int i) { return new Vector2(v.x * i, v.y * i); }
+    public static Vector2 scl(Vector2 v, int i) { return new Vector2(v.x * i, v.y * i); }
 }
