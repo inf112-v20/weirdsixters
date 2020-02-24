@@ -12,31 +12,28 @@ public class Tile {
     public final Vector2 direction; // belts, walls
     public final float rotation; // turning belts, gears
 
+    /**
+     * Constructs a tile with no attributes: empty, hole
+     */
     public Tile(TileKind kind) {
         this(kind, null, 0, 0);
     }
 
-    public Tile(TileKind kind, boolean isDouble) {
-        this(kind, null, 0, isDouble ? 1 : 0);
+    /**
+     * Constructs a tile with a level attribute: flag, wrench
+     */
+    public Tile(TileKind kind, int level) {
+        this(kind, null, 0, level);
     }
 
-    public Tile(TileKind kind, Vector2 direction) {
-        this(kind, direction, 0, 0);
-    }
-
-    public Tile(TileKind kind, float rotation) {
-        this(kind, null, rotation, 0);
-    }
-
+    /**
+     * Constructs a tile with a direction and a binary attribute: belt, laserWall, wall
+     */
     public Tile(TileKind kind, Vector2 direction, boolean isDouble) {
         this(kind, direction, 0, isDouble ? 1 : 0);
     }
 
-    public Tile(TileKind kind, Vector2 direction, float rotation) {
-        this(kind, direction, rotation, 0);
-    }
-
-    public Tile(TileKind kind, Vector2 direction, float degrees, int level) {
+    public Tile(TileKind kind, Vector2 direction, int degrees, int level) {
         this.kind = kind;
         this.direction = direction;
         this.level = level;
