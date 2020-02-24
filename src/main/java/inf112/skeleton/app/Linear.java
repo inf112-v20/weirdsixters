@@ -43,13 +43,6 @@ public class Linear {
     }
 
     /**
-     * @return true if vector @v is axis aligned with a length of exactly one
-     */
-    public static boolean isUnit(Vector2 v) {
-        return (Math.abs(v.x) == 1) ^ (Math.abs(v.y) == 1);
-    }
-
-    /**
      * @return floored copy of vector @v
      */
     public static Vector2 floor(Vector2 v) {

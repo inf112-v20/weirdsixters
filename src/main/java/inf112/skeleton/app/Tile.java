@@ -9,7 +9,7 @@ enum TileKind {
 public class Tile {
     public final TileKind kind;
     public final int level; // belt speed, laser count, wall count, flag number
-    public final Vector2 direction; // belts, walls
+    public final Direction direction, secondDirection; // belts, walls
     public final float rotation; // turning belts, gears
 
     /**
@@ -29,57 +29,28 @@ public class Tile {
     /**
      * Constructs a tile with a direction and a binary attribute: belt, laserWall, wall
      */
-    public Tile(TileKind kind, Vector2 direction, boolean isDouble) {
-        this(kind, direction, 0, isDouble ? 1 : 0);
+    public Tile(TileKind kind, Direction dir, boolean isDouble) {
+        this(kind, dir, 0, isDouble ? 1 : 0);
     }
 
-    public Tile(TileKind kind, Vector2 direction, int degrees, int level) {
+    public Tile(TileKind kind, Direction dir, int degrees, int level) {
+        if (dir == null)
+            dir = Direction.RIGHT;
+
         this.kind = kind;
-        this.direction = direction;
         this.level = level;
         this.rotation = (float)Math.toRadians(degrees);
+        this.direction = dir;
+        this.secondDirection = Direction.fromVector2(dir.toVector2().rotate(90));
     }
 
-    /**
-     * @return true if @tile at @tilePos is blocking @queryPos from moving in @queryDir
-     */
-    public static boolean isBlocking(Tile tile, Vector2 tilePos,
-                                     Vector2 queryPos, Vector2 queryDir) {
-        assert Linear.isUnit(queryDir);
-        if (!tile.canBlock())
+    public boolean blocksDir(Vector2 dir, boolean incoming) {
+        if (!canBlock())
             return false;
-        Vector2[] blockDirs = tile.blockDirections();
-        for (Vector2 blockDir : blockDirs) {
-            if (blockDir == null)
-                continue;
-            if (sameTile(tilePos, queryPos)) {
-                if (blockDir == queryDir)
-                    return true;
-            } else if(Linear.neg(blockDir) == queryDir) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // returns true if positions a and b are on the same tile
-    private static boolean sameTile(Vector2 a, Vector2 b) {
-        return Linear.floor(a) == Linear.floor(b);
-    }
-
-    /**
-     * @return array of two directions, relative to tile, which may be null
-     */
-    private Vector2[] blockDirections() {
-        Vector2[] result = new Vector2[2];
-        if (canBlock()) {
-            result[0] = direction;
-
-            // second wall direction is counter-clockwise from direction
-            if (level > 0 && kind != TileKind.laserWall)
-                result[1] = direction.rotate(90);
-        }
-        return result;
+        if (incoming)
+            dir = Linear.neg(dir);
+        Direction enumDir = Direction.fromVector2(dir);
+        return direction == enumDir || (level > 0 && secondDirection == enumDir);
     }
 
     private boolean canBlock() {
