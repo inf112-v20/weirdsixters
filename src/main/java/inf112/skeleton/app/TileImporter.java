@@ -35,6 +35,13 @@ public class TileImporter {
     }
 
     /**
+     * This is a lookup table for all tiles in the spritesheet.
+     * We need this to map tile-attributes to our Tile representation.
+     * This should be the optimal solution to this mapping problem:
+     * - constant lookup time -> O(n) map import
+     * - reuse of tile objects within each map, and between maps
+     * - just one line of code per tile variation, no map-layer dependencies
+     *
      * "Double" walls/lasers/belts must be marked as such (isDouble=true).
      *
      * Direction of double walls => the "clock-wise" direction
