@@ -6,11 +6,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.ArrayList;
 
 public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
@@ -19,13 +16,11 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public void create() {
-        TiledMap map = new TmxMapLoader().load("testLevel.tmx");
-        TiledMapTileLayer playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
+        TiledMap map = new TmxMapLoader().load("newBoard.tmx");
         renderer = Renderer.create(map);
-        Vector2 mapSize = renderer.getMapSize();
 
         playerTexture = new Texture("player.png");
-        playerTransform = new Transform(findPositions(playerLayer, mapSize).get(0), new Vector2(0,1));
+        playerTransform = new Transform(new Vector2(0,0), new Vector2(0,1));
 
         Gdx.input.setInputProcessor(this);
     }
@@ -102,17 +97,5 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void movePlayer(Vector2 deltaPos){
         playerTransform.position.add(deltaPos);
-    }
-
-    private ArrayList<Vector2> findPositions(TiledMapTileLayer layer, Vector2 size) {
-        ArrayList<Vector2> result = new ArrayList<>();
-        float hi = size.y - 1;
-        for (int y = 0; y < size.y; y++){
-            for (int x = 0; x < size.x; x++){
-                if (layer.getCell(x, y) != null)
-                    result.add(new Vector2(x, hi - y));
-            }
-        }
-        return result;
     }
 }
