@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
-    private Vector2 playerPos;
+    private Transform playerTransform; //må etter hvert flyttes inn i en robotklasse
     private Texture playerTexture;
 
     @Override
@@ -20,7 +20,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer = Renderer.create(map);
 
         playerTexture = new Texture("player.png");
-        playerPos = new Vector2(0,0);
+        playerTransform = new Transform(new Vector2(0,0), new Vector2(0,1));
 
         Gdx.input.setInputProcessor(this);
     }
@@ -33,7 +33,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     @Override
     public void render() {
         renderer.begin();
-        renderer.drawTileSprite(playerTexture, new Vector2(), playerPos);
+        renderer.drawTileSprite(playerTexture, new Vector2(), playerTransform.position);
         renderer.end();
     }
 
@@ -49,28 +49,53 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void resume() {
     }
 
-    /*
-     * @keyUp makes it feel laggy, we're using @keyDown for immediate response.
-     * This won't be a problem because it's not triggered on pressed keys.
-     */
     @Override
     public boolean keyDown(int key) {
-        int x = 0, y = 0;
+        Vector2 deltaPos = new Vector2(0,0);
         switch (key){
-            case Input.Keys.RIGHT: x++; break;
-            case Input.Keys.LEFT: x--; break;
-            case Input.Keys.UP: y++; break;
-            case Input.Keys.DOWN: y--; break;
+            case Input.Keys.RIGHT: deltaPos.x++; break;
+            case Input.Keys.LEFT: deltaPos.x--; break;
+            case Input.Keys.UP: deltaPos.y++; break;
+            case Input.Keys.DOWN: deltaPos.y--; break;
+
+            // movement via cards
+            case Input.Keys.W: executeCard(new Card(CardKind.FORWARD, 2, 0)); break;
+            case Input.Keys.S: executeCard(new Card(CardKind.REVERSE, 1, 0)); break;
+            case Input.Keys.D: executeCard(new Card(CardKind.TURNRIGHT, 1, 0)); break;
+            case Input.Keys.A: executeCard(new Card(CardKind.TURNLEFT, 1, 0)); break;
+            case Input.Keys.F: executeCard(new Card(CardKind.FLIP, 2, 0)); break;
         }
-        movePlayer(x, y);
+        movePlayer(deltaPos);
         return true;
     }
 
-    /*
-     * I'm not checking if the player goes outside of the board
-     * because it's a bad idea to write code before we know it's needed.
+    /**
+     * checks the action of given card
+     * @param card card to check
      */
-    private void movePlayer(int x, int y){
-        playerPos.add((float)x, (float)y);
+    private void executeCard(Card card) {
+        switch(card.getKind()) {
+            case FORWARD:
+                movePlayer(Linear.scl(playerTransform.direction, card.getSteps()));
+                break;
+            case REVERSE:
+                movePlayer(Linear.scl(playerTransform.direction, -card.getSteps()));
+                break;
+            case TURNRIGHT:
+                playerTransform.direction.rotate90(-1);
+                break;
+            case TURNLEFT:
+                playerTransform.direction.rotate90(1);
+                break;
+            case FLIP:
+                playerTransform.direction.rotate(180f);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void movePlayer(Vector2 deltaPos){
+        playerTransform.position.add(deltaPos);
     }
 }
