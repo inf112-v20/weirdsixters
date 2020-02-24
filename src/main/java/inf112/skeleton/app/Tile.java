@@ -6,6 +6,11 @@ enum TileKind {
     empty, belt, flag, gear, hole, laserWall, wall, wrench
 }
 
+/**
+ * Right-angled walls, etc. have two directions. These are stored in
+ * direction and secondDirection. `direction` is the clockwise one, while
+ * `secondDirection` is the counter-clockwise one.
+ */
 public class Tile {
     public final TileKind kind;
     public final int level; // belt speed, laser count, wall count, flag number

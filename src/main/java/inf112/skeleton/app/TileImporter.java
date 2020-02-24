@@ -44,7 +44,7 @@ public class TileImporter {
      *
      * "Double" walls/lasers/belts must be marked as such (isDouble=true).
      *
-     * Direction of double walls => the "clock-wise" direction
+     * Direction of double walls => the "clockwise" direction
      * Ex.: north-west -> north -> up
      *
      * Direction of turning belts => the final direction
