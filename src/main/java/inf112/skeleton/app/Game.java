@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
@@ -13,10 +14,16 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
     private Transform playerTransform; //må etter hvert flyttes inn i en robotklasse
     private Texture playerTexture;
+    private Board board;
 
     @Override
     public void create() {
         TiledMap map = new TmxMapLoader().load("newBoard.tmx");
+        TiledMapTileLayer objLayer = (TiledMapTileLayer)map.getLayers().get("Tiles");
+        Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
+        board = new Board(tileGrid);
+        //TileImporter.debugPrint(tileGrid);
+
         renderer = Renderer.create(map);
 
         playerTexture = new Texture("player.png");
@@ -95,7 +102,10 @@ public class Game extends InputAdapter implements ApplicationListener {
         }
     }
 
-    private void movePlayer(Vector2 deltaPos){
-        playerTransform.position.add(deltaPos);
+    private void movePlayer(Vector2 deltaPos) {
+        Vector2 pos = playerTransform.position;
+        Vector2 dir = Linear.nor(deltaPos);
+        if (board.canMovePiece(pos, dir))
+            pos.add(deltaPos);
     }
 }
