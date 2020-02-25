@@ -10,4 +10,10 @@ public class LinearTest {
     public void addTest(){
         assertEquals(new Vector2(0,1), Linear.add(new Vector2(0,0), new Vector2(0,1)));
     }
+    @Test
+    public void subTest(){
+        assertEquals(new Vector2(0,-2), Linear.add(new Vector2(0,-1), new Vector2(0,-1)));
+    }
+
+
 }
