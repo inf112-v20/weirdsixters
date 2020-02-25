@@ -15,4 +15,13 @@ public class TileTest {
             assertFalse(tile.blocksDir(dir, true));
         }
     }
+
+    @Test
+    public void blocksDir_singleRightWall_blocksOneDir() {
+        Tile tile = new Tile(TileKind.wall, Direction.RIGHT, false);
+        assertTrue(tile.blocksDir(Direction.RIGHT.toVector2(), false));
+        assertFalse(tile.blocksDir(Direction.LEFT.toVector2(), false));
+        assertFalse(tile.blocksDir(Direction.UP.toVector2(), false));
+        assertFalse(tile.blocksDir(Direction.DOWN.toVector2(), false));
+    }
 }
