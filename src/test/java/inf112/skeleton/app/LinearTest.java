@@ -31,6 +31,10 @@ public class LinearTest {
     public void sclTest(){
         assertEquals(new Vector2(6,3), Linear.scl(new Vector2(2,1), (3)));
     }
+    @Test
+    public void negTest(){
+        assertEquals(new Vector2(-2,-2), Linear.neg(new Vector2(2,2)));
+    }
 
 
 }
