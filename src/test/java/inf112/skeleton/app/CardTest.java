@@ -5,7 +5,7 @@ import org.junit.Test;
 import static inf112.skeleton.app.CardKind.FORWARD;
 import static org.junit.Assert.assertEquals;
 
-public class TestCard {
+public class CardTest {
 
     @Test
     public void testGetKind(){
