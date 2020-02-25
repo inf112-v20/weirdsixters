@@ -11,8 +11,8 @@ public class TileTest {
         Tile tile = new Tile(TileKind.empty);
         for (Direction enumDir : Direction.values()) {
             Vector2 dir = enumDir.toVector2();
-            assertEquals(false, tile.blocksDir(dir, false));
-            assertEquals(false, tile.blocksDir(dir, true));
+            assertFalse(tile.blocksDir(dir, false));
+            assertFalse(tile.blocksDir(dir, true));
         }
     }
 }
