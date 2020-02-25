@@ -1,5 +1,6 @@
 package inf112.skeleton.app;
 
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import org.junit.Test;
 
@@ -18,7 +19,10 @@ public class LinearTest {
     public void divTest(){
         assertEquals(new Vector2(1,1), Linear.div(new Vector2(4,1),new Vector2(4,1)));
     }
-    
+    @Test
+    public void minTest(){
+        assertEquals(5, Linear.min(new Vector2(5,10)), 0.001);
+    }
 
 
 }
