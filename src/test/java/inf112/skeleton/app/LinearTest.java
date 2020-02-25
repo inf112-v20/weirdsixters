@@ -23,6 +23,10 @@ public class LinearTest {
     public void minTest(){
         assertEquals(5, Linear.min(new Vector2(5,10)), 0.001);
     }
+    @Test
+    public void maxTest(){
+        assertEquals(10, Linear.max(new Vector2(5,10)), 0);
+    }
 
 
 }
