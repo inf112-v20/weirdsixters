@@ -14,6 +14,11 @@ public class LinearTest {
     public void subTest(){
         assertEquals(new Vector2(0,-2), Linear.add(new Vector2(0,-1), new Vector2(0,-1)));
     }
+    @Test
+    public void divTest(){
+        assertEquals(new Vector2(1,1), Linear.div(new Vector2(4,1),new Vector2(4,1)));
+    }
+    
 
 
 }
