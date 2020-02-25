@@ -35,6 +35,10 @@ public class LinearTest {
     public void negTest(){
         assertEquals(new Vector2(-2,-2), Linear.neg(new Vector2(2,2)));
     }
+    @Test
+    public void floorTest(){
+        assertEquals(new Vector2(0,0), Linear.floor(new Vector2(0.5f, 0.5f)));
+    }
 
 
 }
