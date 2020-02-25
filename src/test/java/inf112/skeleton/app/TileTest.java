@@ -24,4 +24,12 @@ public class TileTest {
         assertFalse(tile.blocksDir(Direction.UP.toVector2(), false));
         assertFalse(tile.blocksDir(Direction.DOWN.toVector2(), false));
     }
+    @Test
+    public void blocksDir_doubleRightWall_blocksTwoDirs() {
+        Tile tile = new Tile(TileKind.wall, Direction.RIGHT, true);
+        assertTrue(tile.blocksDir(Direction.RIGHT.toVector2(), false));
+        assertFalse(tile.blocksDir(Direction.LEFT.toVector2(), false));
+        assertTrue(tile.blocksDir(Direction.UP.toVector2(), false));
+        assertFalse(tile.blocksDir(Direction.DOWN.toVector2(), false));
+    }
 }
