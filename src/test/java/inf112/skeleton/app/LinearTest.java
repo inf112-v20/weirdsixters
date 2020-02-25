@@ -39,6 +39,10 @@ public class LinearTest {
     public void floorTest(){
         assertEquals(new Vector2(0,0), Linear.floor(new Vector2(0.5f, 0.5f)));
     }
+    @Test
+    public void roundTest(){
+        assertEquals(new Vector2(1,1), Linear.round(new Vector2(0.9f,0.8f)));
+    }
 
 
 }
