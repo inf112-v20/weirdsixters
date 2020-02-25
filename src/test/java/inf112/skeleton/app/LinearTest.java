@@ -27,6 +27,10 @@ public class LinearTest {
     public void maxTest(){
         assertEquals(10, Linear.max(new Vector2(5,10)), 0);
     }
+    @Test
+    public void sclTest(){
+        assertEquals(new Vector2(6,3), Linear.scl(new Vector2(2,1), (3)));
+    }
 
 
 }
