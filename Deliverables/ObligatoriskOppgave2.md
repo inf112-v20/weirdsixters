@@ -46,13 +46,3 @@ Vi ser ikke vits i å redusere MVP forløpig fordi vi er så langt unna deadline
 Det vi har med i denne iterasjonen kontra forrige iterasjon er som følger; nytt brett med alle typer tiles for fremtidig testing, import av brett fra Tiled til abstrahert spilldata, kollisjon med vegger, utføring av bevegelse fra kort. 
 
 Vi har dokumentert våre bugs i README filen.
-
-## Manuelle tester
-### Game.executeCard
-Vi har testet executeCard() fra game.java ved å:
- - Kjøre spillet og så først trykke W, sett at vi beveger oss to ruter oppover.
- - Ha trykket D og så W og sett at vi beveger oss to ruter mot høyre. 
- - Ha trykket vi A og W og sett at vi bevegde oss to ruter oppover. 
- - Ha trykket F og så W og sett at vi beveger oss to ruter nedover. 
- - Ha trykket S og sett at vi beveger oss en rute oppover. 
- Dette testet at vår metode executeCard() fungerer med forskjellige typer kort og at movePlayer flytter riktig i forhold til tilgitte argumenter.
