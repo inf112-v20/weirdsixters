@@ -7,7 +7,19 @@ enum TileKind {
 }
 
 /**
- * Right-angled walls, etc. have two directions. These are stored in
+ * Tile is a representation of a board tile.
+ * It contains all the attributes a tile can have.
+ *
+ * The goal is to base actions on tile-attributes instead of tile-kinds, and
+ * maybe remove TileKind completely. This may be achieved by making the
+ * Tile-class contain all unique attributes of all kinds of tiles, and
+ * "ask questions" based on those attributes.
+ * Ex.:
+ * - Is this tile blocking this direction?
+ * - How much will this tile rotate me?
+ * - How fast (if at all) will this tile push me forward?
+ *
+ * Right-angled walls have two directions. These are stored in
  * direction and secondDirection. `direction` is the clockwise one, while
  * `secondDirection` is the counter-clockwise one.
  */
