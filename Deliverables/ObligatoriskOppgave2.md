@@ -45,7 +45,7 @@ Vi ser ikke vits i å redusere MVP forløpig fordi vi er så langt unna deadline
 
 Det vi har med i denne iterasjonen kontra forrige iterasjon er som følger; nytt brett med alle typer tiles for fremtidig testing, import av brett fra Tiled til abstrahert spilldata, kollisjon med vegger, utføring av bevegelse fra kort. 
 
-Forløpig finnes det to bugs som vi er klar over, disse er bevegelse via kort ikke blir stoppet av vegger og at spillet krasjer når man går utforbi brettet og prøver å gå inn igjen.
+Vi har dokumentert våre bugs i README filen.
 
 ## Manuelle tester
 ### Game.executeCard
