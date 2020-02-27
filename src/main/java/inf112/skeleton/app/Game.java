@@ -83,7 +83,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void executeCard(Card card) {
         switch(card.getKind()) {
             case FORWARD:
-                movePlayer(Linear.scl(robot.transform.direction, card.getSteps())); //endre med robot. transforme. direction
+                movePlayer(Linear.scl(robot.transform.direction, card.getSteps()));
                 break;
             case REVERSE:
                 movePlayer(Linear.scl(robot.transform.direction, -card.getSteps()));
