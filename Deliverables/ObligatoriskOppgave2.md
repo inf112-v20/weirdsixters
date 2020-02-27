@@ -26,21 +26,16 @@ Effektiviteten på møtene har forbedret seg. Vi har fått skrevet en del issues
 
 Antall commits per person representerer ikke nødvendigvis arbeidsmengde fordi vi har hatt fokus på parprogrammering.
 
-Våre forbedringspunkter er;
-Effektivitet, oppgavefordeling og kommunikasjon.
+Våre forbedringspunkter er: effektivitet, oppgavefordeling og kommunikasjon.
 
 ## Deloppgave 2: Krav
-Vi har skrevet brukerhistorier, akseptansekriterier og arbeidsoppgaver i issues.
+Vi har skrevet brukerhistorier, akseptansekriterier og arbeidsoppgaver i issues der det blir relevant.
 
 Har laget flere issues enn vi får tid til å fullføre før denne innleveringen. Dette er for å få oversikt over fremtidig arbeid.
 
 Fremover tenker vi å prioritere oppgavene slik at vi får et spillbart spill, som f.eks. win/lose-condition, ordentlig grafikk(ser rotasjon til robot), kortstokk og spillekort som kan spilles. 
 
 MVP forblir ca slik som vi skrev i forrige innlevering under høynivåkrav. 
-For å nå MVP vil vi nå følgende mål:
-
-- mål 1
-- mål 2
 Vi ser ikke vits i å redusere MVP forløpig fordi vi er så langt unna deadline.
 
 Det vi har med i denne iterasjonen kontra forrige iterasjon er som følger; nytt brett med alle typer tiles for fremtidig testing, import av brett fra Tiled til abstrahert spilldata, kollisjon med vegger, utføring av bevegelse fra kort. 
