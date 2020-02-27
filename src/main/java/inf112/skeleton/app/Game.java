@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
-    private Transform playerTransform; //må etter hvert flyttes inn i en robotklasse
+    private Robot robot;
     private Texture playerTexture;
     private Board board;
 
@@ -27,7 +27,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer = Renderer.create(map);
 
         playerTexture = new Texture("player.png");
-        playerTransform = new Transform(new Vector2(0,0), new Vector2(0,1));
+        robot = new Robot();
 
         Gdx.input.setInputProcessor(this);
     }
@@ -40,7 +40,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     @Override
     public void render() {
         renderer.begin();
-        renderer.drawTileSprite(playerTexture, new Vector2(), playerTransform.position);
+        renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform.position);
         renderer.end();
     }
 
@@ -83,19 +83,19 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void executeCard(Card card) {
         switch(card.getKind()) {
             case FORWARD:
-                movePlayer(Linear.scl(playerTransform.direction, card.getSteps()));
+                movePlayer(Linear.scl(robot.transform.direction, card.getSteps()));
                 break;
             case REVERSE:
-                movePlayer(Linear.scl(playerTransform.direction, -card.getSteps()));
+                movePlayer(Linear.scl(robot.transform.direction, -card.getSteps()));
                 break;
             case TURNRIGHT:
-                playerTransform.direction.rotate90(-1);
+                robot.transform.direction.rotate90(-1);
                 break;
             case TURNLEFT:
-                playerTransform.direction.rotate90(1);
+                robot.transform.direction.rotate90(1);
                 break;
             case FLIP:
-                playerTransform.direction.rotate(180f);
+                robot.transform.direction.rotate(180f);
                 break;
             default:
                 break;
@@ -103,7 +103,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     private void movePlayer(Vector2 deltaPos) {
-        Vector2 pos = playerTransform.position;
+        Vector2 pos = robot.transform.position;
         Vector2 dir = Linear.nor(deltaPos);
         if (board.canMovePiece(pos, dir))
             pos.add(deltaPos);
