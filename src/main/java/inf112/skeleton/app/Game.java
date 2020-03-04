@@ -40,7 +40,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     @Override
     public void render() {
         renderer.begin();
-        renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform.position);
+        renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
         renderer.end();
     }
 

@@ -6,6 +6,6 @@ public class Robot {
     public Transform transform;
 
     public Robot() {
-        transform = new Transform(new Vector2(0, 0), new Vector2(0, 1));
+        transform = new Transform(new Vector2(0, 0), new Vector2(1, 0));
     }
 }
