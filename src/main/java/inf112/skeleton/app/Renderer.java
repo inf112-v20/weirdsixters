@@ -17,7 +17,7 @@ public class Renderer {
     private final Vector2 tileSize;
     private final Vector2 mapSize;
 
-    private SpriteBatch batch;
+    private SpriteBatch tileSpriteBatch;
     private BitmapFont font;
     private OrthogonalTiledMapRenderer tilemapRenderer;
 
@@ -36,8 +36,8 @@ public class Renderer {
         tilemapRenderer = new OrthogonalTiledMapRenderer(map, pixelsPerTile);
         tilemapRenderer.setView(camera);
 
-        batch = new SpriteBatch();
-        batch.setProjectionMatrix(camera.combined);
+        tileSpriteBatch = new SpriteBatch();
+        tileSpriteBatch.setProjectionMatrix(camera.combined);
 
         font = new BitmapFont();
         font.setColor(Color.RED);
@@ -50,27 +50,30 @@ public class Renderer {
 
     // need this to "destruct" libGDX stuff
     public void dispose(){
-        batch.dispose();
+        tileSpriteBatch.dispose();
         font.dispose();
     }
 
     public void begin() {
         clearFramebuffer();
         tilemapRenderer.render();
-        batch.begin();
+        tileSpriteBatch.begin();
     }
 
     public void end() {
-        batch.end();
+        tileSpriteBatch.end();
     }
 
-    public void drawTileSprite(Texture tex, Vector2 texIndex, Vector2 coord, float rotation) {
-        int w = (int)tileSize.x;
-        int h = (int)tileSize.y;
-        int offx = (int)texIndex.x * w;
-        int offy = (int)texIndex.y * h;
-        TextureRegion subTex = new TextureRegion(tex, 0, 0, 300, 300);
-        batch.draw(subTex, coord.x, coord.y, w/2.f, h/2.f, 1, 1, 1, 1, rotation);
+    /**
+     * @summary draws a sprite in "tile-space".
+     * @param tex is the texture to draw
+     * @param texIndex is the sub-texture index
+     * @param position is the board coordinate
+     */
+    public void drawTileSprite(Texture tex, Vector2 texIndex, Vector2 position, float rotation) {
+        Vector2 coord = Linear.floor(position);
+        TextureRegion subTex = getSubTexture(tex, texIndex);
+        tileSpriteBatch.draw(subTex, coord.x, coord.y, 0.5f, 0.5f, 1, 1, 1, 1, rotation);
     }
 
     public void drawTileSprite(Texture tex, Vector2 texIndex, Transform transform) {
@@ -88,5 +91,16 @@ public class Renderer {
 
     private Vector2 getLayerTileSize(TiledMapTileLayer layer) {
         return new Vector2(layer.getTileWidth(), layer.getTileHeight());
+    }
+
+    // WARNING: TextureRegion expects texture coordinates (0..1) if constructed
+    // with float arguments. We need to pass ints here for pixels values.
+    private TextureRegion getSubTexture(Texture tex, Vector2 texIndex) {
+        Vector2 texOffset = Linear.mul(tileSize, texIndex);
+        int x = (int)texOffset.x;
+        int y = (int)texOffset.y;
+        int w = (int)tileSize.x;
+        int h = (int)tileSize.y;
+        return new TextureRegion(tex, x, y, w, h);
     }
 }
