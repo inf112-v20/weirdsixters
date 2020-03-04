@@ -64,13 +64,17 @@ public class Renderer {
         batch.end();
     }
 
-    public void drawTileSprite(Texture tex, Vector2 texIndex, Vector2 pos) {
+    public void drawTileSprite(Texture tex, Vector2 texIndex, Vector2 coord, float rotation) {
         int w = (int)tileSize.x;
         int h = (int)tileSize.y;
-        int x = (int)texIndex.x * w;
-        int y = (int)texIndex.y * h;
-        TextureRegion subTex = new TextureRegion(tex, x, y, w, h);
-        batch.draw(subTex, pos.x, pos.y, 1, 1);
+        int offx = (int)texIndex.x * w;
+        int offy = (int)texIndex.y * h;
+        TextureRegion subTex = new TextureRegion(tex, 0, 0, 300, 300);
+        batch.draw(subTex, coord.x, coord.y, w/2.f, h/2.f, 1, 1, 1, 1, rotation);
+    }
+
+    public void drawTileSprite(Texture tex, Vector2 texIndex, Transform transform) {
+        drawTileSprite(tex, texIndex, transform.position, transform.direction.angle());
     }
 
     private void clearFramebuffer(){
