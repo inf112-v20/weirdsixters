@@ -65,7 +65,9 @@ public class Renderer {
     }
 
     /**
-     * @summary draws a sprite in "tile-space".
+     * @summary draws a sprite with the same camera transform as the map,
+     * meaning that the sprite will be drawn as a tile, with @position being
+     * the cell coordinate. The sprite will also be scaled to match the tile size.
      * @param tex is the texture to draw
      * @param texIndex is the sub-texture index
      * @param position is the board coordinate
