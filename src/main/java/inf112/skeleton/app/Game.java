@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
+import com.sun.org.apache.bcel.internal.util.BCELifier;
 
 public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
@@ -39,6 +41,8 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public void render() {
+        updateFlags();
+
         renderer.begin();
         renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform.position);
         renderer.end();
@@ -107,5 +111,12 @@ public class Game extends InputAdapter implements ApplicationListener {
         Vector2 dir = Linear.nor(deltaPos);
         if (board.canMovePiece(pos, dir))
             pos.add(deltaPos);
+    }
+
+    private void updateFlags() {
+        Vector2 robotPosition = robot.transform.position;
+        Tile tile = board.getTile(robotPosition);
+        if (tile.kind == TileKind.flag && tile.level == robot.nextFlag)
+            robot.nextFlag++;
     }
 }
