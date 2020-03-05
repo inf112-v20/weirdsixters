@@ -25,7 +25,7 @@ Vi har testet den grafiske roteringen til spiller ved å:
  - Trykke A for å rotere til venstre.
  Hver gang så ser vi at roboten grafisk roterer seg slik at den alltid vendes den retningen som roboten ser. 
 
-## Game.updateFlage
+## Game.updateFlag
 Vi har testet updateFlag() ved å:
  - Bevege roboten på flagg. I tilfeldig rekkefølge, for å forsikre oss om at det ikke skje noe
  - Bevege roboten på flagg i riktig rekkefølge. Fra 1 til 4 og da oppfyller vi vinne-kravet og alle flaggene har blitt plukket opp.
