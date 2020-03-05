@@ -49,7 +49,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void render() {
         loseCondition();
         renderer.begin();
-        renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform.position);
+        renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
         renderer.end();
     }
 
@@ -92,10 +92,12 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void executeCard(Card card) {
         switch(card.getKind()) {
             case FORWARD:
-                movePlayer(Linear.scl(robot.transform.direction, card.getSteps()));
+                for (int i = 0; i < card.getSteps(); i++) {
+                    movePlayer(Linear.scl(robot.transform.direction, 1));
+                }
                 break;
             case REVERSE:
-                movePlayer(Linear.scl(robot.transform.direction, -card.getSteps()));
+                movePlayer(Linear.scl(robot.transform.direction, -1));
                 break;
             case TURNRIGHT:
                 robot.transform.direction.rotate90(-1);

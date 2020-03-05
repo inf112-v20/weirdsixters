@@ -10,4 +10,9 @@ public class Transform {
         this.position = position;
         this.direction = direction;
     }
+
+    @Override
+    public String toString() {
+        return position.toString() + direction.toString();
+    }
 }

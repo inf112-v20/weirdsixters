@@ -17,3 +17,10 @@ Vi har testet executeCard() fra game.java ved å:
  - Bevege roboten mot hullet ved hjelp av piltastene.
  - Forsikre oss om at roboten returnerer til gitt "startpoint" når den treffer hullet.
  - Gjøre det flere ganger, og i tillegg printe en melding når vi treffer hullet. Dette for å forsikre oss om at alt stemmer mtp. at tile-typen stemmer.
+
+
+## Playersprite rotates with player
+Vi har testet den grafiske roteringen til spiller ved å:
+ - Kjøre spillet og så trykke D for å rotere til høyre.
+ - Trykke A for å rotere til venstre.
+ Hver gang så ser vi at roboten grafisk roterer seg slik at den alltid vendes den retningen som roboten ser. 

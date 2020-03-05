@@ -7,7 +7,7 @@ public class Robot {
     public final Vector2 startPos;
 
     public Robot(Vector2 startPos) {
-        transform = new Transform(startPos, new Vector2(0, 1));
+        transform = new Transform(startPos, new Vector2(1, 0));
         this.startPos = new Vector2(startPos);
     }
 }
