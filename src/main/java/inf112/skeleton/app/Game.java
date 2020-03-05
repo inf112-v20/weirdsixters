@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 
 public class Game extends InputAdapter implements ApplicationListener {
@@ -47,7 +48,9 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public void render() {
+        updateFlags();
         loseCondition();
+  
         renderer.begin();
         renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
         renderer.end();
@@ -118,5 +121,17 @@ public class Game extends InputAdapter implements ApplicationListener {
         Vector2 dir = Linear.nor(deltaPos);
         if (board.canMovePiece(pos, dir))
             pos.add(deltaPos);
+    }
+
+    private void updateFlags() {
+        Vector2 robotPosition = robot.transform.position;
+        Tile tile = board.getTile(robotPosition);
+        if (tile.kind == TileKind.flag && tile.level == robot.nextFlag) {
+            robot.nextFlag++;
+            if (tile.kind == TileKind.flag && tile.level == (robot.nextFlag-1))
+                System.out.println("You've landed on a flag nr: " + (robot.nextFlag-1) + ", the next flag you need is flag nr: " + robot.nextFlag + "");
+            if (robot.nextFlag == 5)
+                System.out.println("You've won!");
+        }
     }
 }
