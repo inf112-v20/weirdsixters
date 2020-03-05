@@ -10,7 +10,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
-import com.sun.org.apache.bcel.internal.util.BCELifier;
 
 public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
@@ -116,7 +115,12 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void updateFlags() {
         Vector2 robotPosition = robot.transform.position;
         Tile tile = board.getTile(robotPosition);
-        if (tile.kind == TileKind.flag && tile.level == robot.nextFlag)
+        if (tile.kind == TileKind.flag && tile.level == robot.nextFlag) {
             robot.nextFlag++;
+            if (tile.kind == TileKind.flag && tile.level == (robot.nextFlag-1))
+                System.out.println("You've landed on a flag nr: " + (robot.nextFlag-1) + ", the next flag you need is flag nr: " + robot.nextFlag + "");
+            if (robot.nextFlag == 5)
+                System.out.println("You've won!");
+        }
     }
 }
