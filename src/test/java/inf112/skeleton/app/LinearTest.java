@@ -16,6 +16,10 @@ public class LinearTest {
         assertEquals(new Vector2(0,-2), Linear.add(new Vector2(0,-1), new Vector2(0,-1)));
     }
     @Test
+    public void mulTest(){
+        assertEquals(new Vector2(3,-8), Linear.mul(new Vector2(1,2), new Vector2(3,-4)));
+    }
+    @Test
     public void divTest(){
         assertEquals(new Vector2(1,1), Linear.div(new Vector2(4,1),new Vector2(4,1)));
     }

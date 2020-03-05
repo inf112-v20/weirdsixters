@@ -28,7 +28,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer = Renderer.create(map);
 
         playerTexture = new Texture("player.png");
-        robot = new Robot();
+        robot = new Robot(new Vector2(0,0));
 
         Gdx.input.setInputProcessor(this);
     }
@@ -38,12 +38,21 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer.dispose();
     }
 
+    private void loseCondition(){
+        Tile tile = board.getTile(robot.transform.position);
+        if(tile.kind == TileKind.hole){
+            robot.transform.position = new Vector2(robot.startPos);
+            System.out.println("Ouch, you entered a hole!");
+        }
+    }
+
     @Override
     public void render() {
         updateFlags();
-
+        loseCondition();
+  
         renderer.begin();
-        renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform.position);
+        renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
         renderer.end();
     }
 
@@ -86,10 +95,12 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void executeCard(Card card) {
         switch(card.getKind()) {
             case FORWARD:
-                movePlayer(Linear.scl(robot.transform.direction, card.getSteps()));
+                for (int i = 0; i < card.getSteps(); i++) {
+                    movePlayer(Linear.scl(robot.transform.direction, 1));
+                }
                 break;
             case REVERSE:
-                movePlayer(Linear.scl(robot.transform.direction, -card.getSteps()));
+                movePlayer(Linear.scl(robot.transform.direction, -1));
                 break;
             case TURNRIGHT:
                 robot.transform.direction.rotate90(-1);
