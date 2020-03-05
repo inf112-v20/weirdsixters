@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class Renderer {
     private final Vector2 tileSize;
@@ -31,6 +32,11 @@ public class Renderer {
         OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false, mapSize.x, mapSize.y);
         camera.position.x = mapSize.x / 2;
+
+        //offset camera to make space for card slots
+        camera.viewportHeight = mapSize.y+4;
+        camera.position.set(new Vector3(mapSize.x/2, mapSize.y/3, 0));
+
         camera.update();
 
         tilemapRenderer = new OrthogonalTiledMapRenderer(map, pixelsPerTile);
