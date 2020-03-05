@@ -11,6 +11,13 @@ Vi har testet executeCard() fra game.java ved å:
  - Ha trykket F og så W og sett at vi beveger oss to ruter nedover. 
  - Ha trykket S og sett at vi beveger oss en rute oppover. 
  Dette testet at vår metode executeCard() fungerer med forskjellige typer kort og at movePlayer flytter riktig i forhold til tilgitte argumenter.
+ 
+ ## Game.loseCondition
+ Vi har testet loseCondition() ved å;
+ - Bevege roboten mot hullet ved hjelp av piltastene.
+ - Forsikre oss om at roboten returnerer til gitt "startpoint" når den treffer hullet.
+ - Gjøre det flere ganger, og i tillegg printe en melding når vi treffer hullet. Dette for å forsikre oss om at alt stemmer mtp. at tile-typen stemmer.
+
 
 ## Playersprite rotates with player
 Vi har testet den grafiske roteringen til spiller ved å:

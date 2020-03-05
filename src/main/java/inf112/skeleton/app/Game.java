@@ -27,7 +27,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer = Renderer.create(map);
 
         playerTexture = new Texture("player.png");
-        robot = new Robot();
+        robot = new Robot(new Vector2(0,0));
 
         Gdx.input.setInputProcessor(this);
     }
@@ -37,8 +37,17 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer.dispose();
     }
 
+    private void loseCondition(){
+        Tile tile = board.getTile(robot.transform.position);
+        if(tile.kind == TileKind.hole){
+            robot.transform.position = new Vector2(robot.startPos);
+            System.out.println("Ouch, you entered a hole!");
+        }
+    }
+
     @Override
     public void render() {
+        loseCondition();
         renderer.begin();
         renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
         renderer.end();
