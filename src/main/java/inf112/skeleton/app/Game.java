@@ -25,13 +25,16 @@ public class Game extends InputAdapter implements ApplicationListener {
         TiledMap map = new TmxMapLoader().load("newBoard.tmx");
         TiledMapTileLayer objLayer = (TiledMapTileLayer)map.getLayers().get("Tiles");
         Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
-        //TileImporter.debugPrint(tileGrid);
         renderer = Renderer.create(map);
         playerTexture = new Texture("player.png");
 
         board = new Board(tileGrid);
         deck = new Deck();
         robot = new Robot(new Vector2(0,0));
+
+        // debug
+        //TileImporter.debugPrint(tileGrid);
+        //Card.debugPrint();
     }
 
     @Override

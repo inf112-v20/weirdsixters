@@ -28,6 +28,15 @@ public class Card {
         this.priority = priority;
     }
 
+    @Override
+    public String toString() {
+        return "Card{" +
+                "kind=" + kind +
+                ", steps=" + steps +
+                ", priority=" + priority +
+                '}';
+    }
+
     /**
      * backup: 6 kort (430 - 480, intervall 10)
      * u-turn: 6 kort (10 - 60, intervall 10)
@@ -45,6 +54,11 @@ public class Card {
         populateProgramCards(CardKind.TURN_LEFT, 18, 70, 20);
         populateProgramCards(CardKind.FORWARD, 3, new int[]{18, 12, 6},
                 new int[]{490, 670, 790}, 10);
+    }
+
+    public static void debugPrint() {
+        for (Card c : programCards)
+            System.out.println(c.toString());
     }
 
     private static void populateProgramCards(CardKind kind,
