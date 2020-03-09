@@ -14,9 +14,9 @@ public class Card {
 
     public static final ArrayList<Card> programCards = new ArrayList<>();
 
-    private CardKind kind;
-    private int steps;
-    private int priority;
+    public final CardKind kind;
+    public final int steps;
+    public final int priority;
 
     /**
      *
@@ -28,19 +28,6 @@ public class Card {
         this.kind = kind;
         this.steps = steps;
         this.priority = priority;
-
-    }
-
-    public CardKind getKind() {
-        return kind;
-    }
-
-    public int getSteps() {
-        return steps;
-    }
-
-    public int getPriority() {
-        return priority;
     }
 
     private static void populateProgramCards(CardKind kind, int levels, int interval, int[] counts, int[] priorities) {
