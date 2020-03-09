@@ -5,8 +5,8 @@ import java.util.ArrayList;
 enum CardKind {
     FORWARD,
     REVERSE,
-    TURNLEFT,
-    TURNRIGHT,
+    TURN_LEFT,
+    TURN_RIGHT,
     FLIP
 }
 
@@ -41,8 +41,8 @@ public class Card {
         programCards = new ArrayList<>();
         populateProgramCards(CardKind.REVERSE, 6, 430, 10);
         populateProgramCards(CardKind.FLIP, 6, 10, 10);
-        populateProgramCards(CardKind.TURNRIGHT, 18, 80, 20);
-        populateProgramCards(CardKind.TURNLEFT, 18, 70, 20);
+        populateProgramCards(CardKind.TURN_RIGHT, 18, 80, 20);
+        populateProgramCards(CardKind.TURN_LEFT, 18, 70, 20);
         populateProgramCards(CardKind.FORWARD, 3, new int[]{18, 12, 6},
                 new int[]{490, 670, 790}, 10);
     }

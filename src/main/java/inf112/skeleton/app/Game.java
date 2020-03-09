@@ -80,8 +80,8 @@ public class Game extends InputAdapter implements ApplicationListener {
             // movement via cards
             case Input.Keys.W: executeCard(new Card(CardKind.FORWARD, 2, 0)); break;
             case Input.Keys.S: executeCard(new Card(CardKind.REVERSE, 1, 0)); break;
-            case Input.Keys.D: executeCard(new Card(CardKind.TURNRIGHT, 1, 0)); break;
-            case Input.Keys.A: executeCard(new Card(CardKind.TURNLEFT, 1, 0)); break;
+            case Input.Keys.D: executeCard(new Card(CardKind.TURN_RIGHT, 1, 0)); break;
+            case Input.Keys.A: executeCard(new Card(CardKind.TURN_LEFT, 1, 0)); break;
             case Input.Keys.F: executeCard(new Card(CardKind.FLIP, 2, 0)); break;
         }
         movePlayer(deltaPos);
@@ -102,10 +102,10 @@ public class Game extends InputAdapter implements ApplicationListener {
             case REVERSE:
                 movePlayer(Linear.scl(robot.transform.direction, -1));
                 break;
-            case TURNRIGHT:
+            case TURN_RIGHT:
                 robot.transform.direction.rotate90(-1);
                 break;
-            case TURNLEFT:
+            case TURN_LEFT:
                 robot.transform.direction.rotate90(1);
                 break;
             case FLIP:
