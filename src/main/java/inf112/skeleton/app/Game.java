@@ -16,21 +16,22 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Robot robot;
     private Texture playerTexture;
     private Board board;
+    private Deck deck;
 
     @Override
     public void create() {
+        Gdx.input.setInputProcessor(this);
+
         TiledMap map = new TmxMapLoader().load("newBoard.tmx");
         TiledMapTileLayer objLayer = (TiledMapTileLayer)map.getLayers().get("Tiles");
         Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
-        board = new Board(tileGrid);
         //TileImporter.debugPrint(tileGrid);
-
         renderer = Renderer.create(map);
-
         playerTexture = new Texture("player.png");
-        robot = new Robot(new Vector2(0,0));
 
-        Gdx.input.setInputProcessor(this);
+        board = new Board(tileGrid);
+        deck = new Deck();
+        robot = new Robot(new Vector2(0,0));
     }
 
     @Override
