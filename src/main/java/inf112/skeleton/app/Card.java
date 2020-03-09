@@ -11,7 +11,6 @@ enum CardKind {
 }
 
 public class Card {
-
     public static final ArrayList<Card> programCards = new ArrayList<>();
 
     public final CardKind kind;
@@ -30,18 +29,27 @@ public class Card {
         this.priority = priority;
     }
 
-    private static void populateProgramCards(CardKind kind, int levels, int interval, int[] counts, int[] priorities) {
+    private static void populateProgramCards(CardKind kind,
+                                             int levels,
+                                             int[] counts,
+                                             int[] priorities,
+                                             int interval) {
         for (int level = 0; level < levels; level++) {
             for (int i = 0; i < counts[level]; i++) {
                 int priority = priorities[level] + i * interval;
-                programCards.add(new Card(CardKind.FORWARD, level, priority));
+                programCards.add(new Card(kind, level, priority));
             }
         }
     }
 
+    private static void populateProgramCards(CardKind kind,
+                                             int count,
+                                             int priority,
+                                             int interval) {
+        populateProgramCards(kind, 1, new int[]{count}, new int[]{priority}, interval);
+    }
+
     /**
-     * har en bevegelse (Flytt frem 1, Flytt frem 2, Flytt frem 3, Flytt bakover 1, Roter 90 grader H, Roter 90 grader V, Roter 180 grader)
-     * har en prioritet (alle bevegelseskort må ha unik prioritet innenfor sin klasse, og mellom klassene (bevegelsestypene) skal intervallet ikke være overlappende)
      * backup: 6 kort (430 - 480, intervall 10)
      * u-turn: 6 kort (10 - 60, intervall 10)
      * rotate right: 18 kort (80-420, intervall 20)
@@ -51,8 +59,12 @@ public class Card {
      * move 3: 6 kort (790 - 840, intervall 10)
      */
     static {
-        populateProgramCards(CardKind.FORWARD, 3, 10, new int[]{80, 12, 6}, new int[]{490,670,790});
-        populateProgramCards(CardKind.TURNLEFT, 3, 10, new int[]{80, 12, 6}, new int[]{490,670,790});
+        populateProgramCards(CardKind.REVERSE, 6, 430, 10);
+        populateProgramCards(CardKind.FLIP, 6, 10, 10);
+        populateProgramCards(CardKind.TURNRIGHT, 18, 80, 20);
+        populateProgramCards(CardKind.TURNLEFT, 18, 70, 20);
+        populateProgramCards(CardKind.FORWARD, 3, new int[]{18, 12, 6},
+                new int[]{490, 670, 790}, 10);
     }
 }
 
