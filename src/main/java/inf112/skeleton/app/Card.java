@@ -68,8 +68,9 @@ public class Card {
                                              int interval) {
         for (int level = 0; level < levels; level++) {
             for (int i = 0; i < counts[level]; i++) {
+                int steps = level+1;
                 int priority = priorities[level] + i * interval;
-                programCards.add(new Card(kind, level, priority));
+                programCards.add(new Card(kind, steps, priority));
             }
         }
     }
