@@ -17,7 +17,8 @@ public class Deck {
             swapStacks();
             Collections.shuffle(stack);
         }
-        return ListUtils.pop(stack);
+        assert(!stack.isEmpty());
+        return stack.remove(stack.size() - 1);
     }
 
     public void discardCard(Card card) {
