@@ -61,12 +61,21 @@ public class Card {
             System.out.println(c.toString());
     }
 
+    /**
+     * @summary populates the programCards list with all combinations of cards.
+     *
+     * @param kind
+     * @param levelCount how many levels of this kind
+     * @param counts is the card count per for each level
+     * @param priorities is the card priority for each level
+     * @param interval is the priority interval
+     */
     private static void populateProgramCards(CardKind kind,
-                                             int levels,
+                                             int levelCount,
                                              int[] counts,
                                              int[] priorities,
                                              int interval) {
-        for (int level = 0; level < levels; level++) {
+        for (int level = 0; level < levelCount; level++) {
             for (int i = 0; i < counts[level]; i++) {
                 int steps = level+1;
                 int priority = priorities[level] + i * interval;
