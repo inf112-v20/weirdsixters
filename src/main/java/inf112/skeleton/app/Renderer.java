@@ -18,11 +18,9 @@ public class Renderer {
     private final Vector2 tileSize;
     private final Vector2 mapSize;
 
-    private SpriteBatch tileSpriteBatch;
-    private SpriteBatch cardSpriteBatch;
-
-    private BitmapFont font;
     private OrthogonalTiledMapRenderer tilemapRenderer;
+    private SpriteBatch spriteBatch;
+    private BitmapFont font;
 
     // private as it should only be called from @create
     private Renderer(TiledMap map) {
@@ -44,10 +42,8 @@ public class Renderer {
         tilemapRenderer = new OrthogonalTiledMapRenderer(map, pixelsPerTile);
         tilemapRenderer.setView(camera);
 
-        tileSpriteBatch = new SpriteBatch();
-        cardSpriteBatch = new SpriteBatch();
-        tileSpriteBatch.setProjectionMatrix(camera.combined);
-        //cardSpriteBatch.setProjectionMatrix(camera.combined);
+        spriteBatch = new SpriteBatch();
+        spriteBatch.setProjectionMatrix(camera.combined);
 
         font = new BitmapFont();
         font.setColor(Color.RED);
@@ -60,21 +56,18 @@ public class Renderer {
 
     // need this to "destruct" libGDX stuff
     public void dispose(){
-        tileSpriteBatch.dispose();
-        cardSpriteBatch.dispose();
+        spriteBatch.dispose();
         font.dispose();
     }
 
     public void begin() {
         clearFramebuffer();
         tilemapRenderer.render();
-        tileSpriteBatch.begin();
-        cardSpriteBatch.begin();
+        spriteBatch.begin();
     }
 
     public void end() {
-        tileSpriteBatch.end();
-        cardSpriteBatch.end();
+        spriteBatch.end();
     }
 
     /**
@@ -88,16 +81,11 @@ public class Renderer {
     public void drawTileSprite(Texture tex, Vector2 texIndex, Vector2 position, float rotation) {
         Vector2 coord = Linear.floor(position);
         TextureRegion subTex = getSubTexture(tex, texIndex);
-        tileSpriteBatch.draw(subTex, coord.x, coord.y, 0.5f, 0.5f, 1, 1, 1, 1, rotation);
+        spriteBatch.draw(subTex, coord.x, coord.y, 0.5f, 0.5f, 1, 1, 1, 1, rotation);
     }
 
     public void drawTileSprite(Texture tex, Vector2 texIndex, Transform transform) {
         drawTileSprite(tex, texIndex, transform.position, transform.direction.angle());
-    }
-
-    public void drawCardSprite(Texture tex, Vector2 texIndex, Vector2 position, float width, float height) {
-        TextureRegion subTex = getSubTexture(tex, texIndex);
-        cardSpriteBatch.draw(subTex, position.x, position.y, width, height);
     }
 
     private void clearFramebuffer(){
