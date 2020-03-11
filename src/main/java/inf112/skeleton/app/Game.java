@@ -18,6 +18,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Texture playerTexture;
     private Board board;
     private Deck deck;
+    private Player player;
 
     private ArrayList<Card> playerHand; //to be moved
 
@@ -34,6 +35,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
         robot = new Robot(new Vector2(0,0));
+        player = new Player();
+
+        //player.dealCards(deck);
 
         playerHand = new ArrayList<>(); //to be moved
 
@@ -153,4 +157,10 @@ public class Game extends InputAdapter implements ApplicationListener {
                 System.out.println("You've won!");
         }
     }
+
+    //private void dealCards(Player player) {
+    //    for (int i )
+    //    assert(cards.length == 9);
+    //    this.cards = cards;
+    //}
 }
