@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 
 public class Game extends InputAdapter implements ApplicationListener {
@@ -57,6 +56,7 @@ public class Game extends InputAdapter implements ApplicationListener {
   
         renderer.begin();
         renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
+        renderer.drawTileSprite(playerTexture, new Vector2(), new Vector2(0.f, -1), 0);
         renderer.end();
     }
 
