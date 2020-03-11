@@ -19,6 +19,8 @@ public class Renderer {
     private final Vector2 mapSize;
 
     private SpriteBatch tileSpriteBatch;
+    private SpriteBatch cardSpriteBatch;
+
     private BitmapFont font;
     private OrthogonalTiledMapRenderer tilemapRenderer;
 
@@ -43,7 +45,9 @@ public class Renderer {
         tilemapRenderer.setView(camera);
 
         tileSpriteBatch = new SpriteBatch();
+        cardSpriteBatch = new SpriteBatch();
         tileSpriteBatch.setProjectionMatrix(camera.combined);
+        //cardSpriteBatch.setProjectionMatrix(camera.combined);
 
         font = new BitmapFont();
         font.setColor(Color.RED);
@@ -57,6 +61,7 @@ public class Renderer {
     // need this to "destruct" libGDX stuff
     public void dispose(){
         tileSpriteBatch.dispose();
+        cardSpriteBatch.dispose();
         font.dispose();
     }
 
@@ -64,10 +69,12 @@ public class Renderer {
         clearFramebuffer();
         tilemapRenderer.render();
         tileSpriteBatch.begin();
+        cardSpriteBatch.begin();
     }
 
     public void end() {
         tileSpriteBatch.end();
+        cardSpriteBatch.end();
     }
 
     /**
@@ -86,6 +93,11 @@ public class Renderer {
 
     public void drawTileSprite(Texture tex, Vector2 texIndex, Transform transform) {
         drawTileSprite(tex, texIndex, transform.position, transform.direction.angle());
+    }
+
+    public void drawCardSprite(Texture tex, Vector2 texIndex, Vector2 position, float width, float height) {
+        TextureRegion subTex = getSubTexture(tex, texIndex);
+        cardSpriteBatch.draw(subTex, position.x, position.y, width, height);
     }
 
     private void clearFramebuffer(){
