@@ -12,7 +12,15 @@ when the java version used is >8. This has no effect on Windows machines, but yo
 - Walls currently does not restrict movement with cards if you move more than one step.
 
 ## Testing
-We have a test package in src with jUnit tests. We have documented our manual tests in a seperate file.
+
+There are three different methods of testing used in this project:
+Manual tests, unit tests and assertions.
+
+Unit tests are located in `src/test`.
+
+Manual tests are documented in `ManualTests.md`.
+
+Runtime assertions can be enabled with the Java VM flag "-ea".
 
 ## Controls
 Arrow keys - Manually move player

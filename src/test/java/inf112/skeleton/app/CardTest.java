@@ -10,19 +10,19 @@ public class CardTest {
     @Test
     public void testGetKind(){
         Card card1 = new Card(FORWARD, 2, 12);
-        assertEquals(FORWARD, card1.getKind());
+        assertEquals(FORWARD, card1.kind);
     }
 
     @Test
     public void testGetSteps(){
         Card card1 = new Card(FORWARD, 2, 12);
-        assertEquals(2, card1.getSteps());
+        assertEquals(2, card1.steps);
     }
 
     @Test
     public void testGetPriority(){
         Card card1 = new Card(FORWARD, 2, 12);
-        assertEquals(12, card1.getPriority());
+        assertEquals(12, card1.priority);
     }
 }
 
