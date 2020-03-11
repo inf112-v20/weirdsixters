@@ -16,21 +16,25 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Robot robot;
     private Texture playerTexture;
     private Board board;
+    private Deck deck;
 
     @Override
     public void create() {
+        Gdx.input.setInputProcessor(this);
+
         TiledMap map = new TmxMapLoader().load("newBoard.tmx");
         TiledMapTileLayer objLayer = (TiledMapTileLayer)map.getLayers().get("Tiles");
         Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
-        board = new Board(tileGrid);
-        //TileImporter.debugPrint(tileGrid);
-
         renderer = Renderer.create(map);
-
         playerTexture = new Texture("player.png");
+
+        board = new Board(tileGrid);
+        deck = new Deck(Card.programCards);
         robot = new Robot(new Vector2(0,0));
 
-        Gdx.input.setInputProcessor(this);
+        // debug
+        //TileImporter.debugPrint(tileGrid);
+        //Card.debugPrint();
     }
 
     @Override
@@ -80,8 +84,8 @@ public class Game extends InputAdapter implements ApplicationListener {
             // movement via cards
             case Input.Keys.W: executeCard(new Card(CardKind.FORWARD, 2, 0)); break;
             case Input.Keys.S: executeCard(new Card(CardKind.REVERSE, 1, 0)); break;
-            case Input.Keys.D: executeCard(new Card(CardKind.TURNRIGHT, 1, 0)); break;
-            case Input.Keys.A: executeCard(new Card(CardKind.TURNLEFT, 1, 0)); break;
+            case Input.Keys.D: executeCard(new Card(CardKind.TURN_RIGHT, 1, 0)); break;
+            case Input.Keys.A: executeCard(new Card(CardKind.TURN_LEFT, 1, 0)); break;
             case Input.Keys.F: executeCard(new Card(CardKind.FLIP, 2, 0)); break;
         }
         movePlayer(deltaPos);
@@ -93,19 +97,19 @@ public class Game extends InputAdapter implements ApplicationListener {
      * @param card card to check
      */
     private void executeCard(Card card) {
-        switch(card.getKind()) {
+        switch(card.kind) {
             case FORWARD:
-                for (int i = 0; i < card.getSteps(); i++) {
+                for (int i = 0; i < card.steps; i++) {
                     movePlayer(Linear.scl(robot.transform.direction, 1));
                 }
                 break;
             case REVERSE:
                 movePlayer(Linear.scl(robot.transform.direction, -1));
                 break;
-            case TURNRIGHT:
+            case TURN_RIGHT:
                 robot.transform.direction.rotate90(-1);
                 break;
-            case TURNLEFT:
+            case TURN_LEFT:
                 robot.transform.direction.rotate90(1);
                 break;
             case FLIP:
