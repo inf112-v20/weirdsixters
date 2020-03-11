@@ -29,7 +29,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         playerTexture = new Texture("player.png");
 
         board = new Board(tileGrid);
-        deck = new Deck();
+        deck = new Deck(Card.programCards);
         robot = new Robot(new Vector2(0,0));
 
         // debug

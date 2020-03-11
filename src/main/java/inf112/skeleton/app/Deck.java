@@ -4,31 +4,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Deck {
-    private ArrayList<Card> stack, discarded;
+    private ArrayList<Card> cards;
+    private int head;
 
-    public Deck() {
-        stack = new ArrayList<>(Card.programCards);
-        Collections.shuffle(stack);
+    public Deck(ArrayList<Card> cards) {
+        this.cards = new ArrayList(cards);
+        head = this.cards.size();
+        Collections.shuffle(this.cards);
     }
 
     public Card drawCard() {
-        if (stack.isEmpty()) {
-            assert(!discarded.isEmpty());
-            swapStacks();
-            Collections.shuffle(stack);
+        assert(head >= 0 && head <= cards.size());
+        if (head == 0) {
+            head = cards.size();
+            Collections.shuffle(cards);
         }
-        assert(!stack.isEmpty());
-        return stack.remove(stack.size() - 1);
-    }
-
-    public void discardCard(Card card) {
-        assert(!stack.contains(card));
-        discarded.add(card);
-    }
-
-    private void swapStacks() {
-        ArrayList<Card> tmp = stack;
-        stack = discarded;
-        discarded = tmp;
+        assert(head > 0);
+        return cards.remove(--head);
     }
 }
