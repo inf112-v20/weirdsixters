@@ -39,16 +39,9 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         startRound();
 
-        playerHand = new ArrayList<>(); //to be moved
-
         // debug
         //TileImporter.debugPrint(tileGrid);
         //Card.debugPrint();
-
-        //fill playerhand. to be a method in playerclass later
-        for (int i = 0; i < 9; i++) {
-            playerHand.add(deck.drawCard());
-        }
     }
 
     private void startRound() {
@@ -77,9 +70,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
 
         //draw cardslot placeholders
-        for (int i = 0; i < playerHand.size(); i++)
+        for (int i = 0; i < player.cards.size(); i++)
             renderer.drawTileSprite(playerTexture, new Vector2(), new Vector2((float) i, -1), 0);
-
+w
         renderer.end();
     }
 
