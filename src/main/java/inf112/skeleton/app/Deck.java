@@ -12,16 +12,27 @@ public class Deck {
         reset();
     }
 
-    public Card drawCard() {
-        assert(head >= 0 && head <= cards.size());
-        if (head == 0)
-            reset();
-        assert(head > 0);
-        return cards.remove(--head);
+    /**
+     * @return a new list of drawn cards.
+     */
+    public ArrayList<Card> drawCards(int count) {
+        update();
+        assert(count >= 0 && head >= count);
+        ArrayList<Card> result = new ArrayList<>(count);
+        for (int i = 0; i < count; i++)
+            result.add(cards.remove(--head));
+        return result;
     }
 
     private void reset() {
         head = cards.size();
         Collections.shuffle(cards);
+    }
+
+    // check internal state, re-shuffle if needed
+    private void update() {
+        assert(head >= 0 && head <= cards.size());
+        if (head == 0)
+            reset();
     }
 }

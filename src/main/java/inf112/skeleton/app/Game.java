@@ -18,6 +18,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Texture playerTexture;
     private Board board;
     private Deck deck;
+    private Player player;
 
     private ArrayList<Card> playerHand; //to be moved
 
@@ -34,17 +35,17 @@ public class Game extends InputAdapter implements ApplicationListener {
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
         robot = new Robot(new Vector2(0,0));
+        player = new Player(robot);
 
-        playerHand = new ArrayList<>(); //to be moved
+        startRound();
 
         // debug
         //TileImporter.debugPrint(tileGrid);
         //Card.debugPrint();
+    }
 
-        //fill playerhand. to be a method in playerclass later
-        for (int i = 0; i < 9; i++) {
-            playerHand.add(deck.drawCard());
-        }
+    private void startRound() {
+        dealCards(deck, player);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
 
         //draw cardslot placeholders
-        for (int i = 0; i < playerHand.size(); i++)
+        for (int i = 0; i < player.cards.size(); i++)
             renderer.drawTileSprite(playerTexture, new Vector2(), new Vector2((float) i, -1), 0);
 
         renderer.end();
@@ -152,5 +153,16 @@ public class Game extends InputAdapter implements ApplicationListener {
             if (robot.nextFlag == 5)
                 System.out.println("You've won!");
         }
+    }
+
+    private static void dealCards(Deck deck, Player player) {
+        player.cards = deck.drawCards(9);
+        msg("dealing cards to player " + player.number + ":");
+        for (Card c : player.cards)
+            msg(c.toString());
+    }
+
+    private static void msg(String text) {
+        System.out.println(text);
     }
 }
