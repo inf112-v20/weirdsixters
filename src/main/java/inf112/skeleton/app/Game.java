@@ -10,12 +10,16 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+
 public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
     private Robot robot;
     private Texture playerTexture;
     private Board board;
     private Deck deck;
+
+    private ArrayList<Card> playerHand; //to be moved
 
     @Override
     public void create() {
@@ -31,9 +35,16 @@ public class Game extends InputAdapter implements ApplicationListener {
         deck = new Deck(Card.programCards);
         robot = new Robot(new Vector2(0,0));
 
+        playerHand = new ArrayList<>(); //to be moved
+
         // debug
         //TileImporter.debugPrint(tileGrid);
         //Card.debugPrint();
+
+        //fill playerhand. to be a method in playerclass later
+        for (int i = 0; i < 9; i++) {
+            playerHand.add(deck.drawCard());
+        }
     }
 
     @Override
@@ -56,7 +67,11 @@ public class Game extends InputAdapter implements ApplicationListener {
   
         renderer.begin();
         renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
-        renderer.drawTileSprite(playerTexture, new Vector2(), new Vector2(0.f, -1), 0);
+
+        //draw cardslot placeholders
+        for (int i = 0; i < playerHand.size(); i++)
+            renderer.drawTileSprite(playerTexture, new Vector2(), new Vector2((float) i, -1), 0);
+
         renderer.end();
     }
 
