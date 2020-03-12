@@ -30,6 +30,7 @@ public class Deck {
         Collections.shuffle(cards);
     }
 
+    // check internal state, re-shuffle if needed
     private void update() {
         assert(head >= 0 && head <= cards.size());
         if (head == 0)
