@@ -19,12 +19,7 @@ public class Deck {
     public ArrayList<Card> drawCards(int count) {
         assert(count >= 0);
         ArrayList<Card> result = new ArrayList<>(count);
-
-        // update state
-        assert(head >= 0 && head <= cards.size());
-        if (head == 0)
-            reset();
-
+        update();
         assert(head >= count);
         for (int i = 0; i < count; i++)
             result.add(cards.remove(--head));
@@ -34,5 +29,11 @@ public class Deck {
     private void reset() {
         head = cards.size();
         Collections.shuffle(cards);
+    }
+
+    private void update() {
+        assert(head >= 0 && head <= cards.size());
+        if (head == 0)
+            reset();
     }
 }
