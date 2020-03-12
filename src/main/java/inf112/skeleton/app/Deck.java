@@ -16,10 +16,9 @@ public class Deck {
      * @return a new list of drawn cards.
      */
     public ArrayList<Card> drawCards(int count) {
-        assert(count >= 0);
-        ArrayList<Card> result = new ArrayList<>(count);
         update();
-        assert(head >= count);
+        assert(count >= 0 && head >= count);
+        ArrayList<Card> result = new ArrayList<>(count);
         for (int i = 0; i < count; i++)
             result.add(cards.remove(--head));
         return result;
