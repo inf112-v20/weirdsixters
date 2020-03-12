@@ -1,6 +1,16 @@
 package inf112.skeleton.app;
 
-public class Player {
-    private Card[] cards = new Card[9];
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import java.util.ArrayList;
+
+public class Player {
+    public final int number = 1;
+    public final Robot robot;
+
+    public ArrayList<Card> cards = new ArrayList<>();
+
+    public Player(Robot robot) {
+        this.robot = robot;
+    }
 }

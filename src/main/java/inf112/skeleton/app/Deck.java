@@ -13,6 +13,9 @@ public class Deck {
         reset();
     }
 
+    /**
+     * @return a new list of drawn cards.
+     */
     public ArrayList<Card> drawCards(int count) {
         assert(count >= 0);
         ArrayList<Card> result = new ArrayList<>(count);

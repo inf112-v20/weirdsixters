@@ -35,9 +35,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
         robot = new Robot(new Vector2(0,0));
-        player = new Player();
+        player = new Player(robot);
 
-        //player.dealCards(deck);
+        startRound();
 
         playerHand = new ArrayList<>(); //to be moved
 
@@ -49,6 +49,10 @@ public class Game extends InputAdapter implements ApplicationListener {
         for (int i = 0; i < 9; i++) {
             playerHand.add(deck.drawCard());
         }
+    }
+
+    private void startRound() {
+        dealCards(deck, player);
     }
 
     @Override
@@ -158,9 +162,14 @@ public class Game extends InputAdapter implements ApplicationListener {
         }
     }
 
-    //private void dealCards(Player player) {
-    //    for (int i )
-    //    assert(cards.length == 9);
-    //    this.cards = cards;
-    //}
+    private static void dealCards(Deck deck, Player player) {
+        player.cards = deck.drawCards(9);
+        msg("dealing cards to player " + player.number + ":");
+        for (Card c : player.cards)
+            msg(c.toString());
+    }
+
+    private static void msg(String text) {
+        System.out.println(text);
+    }
 }
