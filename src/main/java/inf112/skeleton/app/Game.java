@@ -72,7 +72,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         //draw cardslot placeholders
         for (int i = 0; i < player.cards.size(); i++)
             renderer.drawTileSprite(playerTexture, new Vector2(), new Vector2((float) i, -1), 0);
-w
+
         renderer.end();
     }
 
