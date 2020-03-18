@@ -17,7 +17,7 @@ Vi har testet executeCard() fra game.java ved å:
  - Bevege roboten mot hullet ved hjelp av piltastene.
  - Forsikre oss om at roboten returnerer til gitt "startpoint" når den treffer hullet.
  - Gjøre det flere ganger, og i tillegg printe en melding når vi treffer hullet. Dette for å forsikre oss om at alt stemmer mtp. at tile-typen stemmer.
-
+ - Forsikre oss om at roboten faller tilbake til startposisjon om den prøver å gå ut av brettet.
 
 ## Playersprite rotates with player
 Vi har testet den grafiske roteringen til spiller ved å:
@@ -30,3 +30,4 @@ Vi har testet updateFlag() ved å:
  - Bevege roboten på flagg. I tilfeldig rekkefølge, for å forsikre oss om at det ikke skje noe
  - Bevege roboten på flagg i riktig rekkefølge. Fra 1 til 4 og da oppfyller vi vinne-kravet og alle flaggene har blitt plukket opp.
  - Dette ble gjort flere ganger fra forskjellige vinkler. Hver gang funket det som det skulle og riktig melding ble printet ut i terminalen. 
+
