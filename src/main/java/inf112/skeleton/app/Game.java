@@ -55,17 +55,22 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void loseCondition(){
         Tile tile = board.getTile(robot.transform.position);
-        if(tile.kind == TileKind.hole){
+        if(tile == null){
+            robot.transform.position = new Vector2(robot.startPos);
+            System.out.println("You went outside the board");
+        }
+        else if(tile.kind == TileKind.hole){
             robot.transform.position = new Vector2(robot.startPos);
             System.out.println("Ouch, you entered a hole!");
         }
+
     }
 
     @Override
     public void render() {
-        updateFlags();
         loseCondition();
-  
+        updateFlags();
+
         renderer.begin();
         renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
 
