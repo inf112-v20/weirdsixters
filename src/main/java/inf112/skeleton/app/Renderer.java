@@ -93,7 +93,7 @@ public class Renderer {
      * @param card to get index of
      * @return V2 texIndex of given card in cards.png
      */
-    public Vector2 getTexIndex(Card card) {
+    public Vector2 getCardTexIndex(Card card) {
         switch(card.kind) {
             case FORWARD:
                 if (card.steps == 1) return new Vector2();
