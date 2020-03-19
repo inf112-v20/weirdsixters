@@ -16,6 +16,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
     private Robot robot;
     private Texture playerTexture;
+    private Texture cardTexture;
     private Board board;
     private Deck deck;
     private Player player;
@@ -31,6 +32,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
         renderer = Renderer.create(map);
         playerTexture = new Texture("player.png");
+        cardTexture = new Texture("cards.png");
 
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
@@ -76,7 +78,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         //draw cardslot placeholders
         for (int i = 0; i < player.cards.size(); i++)
-            renderer.drawTileSprite(playerTexture, new Vector2(), new Vector2((float) i, -1), 0);
+            renderer.drawTileSprite(cardTexture, getTexIndex(player.cards.get(i)), new Vector2((float) i, -1), 0);
 
         renderer.end();
     }
@@ -165,6 +167,32 @@ public class Game extends InputAdapter implements ApplicationListener {
         msg("dealing cards to player " + player.number + ":");
         for (Card c : player.cards)
             msg(c.toString());
+    }
+
+    /**
+     *
+     * @param card to get index of
+     * @return V2 texIndex of given card in cards.png
+     */
+    private Vector2 getTexIndex(Card card) {
+        switch(card.kind) {
+            case FORWARD:
+                if (card.steps == 1) return new Vector2();
+                if (card.steps == 2) return new Vector2(1, 0);
+                return new Vector2(2, 0);
+            case REVERSE:
+                return new Vector2(3, 0);
+            case TURN_RIGHT:
+                return new Vector2(5, 0);
+            case TURN_LEFT:
+                return new Vector2(4, 0);
+            case FLIP:
+                return new Vector2(6, 0);
+            default:
+                break;
+        }
+        System.out.println("unknown card..");
+        return new Vector2();
     }
 
     private static void msg(String text) {
