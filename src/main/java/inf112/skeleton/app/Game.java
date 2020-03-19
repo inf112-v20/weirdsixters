@@ -22,9 +22,12 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Player player;
 
     private ArrayList<Card> playerHand; //to be moved
+    private long lastTime;
+    private long secondTimer;
 
     @Override
     public void create() {
+        lastTime = System.currentTimeMillis();
         Gdx.input.setInputProcessor(this);
 
         TiledMap map = new TmxMapLoader().load("newBoard.tmx");
@@ -72,6 +75,15 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void render() {
         loseCondition();
         updateFlags();
+
+        long time = System.currentTimeMillis();
+        long deltaTime = time - lastTime;
+        lastTime = time;
+        secondTimer += deltaTime;
+        if (secondTimer > 1000){
+            secondTimer = 0;
+            moveRobotsOnBelts();
+        }
 
         renderer.begin();
         renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
@@ -175,5 +187,13 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private static void msg(String text) {
         System.out.println(text);
+    }
+
+    private void moveRobotsOnBelts() {
+        Vector2 robotPosition = robot.transform.position;
+        Tile tile = board.getTile(robotPosition);
+        if (tile.kind == TileKind.belt) {
+            movePlayer(tile.direction.toVector2());
+        }
     }
 }
