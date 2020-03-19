@@ -76,7 +76,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer.begin();
         renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
 
-        //draw cardslot placeholders
+        //draw cards
         for (int i = 0; i < player.cards.size(); i++)
             renderer.drawTileSprite(cardTexture, getTexIndex(player.cards.get(i)), new Vector2((float) i, -1), 0);
 
