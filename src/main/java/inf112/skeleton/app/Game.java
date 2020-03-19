@@ -16,6 +16,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
     private Robot robot;
     private Texture playerTexture;
+    private Texture cardTexture;
     private Board board;
     private Deck deck;
     private Player player;
@@ -31,6 +32,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
         renderer = Renderer.create(map);
         playerTexture = new Texture("player.png");
+        cardTexture = new Texture("cards.png");
 
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
@@ -74,9 +76,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer.begin();
         renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
 
-        //draw cardslot placeholders
+        //draw cards
         for (int i = 0; i < player.cards.size(); i++)
-            renderer.drawTileSprite(playerTexture, new Vector2(), new Vector2((float) i, -1), 0);
+            renderer.drawTileSprite(cardTexture, renderer.getCardTexIndex(player.cards.get(i)), new Vector2((float) i, -1), 0);
 
         renderer.end();
     }

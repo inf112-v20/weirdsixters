@@ -88,6 +88,32 @@ public class Renderer {
         drawTileSprite(tex, texIndex, transform.position, transform.direction.angle());
     }
 
+    /**
+     *
+     * @param card to get index of
+     * @return V2 texIndex of given card in cards.png
+     */
+    public Vector2 getCardTexIndex(Card card) {
+        switch(card.kind) {
+            case FORWARD:
+                if (card.steps == 1) return new Vector2();
+                if (card.steps == 2) return new Vector2(1, 0);
+                return new Vector2(2, 0);
+            case REVERSE:
+                return new Vector2(3, 0);
+            case TURN_RIGHT:
+                return new Vector2(5, 0);
+            case TURN_LEFT:
+                return new Vector2(4, 0);
+            case FLIP:
+                return new Vector2(6, 0);
+            default:
+                break;
+        }
+        System.out.println("unknown card..");
+        return new Vector2();
+    }
+
     private void clearFramebuffer(){
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
