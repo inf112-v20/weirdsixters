@@ -90,7 +90,10 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         //draw cards
         for (int i = 0; i < player.cards.size(); i++)
-            renderer.drawTileSprite(cardTexture, renderer.getCardTexIndex(player.cards.get(i)), new Vector2((float) i, -1), 0);
+            renderer.drawTileSprite(cardTexture, renderer.getCardTexIndex(player.cards.get(i)), new Vector2((float) i, -2), 0);
+
+        for (int i = 0; i < robot.registers.size(); i++)
+            renderer.drawTileSprite(cardTexture, renderer.getCardTexIndex(robot.registers.get(i)), new Vector2((float) i, -1), 0);
 
         renderer.end();
     }
