@@ -8,8 +8,7 @@
 ## Known bugs
 - Currently throws "WARNING: An illegal reflective access operation has occurred", 
 when the java version used is >8. This has no effect on Windows machines, but you may have to use Java 8 on Linux.
-- The game crashes when you are trying to move outside the board and then back in.
-- Walls currently does not restrict movement with cards if you move more than one step.
+- Blue belts turning left has the wrong direction.
 
 ## Testing
 
