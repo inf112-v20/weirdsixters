@@ -44,3 +44,8 @@ Vi testet stageCard() ved å:
  - starte spillet
  - trykke på knapp 1-9 på tastaturet
  - se at kortet blir flyttet til register ved å se at det flytter seg opp ett hakk
+ 
+## Renderer.getCardTexIndex
+Vi testet getCardTexIndex() ved å
+ - starte spillet
+ - se at textures som vises i spillet samsvarer med type kort gitt (dette printes i console).
