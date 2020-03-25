@@ -36,4 +36,5 @@ Vi har testet moveRobotsOnBelts() ved å;
  - starte spillet.
  - bevege spilleren to plasser til høyre slik at den står på et belte.
  - se at den beveger seg der pilene peker med omtrent ett sekunds mellomrom mellom hver bevegelse.
+
 Vi gjør det samme med de andre pilene på brettet og ser at det samme skjer.
