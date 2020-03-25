@@ -8,21 +8,12 @@ import static org.junit.Assert.assertEquals;
 public class CardTest {
 
     @Test
-    public void testGetKind(){
+    public void card_forward_fowardValue() {
         Card card1 = new Card(FORWARD, 2, 12);
         assertEquals(FORWARD, card1.kind);
-    }
-
-    @Test
-    public void testGetSteps(){
-        Card card1 = new Card(FORWARD, 2, 12);
         assertEquals(2, card1.steps);
-    }
-
-    @Test
-    public void testGetPriority(){
-        Card card1 = new Card(FORWARD, 2, 12);
         assertEquals(12, card1.priority);
+
     }
 }
 
