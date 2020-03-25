@@ -130,7 +130,6 @@ public class Game extends InputAdapter implements ApplicationListener {
             case Input.Keys.F: executeCard(new Card(CardKind.FLIP, 2, 0)); break;
         }
         movePlayer(deltaPos);
-        System.out.println(key); //print keycode
         return true;
     }
 
