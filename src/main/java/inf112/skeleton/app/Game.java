@@ -135,7 +135,8 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     /**
-     * @param index of the card on hand
+     * stages card on given index
+     * @param index of card to be staged in player.cards
      */
     private void stageCard(int index) {
         if (index >= player.cards.size()) return;
