@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 public class DirectionTest {
 
     @Test
-    public void fromVector2Test() {
+    public void fromVector2_direction_rightValue() {
         assertEquals(Direction.RIGHT, Direction.fromVector2(null));
         assertEquals(Direction.RIGHT, Direction.fromVector2(new Vector2(0,0)));
 
