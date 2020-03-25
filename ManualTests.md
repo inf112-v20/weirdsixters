@@ -30,4 +30,10 @@ Vi har testet updateFlag() ved å:
  - Bevege roboten på flagg. I tilfeldig rekkefølge, for å forsikre oss om at det ikke skje noe
  - Bevege roboten på flagg i riktig rekkefølge. Fra 1 til 4 og da oppfyller vi vinne-kravet og alle flaggene har blitt plukket opp.
  - Dette ble gjort flere ganger fra forskjellige vinkler. Hver gang funket det som det skulle og riktig melding ble printet ut i terminalen. 
-
+ 
+## Game.moveRobotsOnBetls
+Vi har testet moveRobotsOnBelts() ved å;
+ - starte spillet.
+ - bevege spilleren to plasser til høyre slik at den står på et belte.
+ - se at den beveger seg der pilene peker med omtrent ett sekunds mellomrom mellom hver bevegelse.
+Vi gjør det samme med de andre pilene på brettet og ser at det samme skjer.
