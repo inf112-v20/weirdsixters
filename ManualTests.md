@@ -40,7 +40,7 @@ Vi har testet moveRobotsOnBelts() ved å;
 Vi gjør det samme med de andre pilene på brettet og ser at det samme skjer.
 
 ## Game.stageCard
-Vi testet at kort blir staget ved å:
+Vi testet stageCard() ved å:
  - starte spillet
  - trykke på knapp 1-9 på tastaturet
- - se at kortet blir flyttet til register ved å se at det flytter seg opp
+ - se at kortet blir flyttet til register ved å se at det flytter seg opp ett hakk
