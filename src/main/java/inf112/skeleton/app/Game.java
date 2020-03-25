@@ -112,6 +112,9 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public boolean keyDown(int key) {
+        //stage card
+        if (key >= 8 && key <= 16) stageCard(key-8);
+
         Vector2 deltaPos = new Vector2(0,0);
         switch (key){
             case Input.Keys.RIGHT: deltaPos.x++; break;
@@ -127,7 +130,16 @@ public class Game extends InputAdapter implements ApplicationListener {
             case Input.Keys.F: executeCard(new Card(CardKind.FLIP, 2, 0)); break;
         }
         movePlayer(deltaPos);
+        System.out.println(key); //print keycode
         return true;
+    }
+
+    /**
+     * @param index of the card on hand
+     */
+    private void stageCard(int index) {
+        if (index >= player.cards.size()) return;
+        robot.registers.add(player.cards.remove(index));
     }
 
     /**
