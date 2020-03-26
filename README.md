@@ -9,7 +9,7 @@
 - Currently throws "WARNING: An illegal reflective access operation has occurred", 
 when the java version used is >8. This has no effect on Windows machines, but you may have to use Java 8 on Linux.
 - Blue belts turning left has the wrong direction.
-
+- Possible to provide Robot all the nine cards. Should only be possible to give 5.
 ## Testing
 
 There are three different methods of testing used in this project:
