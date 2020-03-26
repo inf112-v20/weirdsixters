@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+// TODO: Rename to GameRenderer
 public class Renderer {
     private final Vector2 tileSize;
     private final Vector2 mapSize;
@@ -21,6 +22,8 @@ public class Renderer {
     private OrthogonalTiledMapRenderer tilemapRenderer;
     private SpriteBatch spriteBatch;
     private BitmapFont font;
+    private Texture playerTexture;
+    private Texture cardTexture;
 
     // private as it should only be called from @create
     private Renderer(TiledMap map) {
@@ -47,6 +50,9 @@ public class Renderer {
 
         font = new BitmapFont();
         font.setColor(Color.RED);
+
+        playerTexture = new Texture("player.png");
+        cardTexture = new Texture("cards.png");
     }
 
     // need this for a matching pair of @create and @dispose
@@ -88,30 +94,14 @@ public class Renderer {
         drawTileSprite(tex, texIndex, transform.position, transform.direction.angle());
     }
 
-    /**
-     *
-     * @param card to get index of
-     * @return V2 texIndex of given card in cards.png
-     */
-    public Vector2 getCardTexIndex(Card card) {
-        switch(card.kind) {
-            case FORWARD:
-                if (card.steps == 1) return new Vector2();
-                if (card.steps == 2) return new Vector2(1, 0);
-                return new Vector2(2, 0);
-            case REVERSE:
-                return new Vector2(3, 0);
-            case TURN_RIGHT:
-                return new Vector2(5, 0);
-            case TURN_LEFT:
-                return new Vector2(4, 0);
-            case FLIP:
-                return new Vector2(6, 0);
-            default:
-                break;
-        }
-        System.out.println("unknown card..");
-        return new Vector2();
+    public void drawRobot(Transform transform) {
+        drawTileSprite(playerTexture, new Vector2(), transform);
+    }
+
+    public void drawCard(Card card, int row, int column) {
+        Vector2 texIndex = cardTextureIndex(card);
+        Vector2 coord = new Vector2(column, -1 - row);
+        drawTileSprite(cardTexture, texIndex, coord, 0);
     }
 
     private void clearFramebuffer(){
@@ -136,5 +126,30 @@ public class Renderer {
         int w = (int)tileSize.x;
         int h = (int)tileSize.y;
         return new TextureRegion(tex, x, y, w, h);
+    }
+
+    /**
+     * @param card to get index of
+     * @return V2 texIndex of given card in cards.png
+     */
+    private Vector2 cardTextureIndex(Card card) {
+        switch(card.kind) {
+            case FORWARD:
+                if (card.steps == 1) return new Vector2();
+                if (card.steps == 2) return new Vector2(1, 0);
+                return new Vector2(2, 0);
+            case REVERSE:
+                return new Vector2(3, 0);
+            case TURN_RIGHT:
+                return new Vector2(5, 0);
+            case TURN_LEFT:
+                return new Vector2(4, 0);
+            case FLIP:
+                return new Vector2(6, 0);
+            default:
+                break;
+        }
+        System.out.println("unknown card..");
+        return new Vector2();
     }
 }

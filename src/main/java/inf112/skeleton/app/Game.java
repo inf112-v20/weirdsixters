@@ -4,24 +4,18 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
-import java.util.ArrayList;
-
 public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
     private Robot robot;
-    private Texture playerTexture;
-    private Texture cardTexture;
     private Board board;
     private Deck deck;
     private Player player;
 
-    private ArrayList<Card> playerHand; //to be moved
     private long lastTime;
     private long secondTimer;
 
@@ -34,8 +28,6 @@ public class Game extends InputAdapter implements ApplicationListener {
         TiledMapTileLayer objLayer = (TiledMapTileLayer)map.getLayers().get("Tiles");
         Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
         renderer = Renderer.create(map);
-        playerTexture = new Texture("player.png");
-        cardTexture = new Texture("cards.png");
 
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
@@ -62,11 +54,11 @@ public class Game extends InputAdapter implements ApplicationListener {
         Tile tile = board.getTile(robot.transform.position);
         if(tile == null){
             robot.transform.position = new Vector2(robot.startPos);
-            System.out.println("You went outside the board");
+            msg("You went outside the board");
         }
         else if(tile.kind == TileKind.hole){
             robot.transform.position = new Vector2(robot.startPos);
-            System.out.println("Ouch, you entered a hole!");
+            msg("Ouch, you entered a hole!");
         }
 
     }
@@ -86,15 +78,11 @@ public class Game extends InputAdapter implements ApplicationListener {
         }
 
         renderer.begin();
-        renderer.drawTileSprite(playerTexture, new Vector2(), robot.transform);
-
-        //draw cards
-        for (int i = 0; i < player.cards.size(); i++)
-            renderer.drawTileSprite(cardTexture, renderer.getCardTexIndex(player.cards.get(i)), new Vector2((float) i, -2), 0);
-
+        renderer.drawRobot(robot.transform);
         for (int i = 0; i < robot.registers.size(); i++)
-            renderer.drawTileSprite(cardTexture, renderer.getCardTexIndex(robot.registers.get(i)), new Vector2((float) i, -1), 0);
-
+            renderer.drawCard(robot.registers.get(i), 0, i);
+        for (int i = 0; i < player.cards.size(); i++)
+            renderer.drawCard(player.cards.get(i), 1, i);
         renderer.end();
     }
 
@@ -112,9 +100,12 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public boolean keyDown(int key) {
-        //stage card
-        if (key >= 8 && key <= 16) stageCard(key-8);
 
+        // card actions
+        if (key >= Input.Keys.NUM_1 && key <= Input.Keys.NUM_9)
+            stageCard(key - Input.Keys.NUM_1);
+
+        // debug movement actions
         Vector2 deltaPos = new Vector2(0,0);
         switch (key){
             case Input.Keys.RIGHT: deltaPos.x++; break;
@@ -187,9 +178,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         if (tile.kind == TileKind.flag && tile.level == robot.nextFlag) {
             robot.nextFlag++;
             if (tile.kind == TileKind.flag && tile.level == (robot.nextFlag-1))
-                System.out.println("You've landed on a flag nr: " + (robot.nextFlag-1) + ", the next flag you need is flag nr: " + robot.nextFlag + "");
+                msg("You've landed on a flag nr: " + (robot.nextFlag-1) + ", the next flag you need is flag nr: " + robot.nextFlag + "");
             if (robot.nextFlag == 5)
-                System.out.println("You've won!");
+                msg("You've won!");
         }
     }
 
@@ -200,15 +191,15 @@ public class Game extends InputAdapter implements ApplicationListener {
             msg(c.toString());
     }
 
-    private static void msg(String text) {
-        System.out.println(text);
-    }
-
     private void moveRobotsOnBelts() {
         Vector2 robotPosition = robot.transform.position;
         Tile tile = board.getTile(robotPosition);
         if (tile.kind == TileKind.belt) {
             movePlayer(tile.direction.toVector2());
         }
+    }
+
+    private static void msg(String text) {
+        System.out.println(text);
     }
 }
