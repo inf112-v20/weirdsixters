@@ -101,7 +101,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     @Override
     public boolean keyDown(int key) {
 
-        // card actions
+        // stage/unstage card
         if (key >= Input.Keys.NUM_1 && key <= Input.Keys.NUM_9) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
                 unstageCard(key - Input.Keys.NUM_1);
@@ -138,8 +138,8 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     /**
-     * unstages card on given index
-     * @param index of card to be unstaged from robot.registers
+     * un-stages card on given index
+     * @param index of card to be un-staged from robot.registers
      */
     private void unstageCard(int index) {
         if (index >= robot.registers.size()) return;
