@@ -28,5 +28,5 @@ MVP forblir ca slik som vi skrev i andre innlevering under høynivåkrav. Vi ser
 
 Vi har dokumentert våre bugs i README filen.
 
-
+Angående klasse-diagram, har vi som diskutert kun tatt med relevant informasjon for å unngå støy.
 
