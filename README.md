@@ -13,6 +13,7 @@
 when the java version used is >8. This has no effect on Windows machines, but you may have to use Java 8 on Linux.
 - Blue belts turning left have the wrong direction.
 - Possible to provide Robot all the nine cards. Should only be possible to give 5.
+- Some tiles or some movement actions or some deaths may not work as intended.
 
 ## Testing
 
@@ -29,6 +30,8 @@ Runtime assertions can be enabled with the Java VM flag "-ea".
 
 - Arrow keys: Manually move player
 - WASD + F: Manually execute movement cards, see Game.keydown() line 69 - 73 for more info
+- 1-9: Stage cards
+- SHIFT + 1-5: Unstage cards
 
 ## Compatibility
 
