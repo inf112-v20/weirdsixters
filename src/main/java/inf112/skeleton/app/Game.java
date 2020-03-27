@@ -102,8 +102,12 @@ public class Game extends InputAdapter implements ApplicationListener {
     public boolean keyDown(int key) {
 
         // card actions
-        if (key >= Input.Keys.NUM_1 && key <= Input.Keys.NUM_9)
-            stageCard(key - Input.Keys.NUM_1);
+        if (key >= Input.Keys.NUM_1 && key <= Input.Keys.NUM_9) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+                unstageCard(key - Input.Keys.NUM_1);
+            else
+                stageCard(key - Input.Keys.NUM_1);
+        }
 
         // debug movement actions
         Vector2 deltaPos = new Vector2(0,0);
@@ -131,6 +135,15 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void stageCard(int index) {
         if (index >= player.cards.size()) return;
         robot.registers.add(player.cards.remove(index));
+    }
+
+    /**
+     * unstages card on given index
+     * @param index of card to be unstaged from robot.registers
+     */
+    private void unstageCard(int index) {
+        if (index >= robot.registers.size()) return;
+        player.cards.add(robot.registers.remove(index));
     }
 
     /**
