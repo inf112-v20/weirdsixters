@@ -63,6 +63,24 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     }
 
+    private void dealDamage(){
+        robot.health--;
+        if (robot.health >= 1){
+            msg ("Oof, that will leave a mark. You have " + robot.health + " health remaining!");
+        }
+        if (robot.health <= 0){
+            robot.transform.position = new Vector2(robot.startPos);
+            robot.health = 9;
+            robot.lives--;
+            if (robot.lives >= 1) {
+                msg("Another one bites the dust! You have " + robot.lives + " lives remaining!");
+            }
+            if (robot.lives <= 0){
+                msg("It's over, you're dead! Better luck next time, idiot!");
+            }
+        }
+    }
+
     @Override
     public void render() {
         loseCondition();
@@ -109,13 +127,14 @@ public class Game extends InputAdapter implements ApplicationListener {
                 stageCard(key - Input.Keys.NUM_1);
         }
 
-        // debug movement actions
+        // debug movement and damage actions
         Vector2 deltaPos = new Vector2(0,0);
         switch (key){
             case Input.Keys.RIGHT: deltaPos.x++; break;
             case Input.Keys.LEFT: deltaPos.x--; break;
             case Input.Keys.UP: deltaPos.y++; break;
             case Input.Keys.DOWN: deltaPos.y--; break;
+            case Input.Keys.G: dealDamage(); break;
 
             // movement via cards
             case Input.Keys.W: executeCard(new Card(CardKind.FORWARD, 2, 0)); break;
