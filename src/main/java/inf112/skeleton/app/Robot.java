@@ -24,20 +24,29 @@ public class Robot {
         transform.position = new Vector2(startPos);
     }
 
+    private void respawn(){
+        resetPosition();
+        System.out.println("Another one bites the dust! You have " + lives + " lives remaining!");
+    }
+
+    private void kill(){
+        resetPosition();
+        System.out.println("It's over, you're dead! Better luck next time, idiot!");
+    }
+
     public void dealDamage(){
         health--;
         if (health >= 1){
             System.out.println("Oof, that will leave a mark. You have " + health + " health remaining!");
         }
         else if (health <= 0){
-            resetPosition();
             health = 9;
             lives--;
             if (lives >= 1) {
-                System.out.println("Another one bites the dust! You have " + lives + " lives remaining!");
+                respawn();
             }
             else if (lives <= 0){
-                System.out.println("It's over, you're dead! Better luck next time, idiot!");
+                kill();
             }
         }
     }
