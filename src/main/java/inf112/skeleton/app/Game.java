@@ -62,27 +62,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         }
 
     }
-
-    /***
-    private void dealDamage(){
-        robot.health--;
-        if (robot.health >= 1){
-            msg ("Oof, that will leave a mark. You have " + robot.health + " health remaining!");
-        }
-        else if (robot.health <= 0){
-            resetPosition();
-            robot.health = 9;
-            robot.lives--;
-            if (robot.lives >= 1) {
-                msg("Another one bites the dust! You have " + robot.lives + " lives remaining!");
-            }
-            else if (robot.lives <= 0){
-                msg("It's over, you're dead! Better luck next time, idiot!");
-            }
-        }
-    }
-     ***/
-
+    
     @Override
     public void render() {
         loseCondition();
