@@ -53,23 +53,24 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void loseCondition(){
         Tile tile = board.getTile(robot.transform.position);
         if(tile == null){
-            robot.transform.position = new Vector2(robot.startPos);
+            robot.resetPosition();
             msg("You went outside the board");
         }
         else if(tile.kind == TileKind.hole){
-            robot.transform.position = new Vector2(robot.startPos);
+            robot.resetPosition();
             msg("Ouch, you entered a hole!");
         }
 
     }
 
+    /***
     private void dealDamage(){
         robot.health--;
         if (robot.health >= 1){
             msg ("Oof, that will leave a mark. You have " + robot.health + " health remaining!");
         }
         else if (robot.health <= 0){
-            robot.transform.position = new Vector2(robot.startPos);
+            resetPosition();
             robot.health = 9;
             robot.lives--;
             if (robot.lives >= 1) {
@@ -80,6 +81,7 @@ public class Game extends InputAdapter implements ApplicationListener {
             }
         }
     }
+     ***/
 
     @Override
     public void render() {
@@ -134,7 +136,7 @@ public class Game extends InputAdapter implements ApplicationListener {
             case Input.Keys.LEFT: deltaPos.x--; break;
             case Input.Keys.UP: deltaPos.y++; break;
             case Input.Keys.DOWN: deltaPos.y--; break;
-            case Input.Keys.G: dealDamage(); break;
+            case Input.Keys.G: robot.dealDamage(); break;
 
             // movement via cards
             case Input.Keys.W: executeCard(new Card(CardKind.FORWARD, 2, 0)); break;

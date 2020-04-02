@@ -8,8 +8,8 @@ public class Robot {
     public Transform transform;
     public final Vector2 startPos;
     public int nextFlag;
-    public int health;
-    public int lives;
+    private int health;
+    private int lives;
     public ArrayList<Card> registers = new ArrayList<>();
 
     public Robot(Vector2 startPos) {
@@ -18,5 +18,27 @@ public class Robot {
         nextFlag = 1;
         health = 9;
         lives = 3;
+    }
+
+    public void resetPosition(){
+        transform.position = new Vector2(startPos);
+    }
+
+    public void dealDamage(){
+        health--;
+        if (health >= 1){
+            System.out.println("Oof, that will leave a mark. You have " + health + " health remaining!");
+        }
+        else if (health <= 0){
+            resetPosition();
+            health = 9;
+            lives--;
+            if (lives >= 1) {
+                System.out.println("Another one bites the dust! You have " + lives + " lives remaining!");
+            }
+            else if (lives <= 0){
+                System.out.println("It's over, you're dead! Better luck next time, idiot!");
+            }
+        }
     }
 }
