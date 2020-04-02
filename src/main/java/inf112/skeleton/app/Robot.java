@@ -8,9 +8,11 @@ public class Robot {
     public Transform transform;
     public final Vector2 startPos;
     public int nextFlag;
+    public ArrayList<Card> registers = new ArrayList<>();
+
     private int health;
     private int lives;
-    public ArrayList<Card> registers = new ArrayList<>();
+
 
     public Robot(Vector2 startPos) {
         transform = new Transform(startPos, new Vector2(1, 0));
@@ -39,13 +41,13 @@ public class Robot {
         if (health >= 1){
             System.out.println("Oof, that will leave a mark. You have " + health + " health remaining!");
         }
-        else if (health <= 0){
+        else {
             health = 9;
             lives--;
             if (lives >= 1) {
                 respawn();
             }
-            else if (lives <= 0){
+            else {
                 kill();
             }
         }

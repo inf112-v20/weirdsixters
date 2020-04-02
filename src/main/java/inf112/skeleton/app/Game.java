@@ -62,7 +62,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         }
 
     }
-    
+
     @Override
     public void render() {
         loseCondition();
