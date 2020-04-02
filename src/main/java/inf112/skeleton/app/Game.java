@@ -68,14 +68,14 @@ public class Game extends InputAdapter implements ApplicationListener {
         if (robot.health >= 1){
             msg ("Oof, that will leave a mark. You have " + robot.health + " health remaining!");
         }
-        if (robot.health <= 0){
+        else if (robot.health <= 0){
             robot.transform.position = new Vector2(robot.startPos);
             robot.health = 9;
             robot.lives--;
             if (robot.lives >= 1) {
                 msg("Another one bites the dust! You have " + robot.lives + " lives remaining!");
             }
-            if (robot.lives <= 0){
+            else if (robot.lives <= 0){
                 msg("It's over, you're dead! Better luck next time, idiot!");
             }
         }
