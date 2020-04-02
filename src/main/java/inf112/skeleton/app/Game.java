@@ -53,11 +53,11 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void loseCondition(){
         Tile tile = board.getTile(robot.transform.position);
         if(tile == null){
-            robot.transform.position = new Vector2(robot.startPos);
+            robot.resetPosition();
             msg("You went outside the board");
         }
         else if(tile.kind == TileKind.hole){
-            robot.transform.position = new Vector2(robot.startPos);
+            robot.resetPosition();
             msg("Ouch, you entered a hole!");
         }
 
@@ -109,13 +109,14 @@ public class Game extends InputAdapter implements ApplicationListener {
                 stageCard(key - Input.Keys.NUM_1);
         }
 
-        // debug movement actions
+        // debug movement and damage actions
         Vector2 deltaPos = new Vector2(0,0);
         switch (key){
             case Input.Keys.RIGHT: deltaPos.x++; break;
             case Input.Keys.LEFT: deltaPos.x--; break;
             case Input.Keys.UP: deltaPos.y++; break;
             case Input.Keys.DOWN: deltaPos.y--; break;
+            case Input.Keys.G: robot.dealDamage(); break;
 
             // movement via cards
             case Input.Keys.W: executeCard(new Card(CardKind.FORWARD, 2, 0)); break;
