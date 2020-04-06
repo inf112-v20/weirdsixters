@@ -9,12 +9,15 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+
 public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
-    private Robot robot;
     private Board board;
     private Deck deck;
-    private Player player;
+    private Player player1;
+    private ArrayList<Robot> robots = new ArrayList<>();
+    private ArrayList<Player> players = new ArrayList<>();
 
     private long lastTime;
     private long secondTimer;
@@ -31,8 +34,8 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
-        robot = new Robot(new Vector2(0,0));
-        player = new Player(robot);
+        player1 = new Player(new Robot(new Vector2(1,0)));
+        players.add(player1);
 
         startRound();
 
@@ -42,7 +45,9 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     private void startRound() {
-        dealCards(deck, player);
+        for(Player p: players){
+            dealCards(deck, p);
+        }
     }
 
     @Override
@@ -51,16 +56,16 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     private void loseCondition(){
-        Tile tile = board.getTile(robot.transform.position);
-        if(tile == null){
-            robot.resetPosition();
-            msg("You went outside the board");
+        for(Robot robot: robots) {
+            Tile tile = board.getTile(robot.transform.position);
+            if (tile == null) {
+                robot.resetPosition();
+                msg("You went outside the board");
+            } else if (tile.kind == TileKind.hole) {
+                robot.resetPosition();
+                msg("Ouch, you entered a hole!");
+            }
         }
-        else if(tile.kind == TileKind.hole){
-            robot.resetPosition();
-            msg("Ouch, you entered a hole!");
-        }
-
     }
 
     @Override
@@ -78,11 +83,15 @@ public class Game extends InputAdapter implements ApplicationListener {
         }
 
         renderer.begin();
-        renderer.drawRobot(robot.transform);
-        for (int i = 0; i < robot.registers.size(); i++)
-            renderer.drawCard(robot.registers.get(i), 0, i);
-        for (int i = 0; i < player.cards.size(); i++)
-            renderer.drawCard(player.cards.get(i), 1, i);
+        for (Robot robot: robots) {
+            renderer.drawRobot(robot.transform);
+            for (int i = 0; i < robot.registers.size(); i++)
+                renderer.drawCard(robot.registers.get(i), 0, i);
+        }
+        for (Player player: players) {
+            for (int i = 0; i < player.cards.size(); i++)
+                renderer.drawCard(player.cards.get(i), 1, i);
+        }
         renderer.end();
     }
 
@@ -116,7 +125,7 @@ public class Game extends InputAdapter implements ApplicationListener {
             case Input.Keys.LEFT: deltaPos.x--; break;
             case Input.Keys.UP: deltaPos.y++; break;
             case Input.Keys.DOWN: deltaPos.y--; break;
-            case Input.Keys.G: robot.dealDamage(); break;
+            case Input.Keys.G: player1.robot.dealDamage(); break;
 
             // movement via cards
             case Input.Keys.W: executeCard(new Card(CardKind.FORWARD, 2, 0)); break;
@@ -134,8 +143,8 @@ public class Game extends InputAdapter implements ApplicationListener {
      * @param index of card to be staged in player.cards
      */
     private void stageCard(int index) {
-        if (index >= player.cards.size()) return;
-        robot.registers.add(player.cards.remove(index));
+        if (index >= player1.cards.size()) return;
+        player1.robot.registers.add(player1.cards.remove(index));
     }
 
     /**
@@ -143,8 +152,8 @@ public class Game extends InputAdapter implements ApplicationListener {
      * @param index of card to be un-staged from robot.registers
      */
     private void unstageCard(int index) {
-        if (index >= robot.registers.size()) return;
-        player.cards.add(robot.registers.remove(index));
+        if (index >= player1.robot.registers.size()) return;
+        player1.cards.add(player1.robot.registers.remove(index));
     }
 
     /**
@@ -155,20 +164,20 @@ public class Game extends InputAdapter implements ApplicationListener {
         switch(card.kind) {
             case FORWARD:
                 for (int i = 0; i < card.steps; i++) {
-                    movePlayer(Linear.scl(robot.transform.direction, 1));
+                    movePlayer(Linear.scl(player1.robot.transform.direction, 1));
                 }
                 break;
             case REVERSE:
-                movePlayer(Linear.scl(robot.transform.direction, -1));
+                movePlayer(Linear.scl(player1.robot.transform.direction, -1));
                 break;
             case TURN_RIGHT:
-                robot.transform.direction.rotate90(-1);
+                player1.robot.transform.direction.rotate90(-1);
                 break;
             case TURN_LEFT:
-                robot.transform.direction.rotate90(1);
+                player1.robot.transform.direction.rotate90(1);
                 break;
             case FLIP:
-                robot.transform.direction.rotate(180f);
+                player1.robot.transform.direction.rotate(180f);
                 break;
             default:
                 break;
@@ -176,7 +185,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     private void movePlayer(Vector2 deltaPos) {
-        Vector2 pos = robot.transform.position;
+        Vector2 pos = player1.robot.transform.position;
         Vector2 dir = Linear.nor(deltaPos);
         Tile tile = board.getTile(pos);
         if(tile == null || tile.kind == TileKind.hole){
@@ -187,13 +196,13 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     private void updateFlags() {
-        Vector2 robotPosition = robot.transform.position;
+        Vector2 robotPosition = player1.robot.transform.position;
         Tile tile = board.getTile(robotPosition);
-        if (tile.kind == TileKind.flag && tile.level == robot.nextFlag) {
-            robot.nextFlag++;
-            if (tile.kind == TileKind.flag && tile.level == (robot.nextFlag-1))
-                msg("You've landed on a flag nr: " + (robot.nextFlag-1) + ", the next flag you need is flag nr: " + robot.nextFlag + "");
-            if (robot.nextFlag == 5)
+        if (tile.kind == TileKind.flag && tile.level == player1.robot.nextFlag) {
+            player1.robot.nextFlag++;
+            if (tile.kind == TileKind.flag && tile.level == (player1.robot.nextFlag-1))
+                msg("You've landed on a flag nr: " + (player1.robot.nextFlag-1) + ", the next flag you need is flag nr: " + player1.robot.nextFlag + "");
+            if (player1.robot.nextFlag == 5)
                 msg("You've won!");
         }
     }
@@ -206,7 +215,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     private void moveRobotsOnBelts() {
-        Vector2 robotPosition = robot.transform.position;
+        Vector2 robotPosition = player1.robot.transform.position;
         Tile tile = board.getTile(robotPosition);
         if (tile.kind == TileKind.belt) {
             movePlayer(tile.direction.toVector2());
