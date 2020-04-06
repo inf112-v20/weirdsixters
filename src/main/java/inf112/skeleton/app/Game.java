@@ -34,14 +34,24 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
-        player1 = new Player(new Robot(new Vector2(1,0)));
-        players.add(player1);
+
+        player1 = addPlayer(new Vector2(1,0));
+        addPlayer(new Vector2(0,1));
+        addPlayer(new Vector2(0,2));
 
         startRound();
 
         // debug
         //TileImporter.debugPrint(tileGrid);
         //Card.debugPrint();
+    }
+
+    private Player addPlayer(Vector2 pos) {
+        Robot robot = new Robot(pos);
+        robots.add(robot);
+        Player player = new Player(robot);
+        players.add(player);
+        return player;
     }
 
     private void startRound() {
@@ -198,6 +208,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void updateFlags() {
         Vector2 robotPosition = player1.robot.transform.position;
         Tile tile = board.getTile(robotPosition);
+        assert(tile != null);
         if (tile.kind == TileKind.flag && tile.level == player1.robot.nextFlag) {
             player1.robot.nextFlag++;
             if (tile.kind == TileKind.flag && tile.level == (player1.robot.nextFlag-1))
