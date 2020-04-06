@@ -17,7 +17,7 @@ public class Board {
         robotGrid[y][x] = r;
     }
 
-    public boolean canMovePiece(Vector2 fromPos, Vector2 dir) {
+    private boolean canMovePiece(Vector2 fromPos, Vector2 dir) {
         Vector2 toPos = Linear.add(fromPos, dir);
         Tile fromTile = getTile(fromPos);
         if (fromTile.blocksDir(dir, false))
@@ -44,7 +44,6 @@ public class Board {
         Robot r = getRobot(x1, y1);
         if (r == null)
             return;
-        //assert(r != null);
         r.transform.position.add(new Vector2(x2-x1, y2-y1));
         robotGrid[y1][x1] = null;
         if (x2 < 0 || y2 < 0 || x2 >= robotGrid[0].length || y2 >= robotGrid.length)

@@ -37,7 +37,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         player1 = addPlayer(new Vector2(1,0));
         addPlayer(new Vector2(0,4));
-        //addPlayer(new Vector2(0,2));
+        addPlayer(new Vector2(0,5));
 
         startRound();
 
@@ -203,7 +203,6 @@ public class Game extends InputAdapter implements ApplicationListener {
         if(tile == null || tile.kind == TileKind.hole){
             return;
         }
-
         board.move((int)pos.x, (int)pos.y, (int)dir.x, (int)dir.y);
     }
 
