@@ -37,7 +37,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         player1 = addPlayer(new Vector2(1,0));
         addPlayer(new Vector2(0,1));
-        addPlayer(new Vector2(0,2));
+        //addPlayer(new Vector2(0,2));
 
         startRound();
 
@@ -49,6 +49,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Player addPlayer(Vector2 pos) {
         Robot robot = new Robot(pos);
         robots.add(robot);
+        board.addRobot(robot, (int)pos.x, (int)pos.y);
         Player player = new Player(robot);
         players.add(player);
         return player;
@@ -144,7 +145,8 @@ public class Game extends InputAdapter implements ApplicationListener {
             case Input.Keys.A: executeCard(new Card(CardKind.TURN_LEFT, 1, 0)); break;
             case Input.Keys.F: executeCard(new Card(CardKind.FLIP, 2, 0)); break;
         }
-        movePlayer(deltaPos);
+        if (deltaPos.len() != 0)
+            movePlayer(deltaPos);
         return true;
     }
 
@@ -201,8 +203,8 @@ public class Game extends InputAdapter implements ApplicationListener {
         if(tile == null || tile.kind == TileKind.hole){
             return;
         }
-        if (board.canMovePiece(pos, dir))
-            pos.add(deltaPos);
+
+        board.move((int)pos.x, (int)pos.y, (int)dir.x, (int)dir.y);
     }
 
     private void updateFlags() {
