@@ -52,19 +52,25 @@ public class Board {
         robotGrid[y2][x2] = r;
     }
 
-    public void move(int x1, int y1, int dx, int dy) {
+    /**
+     * @return false when the entire move is blocked
+     */
+    public boolean move(int x1, int y1, int dx, int dy) {
         int x2 = x1 + dx;
         int y2 = y1 + dy;
 
         Robot r1 = getRobot(x1, y1);
         if (r1 == null)
-            return;
+            return true;
         if (!canMovePiece(new Vector2(x1, y1), new Vector2(dx, dy)))
-            return;
+            return false;
 
         Robot r2 = getRobot(x2, y2);
-        if (r2 != null)
-            move(x2, y2, dx, dy);
+        if (r2 != null) {
+            if (!move(x2, y2, dx, dy))
+                return false;
+        }
         moveRobot(x1, y1, x2, y2);
+        return true;
     }
 }

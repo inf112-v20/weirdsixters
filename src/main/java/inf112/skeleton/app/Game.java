@@ -36,7 +36,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         deck = new Deck(Card.programCards);
 
         player1 = addPlayer(new Vector2(1,0));
-        addPlayer(new Vector2(0,1));
+        addPlayer(new Vector2(0,4));
         //addPlayer(new Vector2(0,2));
 
         startRound();
