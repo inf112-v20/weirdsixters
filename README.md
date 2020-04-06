@@ -14,6 +14,7 @@ when the java version used is >8. This has no effect on Windows machines, but yo
 - Blue belts turning left have the wrong direction.
 - Possible to provide Robot all the nine cards. Should only be possible to give 5.
 - Some tiles or some movement actions or some deaths may not work as intended.
+- Not possible to move Player after death
 
 ## Testing
 
