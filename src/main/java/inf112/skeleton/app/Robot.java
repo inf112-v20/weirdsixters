@@ -6,11 +6,13 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 
 public class Robot {
+    public static final int REGISTER_SIZE = 5;
+
     public final Vector2 startPos;
     public final Color color;
 
-    public Vector2 direction;
     public ArrayList<Card> registers = new ArrayList<>();
+    public Vector2 direction;
     public int nextFlag;
 
     private int health;
@@ -33,5 +35,39 @@ public class Robot {
 
     public boolean isDead(){
         return lives < 1;
+    }
+
+    /**
+     * Add card to first idle register.
+     * @return true on success.
+     */
+    public boolean addCard(Card card) {
+        if (registers.size() >= REGISTER_SIZE)
+            return false;
+        registers.add(card);
+        return true;
+    }
+
+    public Card getCard(int i) {
+        return registers.get(i);
+    }
+
+    public void clearRegisters() {
+        registers.clear();
+    }
+
+    /**
+     * @return true if the robot has been fully programmed.
+     */
+    public boolean isReady() {
+        return registers.size() == REGISTER_SIZE;
+    }
+
+    public int cardCount() {
+        return registers.size();
+    }
+
+    public Card removeCard(int index) {
+        return registers.remove(index);
     }
 }
