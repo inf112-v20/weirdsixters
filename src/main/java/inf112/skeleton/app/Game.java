@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -31,7 +32,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
-        robot = new Robot(new Vector2(0,0));
+        robot = new Robot(new Vector2(0,0), new Color());
         player = new Player(robot);
 
         startRound();
@@ -62,6 +63,8 @@ public class Game extends InputAdapter implements ApplicationListener {
         }
 
     }
+
+
 
     @Override
     public void render() {
