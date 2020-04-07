@@ -9,30 +9,30 @@ public class Deck {
 
     public Deck(ArrayList<Card> cards) {
         this.cards = new ArrayList(cards);
-        reset();
+        shuffle();
     }
 
     /**
      * @return a new list of drawn cards.
      */
     public ArrayList<Card> drawCards(int count) {
-        update();
-        assert(count >= 0 && head >= count);
+        assert(head >= 0 && head <= cards.size());
+        if (!enoughCards(count))
+            shuffle();
+
         ArrayList<Card> result = new ArrayList<>(count);
         for (int i = 0; i < count; i++)
-            result.add(cards.remove(--head));
+            result.add(cards.get(--head));
         return result;
     }
 
-    private void reset() {
-        head = cards.size();
-        Collections.shuffle(cards);
+    private boolean enoughCards(int count) {
+        return head >= count;
     }
 
-    // check internal state, re-shuffle if needed
-    private void update() {
-        assert(head >= 0 && head <= cards.size());
-        if (head == 0)
-            reset();
+    private void shuffle() {
+        System.out.println("Shuffling deck");
+        head = cards.size();
+        Collections.shuffle(cards);
     }
 }

@@ -19,6 +19,14 @@ public class DeckTest {
         Deck deck = new Deck(Card.programCards);
         ArrayList<Card> cards = deck.drawCards(9);
         assertEquals(9, cards.size());
-        System.out.println(cards.get(0).toString());
+    }
+
+    @Test
+    public void drawCard_countOverCapacity_doesNotRunDry() {
+        int n = Card.programCards.size();
+        Deck deck = new Deck(Card.programCards);
+        ArrayList<Card> cards = deck.drawCards(n-1);
+        cards.addAll(deck.drawCards(2));
+        assertEquals(n+1, cards.size());
     }
 }

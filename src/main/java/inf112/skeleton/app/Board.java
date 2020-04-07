@@ -153,6 +153,7 @@ public class Board {
         robotGrid[y2][x2] = robot;
     }
 
+    // FIXME, doesn't handle being reset on top of another robot
     private void resetRobotPosition(Robot robot) {
         int x = (int)robot.startPos.x;
         int y = (int)robot.startPos.y;
