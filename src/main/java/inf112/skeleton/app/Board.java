@@ -10,6 +10,7 @@ public class Board {
 
     private Robot[][] robotGrid;
     private Tile[][] tileGrid;
+    private ArrayList<Vector2> belts, flags;
 
     /*
         public methods
@@ -20,7 +21,21 @@ public class Board {
         width = tileGrid[0].length;
         size = width * height;
         this.tileGrid = tileGrid;
-        this.robotGrid = new Robot[height][width];
+        robotGrid = new Robot[height][width];
+
+        // process tiles
+        belts = new ArrayList<>();
+        flags = new ArrayList<>();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Vector2 pos = new Vector2(x, y);
+                Tile tile = getTile(pos);
+                switch (tile.kind) {
+                    case belt: belts.add(pos); break;
+                    case flag: flags.add(pos); break;
+                }
+            }
+        }
     }
 
     public Robot addRobot(int x, int y) {
@@ -34,6 +49,10 @@ public class Board {
         return isInside(x, y) ? robotGrid[y][x] : null;
     }
 
+    public Robot getRobot(Vector2 pos) {
+        return getRobot((int)pos.x, (int)pos.y);
+    }
+
     public Vector2 getRobotPosition(Robot robot) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -43,10 +62,6 @@ public class Board {
         }
         return null;
     }
-
-    /*public Robot getRobot(int i) {
-        return getRobot(i%width, i/height);
-    }*/
 
     public Tile getTile(int x, int y) {
         return isInside(x, y) ? tileGrid[y][x] : null;
@@ -79,30 +94,38 @@ public class Board {
         return true;
     }
 
-    public void update() {
+    public void updateBelts() {
         // move actions must be queued to avoid them affecting each other
-        ArrayList<MoveAction> moveActions = new ArrayList<>();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                Robot robot = getRobot(x, y);
-                if (robot == null)
-                    continue;
-                Tile tile = getTile(x, y);
-                Vector2 dir = tile.direction.toVector2();
-                int dx = (int)dir.x;
-                int dy = (int)dir.y;
-                switch (tile.kind) {
-                    case belt:
-                        moveActions.add(new MoveAction(x, y, dx, dy));
-                        break;
-                    case flag:
-                        updateFlag(tile, robot);
-                        break;
-                }
-            }
+        ArrayList<MoveAction> moves = new ArrayList<>();
+        for (Vector2 pos : belts) {
+            Robot robot = getRobot(pos);
+            if (robot == null)
+                continue;
+            Tile tile = getTile(pos);
+            Vector2 dir = tile.direction.toVector2();
+            moves.add(new MoveAction(pos, dir));
         }
-        for (MoveAction ma : moveActions)
+        for (MoveAction ma : moves)
             move(ma.x, ma.y, ma.dx, ma.dy);
+    }
+
+    public void registerFlags() {
+        for (Vector2 pos : flags) {
+            Robot robot = getRobot(pos);
+            if (robot == null)
+                continue;
+            Tile tile = getTile(pos);
+            assert(tile.kind == TileKind.flag);
+            int flag = tile.level + 1;
+            if (flag != robot.nextFlag)
+                return;
+            robot.nextFlag++;
+            System.out.println("You've landed on flag " + flag);
+            if (robot.nextFlag == 5)
+                System.out.println("You've won!");
+            else
+                System.out.println("The next flag you need is " + robot.nextFlag);
+        }
     }
 
     /*
@@ -141,18 +164,9 @@ public class Board {
         return x >= 0 && y >= 0 && x < tileGrid[0].length && y < tileGrid.length;
     }
 
-    private void updateFlag(Tile tile, Robot robot) {
-        assert(tile.kind == TileKind.flag);
-        int flag = tile.level + 1;
-        if (flag != robot.nextFlag)
-            return;
-        robot.nextFlag++;
-        System.out.println("You've landed on flag " + flag);
-        if (robot.nextFlag == 5)
-            System.out.println("You've won!");
-        else
-            System.out.println("The next flag you need is " + robot.nextFlag);
-    }
+    /*
+        private classes
+     */
 
     private class MoveAction {
         public int x;
@@ -165,6 +179,10 @@ public class Board {
             this.y = y;
             this.dx = dx;
             this.dy = dy;
+        }
+
+        public MoveAction(Vector2 pos, Vector2 dir) {
+            this((int)pos.y, (int)pos.x, (int)dir.x, (int)dir.y);
         }
     }
 }

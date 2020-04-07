@@ -9,6 +9,7 @@ public class Player {
     public final Robot robot;
 
     public ArrayList<Card> cards = new ArrayList<>();
+    public boolean committed;
 
     public Player(Robot robot) {
         this.robot = robot;

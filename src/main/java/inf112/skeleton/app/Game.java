@@ -11,19 +11,26 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
+enum GameState {
+    WAITING_FOR_PLAYERS_TO_JOIN,
+    DEALING_CARDS,
+    STAGING_CARDS,
+    COMMITTED,
+    TURN,
+}
+
 public class Game extends InputAdapter implements ApplicationListener {
     private Renderer renderer;
     private Board board;
     private Deck deck;
     private Player player1;
     private ArrayList<Player> players = new ArrayList<>();
-
-    private long lastTime;
-    private long phaseTimer;
+    private GameState state;
 
     @Override
     public void create() {
-        lastTime = System.currentTimeMillis();
         Gdx.input.setInputProcessor(this);
 
         TiledMap map = new TmxMapLoader().load("newBoard.tmx");
@@ -37,12 +44,6 @@ public class Game extends InputAdapter implements ApplicationListener {
         player1 = addPlayer(new Vector2(1,0));
         addPlayer(new Vector2(0,4));
         addPlayer(new Vector2(0,5));
-
-        startRound();
-
-        // debug
-        //TileImporter.debugPrint(tileGrid);
-        //Card.debugPrint();
     }
 
     private Player addPlayer(Vector2 pos) {
@@ -52,26 +53,54 @@ public class Game extends InputAdapter implements ApplicationListener {
         return player;
     }
 
-    private void startRound() {
-        for(Player p: players){
-            dealCards(deck, p);
-        }
-    }
-
     @Override
     public void dispose() {
         renderer.dispose();
     }
 
     private void update() {
-        long time = System.currentTimeMillis();
-        long deltaTime = time - lastTime;
-        lastTime = time;
-        phaseTimer += deltaTime;
-        if (phaseTimer > 1000){
-            phaseTimer = 0;
-            board.update();
+        switch (state) {
+            case WAITING_FOR_PLAYERS_TO_JOIN:
+                if (players.size() > 1)
+                    state = GameState.DEALING_CARDS;
+                break;
+            case DEALING_CARDS:
+                for(Player p : players)
+                    dealCards(deck, p);
+                state = GameState.STAGING_CARDS;
+                break;
+            case STAGING_CARDS:
+                if (player1.committed)
+                    state = GameState.COMMITTED;
+                break;
+            case COMMITTED:
+                if (players.stream().allMatch(p -> p.committed))
+                    state = GameState.TURN;
+                break;
+            case TURN:
+                doTurn();
+                state = GameState.STAGING_CARDS;
+                break;
         }
+    }
+
+    private void doTurn() {
+        for (int i = 0; i < 5; i++)
+            doPhase(i);
+    }
+
+    private void doPhase(int i) {
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+        }
+
+        //revealCards();
+        //executeMovementCards();
+        board.updateBelts();
+        //moveGears();
+        //fireLasers();
+        board.registerFlags();
     }
 
     @Override
@@ -140,7 +169,6 @@ public class Game extends InputAdapter implements ApplicationListener {
             executeMoveAction(robot, deltaPos);
 
         // reset timer on input to avoid confusion
-        phaseTimer = 0;
         return true;
     }
 
