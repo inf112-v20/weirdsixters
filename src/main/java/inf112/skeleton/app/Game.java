@@ -51,7 +51,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         Color color1 = Color.RED;
         Robot robot = new Robot(pos, color1);
         assert(robot.color == color1);
-        System.out.println("The robot is " + robot.color.toString()); //Prints color-code
+        System.out.println("The robot is " + robot.color.toString()); //Prints out color-code
         robots.add(robot);
         board.addRobot(robot, (int)pos.x, (int)pos.y);
         Player player = new Player(robot);
