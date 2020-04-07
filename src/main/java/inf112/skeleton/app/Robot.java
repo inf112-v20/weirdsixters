@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.Color;
 import java.util.ArrayList;
 
 public class Robot {
-    public Transform transform;
+    public final Color color;
     public final Vector2 startPos;
+    public Transform transform;
     public int nextFlag;
     public ArrayList<Card> registers = new ArrayList<>();
-    public final Color color;
     private int health;
     private int lives;
 
