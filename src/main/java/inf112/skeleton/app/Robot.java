@@ -2,7 +2,7 @@ package inf112.skeleton.app;
 
 import com.badlogic.gdx.math.Vector2;
 
-import java.awt.*;
+import com.badlogic.gdx.graphics.Color;
 import java.util.ArrayList;
 
 public class Robot {
