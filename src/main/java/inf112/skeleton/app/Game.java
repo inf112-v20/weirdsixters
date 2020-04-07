@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Game extends InputAdapter implements ApplicationListener {
@@ -47,7 +48,9 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     private Player addPlayer(Vector2 pos) {
-        Robot robot = new Robot(pos);
+        Color color1 = Color.RED;
+        Robot robot = new Robot(pos, color1);
+        assert(robot.color == color1);
         robots.add(robot);
         board.addRobot(robot, (int)pos.x, (int)pos.y);
         Player player = new Player(robot);
