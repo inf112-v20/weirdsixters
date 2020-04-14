@@ -12,9 +12,7 @@ public class Board {
     private Tile[][] tileGrid;
     private ArrayList<Vector2> belts, flags;
 
-    /*
-        public methods
-     */
+    // region public methods
 
     public Board(Tile[][] tileGrid) {
         height = tileGrid.length;
@@ -128,9 +126,9 @@ public class Board {
         }
     }
 
-    /*
-        private methods
-     */
+    // endregion
+
+    // region private methods
 
     private boolean canMove(int x, int y, int dx, int dy) {
         Tile fromTile = getTile(x, y);
@@ -165,9 +163,7 @@ public class Board {
         return x >= 0 && y >= 0 && x < tileGrid[0].length && y < tileGrid.length;
     }
 
-    /*
-        private classes
-     */
+    // endregion
 
     private class MoveAction {
         public int x;

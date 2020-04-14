@@ -51,17 +51,17 @@ public class Game extends InputAdapter implements ApplicationListener {
         state = GameState.WAITING_FOR_PLAYERS_TO_JOIN;
     }
 
+    @Override
+    public void dispose() {
+        renderer.dispose();
+    }
+
     private Player addPlayer(Vector2 pos) {
         int number = players.size() + 1;
         Robot robot = board.addRobot((int)pos.x, (int)pos.y);
         Player player = new Player(number, robot);
         players.add(player);
         return player;
-    }
-
-    @Override
-    public void dispose() {
-        renderer.dispose();
     }
 
     private void update() {

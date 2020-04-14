@@ -7,10 +7,8 @@ import java.util.ArrayList;
 
 public class Robot {
     public static final int REGISTER_SIZE = 5;
-
     public final Vector2 startPos;
     public final Color color;
-
     public ArrayList<Card> registers = new ArrayList<>();
     public Vector2 direction;
     public int nextFlag;
