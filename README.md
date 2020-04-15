@@ -29,7 +29,8 @@ Runtime assertions can be enabled with the Java VM flag "-ea".
 - Arrow keys: Manually move player
 - WASD + F: Manually execute movement cards, see Game.keydown() line 69 - 73 for more info
 - 1-9: Stage cards
-- SHIFT + 1-5: Unstage cards
+- Shift + 1-5: Unstage cards
+- Return: Commit cards
 
 ## Compatibility
 
