@@ -1,57 +1,71 @@
 package inf112.skeleton.app;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
-import com.badlogic.gdx.graphics.Color;
 import java.util.ArrayList;
 
 public class Robot {
-    public final Color color;
+    public static final int REGISTER_SIZE = 5;
     public final Vector2 startPos;
-    public Transform transform;
-    public int nextFlag;
+    public final Color color;
     public ArrayList<Card> registers = new ArrayList<>();
+    public Vector2 direction;
+    public int nextFlag;
+
     private int health;
     private int lives;
 
-
     public Robot(Vector2 startPos, Color color) {
-        this.color = color;
-        transform = new Transform(startPos, new Vector2(1, 0));
         this.startPos = new Vector2(startPos);
+        this.color = color;
+        direction = new Vector2(1, 0);
         nextFlag = 1;
         health = 9;
         lives = 3;
     }
 
-    public void resetPosition(){
-        transform.position = new Vector2(startPos);
-    }
-
-    private void respawn(){
-        resetPosition();
-        System.out.println("Another one bites the dust! You have " + lives + " lives remaining!");
-    }
-
-    private void kill(){
-        resetPosition();
-        System.out.println("It's over, you're dead! Better luck next time, idiot!");
-    }
-
     public void dealDamage(){
         health--;
-        if (health >= 1){
-            System.out.println("Oof, that will leave a mark. You have " + health + " health remaining!");
-        }
-        else {
-            health = 9;
+        if (health <= 0)
             lives--;
-            if (lives >= 1) {
-                respawn();
-            }
-            else {
-                kill();
-            }
-        }
+    }
+
+    public boolean isDead(){
+        return lives < 1;
+    }
+
+    /**
+     * Add card to first idle register.
+     * @return true on success.
+     */
+    public boolean addCard(Card card) {
+        if (registers.size() >= REGISTER_SIZE)
+            return false;
+        registers.add(card);
+        return true;
+    }
+
+    public Card getCard(int i) {
+        return registers.get(i);
+    }
+
+    public void clearRegisters() {
+        registers.clear();
+    }
+
+    /**
+     * @return true if the robot has been fully programmed.
+     */
+    public boolean isReady() {
+        return registers.size() == REGISTER_SIZE;
+    }
+
+    public int cardCount() {
+        return registers.size();
+    }
+
+    public Card removeCard(int index) {
+        return registers.remove(index);
     }
 }

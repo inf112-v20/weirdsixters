@@ -12,20 +12,29 @@ import com.badlogic.gdx.graphics.Color;
 
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
+enum GameState {
+    WAITING_FOR_PLAYERS_TO_JOIN,
+    DEALING_CARDS,
+    STAGING_CARDS,
+    COMMITTED,
+    TURN,
+}
+
 public class Game extends InputAdapter implements ApplicationListener {
+    private static final int PHASE_COUNT = 5;
+
     private Renderer renderer;
     private Board board;
     private Deck deck;
     private Player player1;
-    private ArrayList<Robot> robots = new ArrayList<>();
     private ArrayList<Player> players = new ArrayList<>();
-
-    private long lastTime;
-    private long secondTimer;
+    private GameState state;
+    private int phaseIndex;
 
     @Override
     public void create() {
-        lastTime = System.currentTimeMillis();
         Gdx.input.setInputProcessor(this);
 
         TiledMap map = new TmxMapLoader().load("newBoard.tmx");
@@ -40,29 +49,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         addPlayer(new Vector2(0,4));
         addPlayer(new Vector2(0,5));
 
-        startRound();
-
-        // debug
-        //TileImporter.debugPrint(tileGrid);
-        //Card.debugPrint();
-    }
-
-    private Player addPlayer(Vector2 pos) {
-        Color color1 = Color.RED;
-        Robot robot = new Robot(pos, color1);
-        assert(robot.color == color1);
-        System.out.println("The robot is " + robot.color.toString()); //Prints out color-code
-        robots.add(robot);
-        board.addRobot(robot, (int)pos.x, (int)pos.y);
-        Player player = new Player(robot);
-        players.add(player);
-        return player;
-    }
-
-    private void startRound() {
-        for(Player p: players){
-            dealCards(deck, p);
-        }
+        state = GameState.WAITING_FOR_PLAYERS_TO_JOIN;
     }
 
     @Override
@@ -70,43 +57,114 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer.dispose();
     }
 
-    private void loseCondition(){
-        for(Robot robot: robots) {
-            Tile tile = board.getTile(robot.transform.position);
-            if (tile == null) {
-                robot.resetPosition();
-                msg("You went outside the board");
-            } else if (tile.kind == TileKind.hole) {
-                robot.resetPosition();
-                msg("Ouch, you entered a hole!");
-            }
+    private Player addPlayer(Vector2 pos) {
+        int number = players.size() + 1;
+        Robot robot = board.addRobot((int)pos.x, (int)pos.y);
+        Player player = new Player(number, robot);
+        players.add(player);
+        return player;
+    }
+
+    private void update() {
+        switch (state) {
+            case WAITING_FOR_PLAYERS_TO_JOIN:
+                if (players.size() > 1)
+                    setState(GameState.DEALING_CARDS);
+                break;
+            case DEALING_CARDS:
+                for(Player p : players)
+                    dealCards(deck, p);
+                setState(GameState.STAGING_CARDS);
+                break;
+            case STAGING_CARDS:
+                if (player1.committed)
+                    setState(GameState.COMMITTED);
+                break;
+            case COMMITTED:
+                autoCommitOtherPlayers();
+                if (players.stream().allMatch(p -> p.committed)) {
+                    setState(GameState.TURN);
+                    startTurn();
+                }
+                break;
+            case TURN:
+                if (phaseIndex >= PHASE_COUNT) {
+                    endTurn();
+                    setState(GameState.DEALING_CARDS);
+                } else {
+                    doPhase(phaseIndex++);
+                }
+                break;
         }
+    }
+
+    private void startTurn() {
+        phaseIndex = 0;
+    }
+
+    private void endTurn() {
+        for (Player p : players) {
+            p.robot.clearRegisters();
+            p.committed = false;
+        }
+    }
+
+    private void autoCommitOtherPlayers() {
+        for (Player p : players) {
+            if (p == player1)
+                continue;
+            for (int i = 0; i < Robot.REGISTER_SIZE; i++)
+                stageCard(p, 0);
+            commitCards(p);
+        }
+    }
+
+    private void setState(GameState state) {
+        this.state = state;
+        System.out.println("New state: " + state.toString());
+    }
+
+    private void doPhase(int index) {
+        System.out.println("Phase " + (index + 1));
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+        }
+
+        //revealCards();
+        executeMovementCards(index);
+        board.updateBelts();
+        //moveGears();
+        //fireLasers();
+        board.registerFlags();
+    }
+
+    private void executeMovementCards(int index) {
+        for (Player p : players)
+            executeCard(p.robot, p.robot.getCard(index));
     }
 
     @Override
     public void render() {
-        loseCondition();
-        updateFlags();
-
-        long time = System.currentTimeMillis();
-        long deltaTime = time - lastTime;
-        lastTime = time;
-        secondTimer += deltaTime;
-        if (secondTimer > 1000){
-            secondTimer = 0;
-            moveRobotsOnBelts();
-        }
+        update();
 
         renderer.begin();
-        for (Robot robot: robots) {
-            renderer.drawRobot(robot.transform);
-            for (int i = 0; i < robot.registers.size(); i++)
-                renderer.drawCard(robot.registers.get(i), 0, i);
+
+        // draw robots
+        for (Player player : players) {
+            Robot robot = player.robot;
+            Vector2 pos = board.getRobotPosition(robot);
+            renderer.drawRobot(robot, pos);
         }
-        for (Player player: players) {
-            for (int i = 0; i < player.cards.size(); i++)
-                renderer.drawCard(player.cards.get(i), 1, i);
-        }
+
+        // draw player1's robot registers
+        for (int i = 0; i < player1.robot.cardCount(); i++)
+            renderer.drawCard(player1.robot.getCard(i), 0, i);
+
+        // draw player1 cards
+        for (int i = 0; i < player1.cards.size(); i++)
+            renderer.drawCard(player1.cards.get(i), 1, i);
+
         renderer.end();
     }
 
@@ -124,84 +182,95 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public boolean keyDown(int key) {
+        if (player1.committed)
+            return false;
 
         // stage/unstage card
         if (key >= Input.Keys.NUM_1 && key <= Input.Keys.NUM_9) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-                unstageCard(key - Input.Keys.NUM_1);
+                unstageCard(player1, key - Input.Keys.NUM_1);
             else
-                stageCard(key - Input.Keys.NUM_1);
+                stageCard(player1, key - Input.Keys.NUM_1);
+            return true;
         }
 
-        // debug movement and damage actions
-        Vector2 deltaPos = new Vector2(0,0);
+        Robot robot = player1.robot;
         switch (key){
-            case Input.Keys.RIGHT: deltaPos.x++; break;
-            case Input.Keys.LEFT: deltaPos.x--; break;
-            case Input.Keys.UP: deltaPos.y++; break;
-            case Input.Keys.DOWN: deltaPos.y--; break;
-            case Input.Keys.G: player1.robot.dealDamage(); break;
 
-            // movement via cards
-            case Input.Keys.W: executeCard(new Card(CardKind.FORWARD, 2, 0)); break;
-            case Input.Keys.S: executeCard(new Card(CardKind.REVERSE, 1, 0)); break;
-            case Input.Keys.D: executeCard(new Card(CardKind.TURN_RIGHT, 1, 0)); break;
-            case Input.Keys.A: executeCard(new Card(CardKind.TURN_LEFT, 1, 0)); break;
-            case Input.Keys.F: executeCard(new Card(CardKind.FLIP, 2, 0)); break;
+            // commit staged cards
+            case Input.Keys.ENTER: commitCards(player1);
+
+            // deal damage (for debugging)
+            case Input.Keys.G: robot.dealDamage(); break;
+
+            // inject movement cards (for debugging)
+            case Input.Keys.W: robot.addCard(new Card(CardKind.FORWARD, 1, 0)); break;
+            case Input.Keys.S: robot.addCard(new Card(CardKind.REVERSE, 1, 0)); break;
+            case Input.Keys.A: robot.addCard(new Card(CardKind.TURN_LEFT, 1, 0)); break;
+            case Input.Keys.D: robot.addCard(new Card(CardKind.TURN_RIGHT, 1 , 0)); break;
         }
-        if (deltaPos.len() != 0)
-            movePlayer(deltaPos);
         return true;
+    }
+
+    private void commitCards(Player player) {
+        if (!player.robot.isReady())
+            return;
+        player.committed = true;
+        System.out.println("Player " + player.number + " committed!");
     }
 
     /**
      * stages card on given index
      * @param index of card to be staged in player.cards
      */
-    private void stageCard(int index) {
-        if (index >= player1.cards.size()) return;
-        player1.robot.registers.add(player1.cards.remove(index));
+    private void stageCard(Player player, int index) {
+        if (index >= player.cards.size())
+            return;
+        Card card = player.cards.get(index);
+        if (player.robot.addCard(card))
+            player.cards.remove(index);
     }
 
     /**
      * un-stages card on given index
      * @param index of card to be un-staged from robot.registers
      */
-    private void unstageCard(int index) {
-        if (index >= player1.robot.registers.size()) return;
-        player1.cards.add(player1.robot.registers.remove(index));
+    private void unstageCard(Player player, int index) {
+        if (index >= player.robot.cardCount())
+            return;
+        player.cards.add(player.robot.removeCard(index));
     }
 
     /**
      * checks the action of given card
      * @param card card to check
      */
-    private void executeCard(Card card) {
+    private void executeCard(Robot robot, Card card) {
         switch(card.kind) {
             case FORWARD:
                 for (int i = 0; i < card.steps; i++) {
-                    movePlayer(Linear.scl(player1.robot.transform.direction, 1));
+                    executeMoveAction(robot, Linear.scl(robot.direction, 1));
                 }
                 break;
             case REVERSE:
-                movePlayer(Linear.scl(player1.robot.transform.direction, -1));
+                executeMoveAction(robot, Linear.scl(robot.direction, -1));
                 break;
             case TURN_RIGHT:
-                player1.robot.transform.direction.rotate90(-1);
+                robot.direction.rotate90(-1);
                 break;
             case TURN_LEFT:
-                player1.robot.transform.direction.rotate90(1);
+                robot.direction.rotate90(1);
                 break;
             case FLIP:
-                player1.robot.transform.direction.rotate(180f);
+                robot.direction.rotate(180f);
                 break;
             default:
                 break;
         }
     }
 
-    private void movePlayer(Vector2 deltaPos) {
-        Vector2 pos = player1.robot.transform.position;
+    private void executeMoveAction(Robot robot, Vector2 deltaPos) {
+        Vector2 pos = board.getRobotPosition(robot);
         Vector2 dir = Linear.nor(deltaPos);
         Tile tile = board.getTile(pos);
         if(tile == null || tile.kind == TileKind.hole){
@@ -210,32 +279,11 @@ public class Game extends InputAdapter implements ApplicationListener {
         board.move((int)pos.x, (int)pos.y, (int)dir.x, (int)dir.y);
     }
 
-    private void updateFlags() {
-        Vector2 robotPosition = player1.robot.transform.position;
-        Tile tile = board.getTile(robotPosition);
-        assert(tile != null);
-        if (tile.kind == TileKind.flag && tile.level == player1.robot.nextFlag) {
-            player1.robot.nextFlag++;
-            if (tile.kind == TileKind.flag && tile.level == (player1.robot.nextFlag-1))
-                msg("You've landed on a flag nr: " + (player1.robot.nextFlag-1) + ", the next flag you need is flag nr: " + player1.robot.nextFlag + "");
-            if (player1.robot.nextFlag == 5)
-                msg("You've won!");
-        }
-    }
-
     private static void dealCards(Deck deck, Player player) {
         player.cards = deck.drawCards(9);
         msg("dealing cards to player " + player.number + ":");
         for (Card c : player.cards)
             msg(c.toString());
-    }
-
-    private void moveRobotsOnBelts() {
-        Vector2 robotPosition = player1.robot.transform.position;
-        Tile tile = board.getTile(robotPosition);
-        if (tile.kind == TileKind.belt) {
-            movePlayer(tile.direction.toVector2());
-        }
     }
 
     private static void msg(String text) {

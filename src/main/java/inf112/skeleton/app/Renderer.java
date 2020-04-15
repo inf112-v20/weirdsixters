@@ -90,12 +90,8 @@ public class Renderer {
         spriteBatch.draw(subTex, coord.x, coord.y, 0.5f, 0.5f, 1, 1, 1, 1, rotation);
     }
 
-    public void drawTileSprite(Texture tex, Vector2 texIndex, Transform transform) {
-        drawTileSprite(tex, texIndex, transform.position, transform.direction.angle());
-    }
-
-    public void drawRobot(Transform transform) {
-        drawTileSprite(playerTexture, new Vector2(), transform);
+    public void drawRobot(Robot robot, Vector2 pos) {
+        drawTileSprite(playerTexture, new Vector2(), pos, robot.direction.angle());
     }
 
     public void drawCard(Card card, int row, int column) {
