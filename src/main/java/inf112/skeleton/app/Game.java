@@ -140,8 +140,9 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     private void executeMovementCards(int index) {
-        for (Player p : players)
+        for (Player p : players) {
             executeCard(p.robot, p.robot.getCard(index));
+        }
     }
 
     @Override
@@ -246,6 +247,8 @@ public class Game extends InputAdapter implements ApplicationListener {
      * @param card card to check
      */
     private void executeCard(Robot robot, Card card) {
+        if (card == null)
+            return;
         switch(card.kind) {
             case FORWARD:
                 for (int i = 0; i < card.steps; i++) {

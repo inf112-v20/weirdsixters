@@ -53,6 +53,8 @@ public class Robot {
     }
 
     public Card getCard(int i) {
+        if (i >= registers.size())
+            return null;
         return registers.get(i);
     }
 
