@@ -134,7 +134,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         //revealCards();
         executeMovementCards(index);
         board.updateBelts();
-        //moveGears();
+        rotateGears();
         //fireLasers();
         board.registerFlags();
     }
@@ -279,6 +279,18 @@ public class Game extends InputAdapter implements ApplicationListener {
             return;
         }
         board.move((int)pos.x, (int)pos.y, (int)dir.x, (int)dir.y);
+    }
+
+    private void rotateGears(){
+        for (Player p : players){
+            Vector2 pos = board.getRobotPosition(p.robot);
+            Tile tile = board.getTile(pos);
+            if (tile == null)
+                continue;
+            if (tile.kind == TileKind.gear) {
+                p.robot.direction.rotate(tile.rotation);
+            }
+        }
     }
 
     private static void dealCards(Deck deck, Player player) {
