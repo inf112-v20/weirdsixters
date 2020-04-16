@@ -45,7 +45,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
 
-        player1 = addPlayer(new Vector2(1,0));
+        player1 = addPlayer(new Vector2(0,0));
         addPlayer(new Vector2(0,4));
         addPlayer(new Vector2(0,5));
 
@@ -273,7 +273,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         Vector2 pos = board.getRobotPosition(robot);
         if (pos == null)
             return;
-        Vector2 dir = Linear.nor(deltaPos);
+        Vector2 dir = Linear.round(Linear.nor(deltaPos));
         Tile tile = board.getTile(pos);
         if(tile == null || tile.kind == TileKind.hole){
             return;
