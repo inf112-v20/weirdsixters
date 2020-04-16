@@ -25,10 +25,16 @@ public class Robot {
         lives = 3;
     }
 
+    public void kill() {
+        registers.clear();
+        direction.setAngle(0);
+        lives--;
+    }
+
     public void dealDamage(){
         health--;
         if (health <= 0)
-            lives--;
+            kill();
     }
 
     public boolean isDead(){
@@ -47,6 +53,8 @@ public class Robot {
     }
 
     public Card getCard(int i) {
+        if (i >= registers.size())
+            return null;
         return registers.get(i);
     }
 

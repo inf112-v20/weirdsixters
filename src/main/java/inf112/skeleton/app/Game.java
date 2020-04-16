@@ -45,7 +45,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
 
-        player1 = addPlayer(new Vector2(1,0));
+        player1 = addPlayer(new Vector2(0,0));
         addPlayer(new Vector2(0,4));
         addPlayer(new Vector2(0,5));
 
@@ -134,14 +134,15 @@ public class Game extends InputAdapter implements ApplicationListener {
         //revealCards();
         executeMovementCards(index);
         board.updateBelts();
-        //moveGears();
+        rotateGears();
         //fireLasers();
         board.registerFlags();
     }
 
     private void executeMovementCards(int index) {
-        for (Player p : players)
+        for (Player p : players) {
             executeCard(p.robot, p.robot.getCard(index));
+        }
     }
 
     @Override
@@ -246,6 +247,8 @@ public class Game extends InputAdapter implements ApplicationListener {
      * @param card card to check
      */
     private void executeCard(Robot robot, Card card) {
+        if (card == null)
+            return;
         switch(card.kind) {
             case FORWARD:
                 for (int i = 0; i < card.steps; i++) {
@@ -271,12 +274,26 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void executeMoveAction(Robot robot, Vector2 deltaPos) {
         Vector2 pos = board.getRobotPosition(robot);
-        Vector2 dir = Linear.nor(deltaPos);
+        if (pos == null)
+            return;
+        Vector2 dir = Linear.round(Linear.nor(deltaPos));
         Tile tile = board.getTile(pos);
         if(tile == null || tile.kind == TileKind.hole){
             return;
         }
         board.move((int)pos.x, (int)pos.y, (int)dir.x, (int)dir.y);
+    }
+
+    private void rotateGears(){
+        for (Player p : players){
+            Vector2 pos = board.getRobotPosition(p.robot);
+            Tile tile = board.getTile(pos);
+            if (tile == null)
+                continue;
+            if (tile.kind == TileKind.gear) {
+                p.robot.direction.rotate(tile.rotation);
+            }
+        }
     }
 
     private static void dealCards(Deck deck, Player player) {

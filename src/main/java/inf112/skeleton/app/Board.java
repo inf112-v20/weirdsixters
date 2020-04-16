@@ -71,15 +71,17 @@ public class Board {
 
     /**
      * @summary Perform the action of moving a robot from (x1,y1) to (x2,y2).
-     * @return false when the entire move is blocked.
+     * @return false when the move is blocked or impossible.
      */
     public boolean move(int x1, int y1, int dx, int dy) {
+        assert(dx >= -1 && dx <= 1 && dy >= -1 && dy <= 1);
+        assert(dx != 0 || dy != 0);
         int x2 = x1 + dx;
         int y2 = y1 + dy;
 
         Robot r1 = getRobot(x1, y1);
         if (r1 == null)
-            return true;
+            return false;
         if (!canMove(x1, y1, dx, dy))
             return false;
 
@@ -130,13 +132,18 @@ public class Board {
 
     // region private methods
 
+    // return false on blocked or invalid moves
     private boolean canMove(int x, int y, int dx, int dy) {
         Tile fromTile = getTile(x, y);
+        if (fromTile == null)
+            return false;
         Vector2 dir = new Vector2(dx, dy);
         if (fromTile.blocksDir(dir, false))
             return false;
         Tile toTile = getTile(x+dx, y+dy);
-        return (toTile == null) || !toTile.blocksDir(dir, true);
+        if (toTile == null)
+            return true;
+        return !toTile.blocksDir(dir, true);
     }
 
     private void moveRobotFromTo(int x1, int y1, int x2, int y2) {
@@ -145,14 +152,15 @@ public class Board {
             return;
         robotGrid[y1][x1] = null;
         if (!isInside(x2, y2) || getTile(x2, y2).kind == TileKind.hole) {
-            resetRobotPosition(robot);
+            resetRobot(robot);
             return;
         }
         robotGrid[y2][x2] = robot;
     }
 
     // FIXME, doesn't handle being reset on top of another robot
-    private void resetRobotPosition(Robot robot) {
+    private void resetRobot(Robot robot) {
+        robot.kill();
         int x = (int)robot.startPos.x;
         int y = (int)robot.startPos.y;
         assert(robotGrid[y][x] == null);

@@ -56,7 +56,7 @@ public class Tile {
 
         this.kind = kind;
         this.level = level;
-        this.rotation = (float)Math.toRadians(degrees);
+        this.rotation = degrees;
         this.direction = dir;
         this.secondDirection = Direction.fromVector2(dir.toVector2().rotate(90));
     }
