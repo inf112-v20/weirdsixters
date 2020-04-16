@@ -132,6 +132,8 @@ public class Board {
 
     private boolean canMove(int x, int y, int dx, int dy) {
         Tile fromTile = getTile(x, y);
+        if (fromTile == null)
+            return false;
         Vector2 dir = new Vector2(dx, dy);
         if (fromTile.blocksDir(dir, false))
             return false;
