@@ -271,6 +271,8 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void executeMoveAction(Robot robot, Vector2 deltaPos) {
         Vector2 pos = board.getRobotPosition(robot);
+        if (pos == null)
+            return;
         Vector2 dir = Linear.nor(deltaPos);
         Tile tile = board.getTile(pos);
         if(tile == null || tile.kind == TileKind.hole){
