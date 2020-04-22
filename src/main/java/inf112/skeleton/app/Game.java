@@ -30,6 +30,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Deck deck;
     private Player player1;
     private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Vector2> lasers = new ArrayList<>();
     private GameState state;
     private int phaseIndex;
 
@@ -48,6 +49,17 @@ public class Game extends InputAdapter implements ApplicationListener {
         player1 = addPlayer(new Vector2(0,0));
         addPlayer(new Vector2(0,4));
         addPlayer(new Vector2(0,5));
+
+
+        //loop through board and populate lasers. to be moved to own method?
+        for(int y = 0; y < board.height; y++) {
+            for(int x = 0; x < board.width; x++) {
+                if (board.getTile(x, y).kind == TileKind.laserWall) {
+                    lasers.add(new Vector2(x, y));
+                }
+            }
+        }
+
 
         state = GameState.WAITING_FOR_PLAYERS_TO_JOIN;
     }
