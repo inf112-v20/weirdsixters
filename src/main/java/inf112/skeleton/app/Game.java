@@ -150,6 +150,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         update();
 
         renderer.begin();
+        drawRobotLives();
 
         // draw robots
         for (Player player : players) {
@@ -293,6 +294,14 @@ public class Game extends InputAdapter implements ApplicationListener {
             if (tile.kind == TileKind.gear) {
                 p.robot.direction.rotate(tile.rotation);
             }
+        }
+    }
+
+    private void drawRobotLives(){
+        int y = board.height-1;
+        for (Player p: players){
+            int lives = p.robot.getLives();
+            renderer.drawLives(new Vector2(board.width, y--),lives);
         }
     }
 
