@@ -8,9 +8,12 @@ import java.util.ArrayList;
 public class Board {
     public final int width, height, size;
 
+    private Color[] robotColors;
     private Robot[][] robotGrid;
     private Tile[][] tileGrid;
     private ArrayList<Vector2> belts, flags;
+
+    private int robotCount;
 
     // region public methods
 
@@ -29,17 +32,25 @@ public class Board {
                 Vector2 pos = new Vector2(x, y);
                 Tile tile = getTile(pos);
                 switch (tile.kind) {
-                    case belt: belts.add(pos); break;
-                    case flag: flags.add(pos); break;
+                    case belt:
+                        belts.add(pos);
+                        break;
+                    case flag:
+                        flags.add(pos);
+                        break;
                 }
             }
         }
+        robotColors = new Color[]{
+                Color.RED, Color.GOLD, Color.CYAN, Color.CHARTREUSE,
+                Color.FIREBRICK, Color.GREEN, Color.PURPLE, Color.YELLOW};
     }
 
     public Robot addRobot(int x, int y) {
-        Robot robot = new Robot(new Vector2(x, y), Color.RED);
-        assert(robotGrid[y][x] == null);
+        Robot robot = new Robot(new Vector2(x, y), robotColors[robotCount]);
+        assert (robotGrid[y][x] == null);
         robotGrid[y][x] = robot;
+        robotCount++;
         return robot;
     }
 
@@ -48,7 +59,7 @@ public class Board {
     }
 
     public Robot getRobot(Vector2 pos) {
-        return getRobot((int)pos.x, (int)pos.y);
+        return getRobot((int) pos.x, (int) pos.y);
     }
 
     public Vector2 getRobotPosition(Robot robot) {
@@ -66,16 +77,16 @@ public class Board {
     }
 
     public Tile getTile(Vector2 pos) {
-        return getTile((int)pos.x, (int)pos.y);
+        return getTile((int) pos.x, (int) pos.y);
     }
 
     /**
-     * @summary Perform the action of moving a robot from (x1,y1) to (x2,y2).
      * @return false when the move is blocked or impossible.
+     * @summary Perform the action of moving a robot from (x1,y1) to (x2,y2).
      */
     public boolean move(int x1, int y1, int dx, int dy) {
-        assert(dx >= -1 && dx <= 1 && dy >= -1 && dy <= 1);
-        assert(dx != 0 || dy != 0);
+        assert (dx >= -1 && dx <= 1 && dy >= -1 && dy <= 1);
+        assert (dx != 0 || dy != 0);
         int x2 = x1 + dx;
         int y2 = y1 + dy;
 
@@ -115,7 +126,7 @@ public class Board {
             if (robot == null)
                 continue;
             Tile tile = getTile(pos);
-            assert(tile.kind == TileKind.flag);
+            assert (tile.kind == TileKind.flag);
             int flag = tile.level + 1;
             if (flag != robot.nextFlag)
                 return;
@@ -140,7 +151,7 @@ public class Board {
         Vector2 dir = new Vector2(dx, dy);
         if (fromTile.blocksDir(dir, false))
             return false;
-        Tile toTile = getTile(x+dx, y+dy);
+        Tile toTile = getTile(x + dx, y + dy);
         if (toTile == null)
             return true;
         return !toTile.blocksDir(dir, true);
@@ -161,9 +172,9 @@ public class Board {
     // FIXME, doesn't handle being reset on top of another robot
     private void resetRobot(Robot robot) {
         robot.kill();
-        int x = (int)robot.startPos.x;
-        int y = (int)robot.startPos.y;
-        assert(robotGrid[y][x] == null);
+        int x = (int) robot.startPos.x;
+        int y = (int) robot.startPos.y;
+        assert (robotGrid[y][x] == null);
         robotGrid[y][x] = robot;
     }
 
@@ -187,7 +198,7 @@ public class Board {
         }
 
         public MoveAction(Vector2 pos, Vector2 dir) {
-            this((int)pos.y, (int)pos.x, (int)dir.x, (int)dir.y);
+            this((int) pos.y, (int) pos.x, (int) dir.x, (int) dir.y);
         }
     }
 }

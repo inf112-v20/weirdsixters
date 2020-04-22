@@ -157,10 +157,10 @@ public class Renderer {
         return new Vector2();
     }
 
-    public void drawLives(Vector2 pos, int count){
+    public void drawLives(Vector2 pos, int count, Color color){
         for (int i = 0; i < count ; i++) {
             Vector2 newPos = Linear.add(pos, new Vector2(i,0));
-            drawTileSprite(playerTexture, Vector2.Zero, newPos, 0);
+            drawTileSprite(playerTexture, Vector2.Zero, newPos, 0, color);
         }
     }
 }

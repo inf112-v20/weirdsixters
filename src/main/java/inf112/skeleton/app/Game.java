@@ -301,7 +301,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         int y = board.height-1;
         for (Player p: players){
             int lives = p.robot.getLives();
-            renderer.drawLives(new Vector2(board.width, y--),lives);
+            renderer.drawLives(new Vector2(board.width, y--),lives, p.robot.color);
         }
     }
 
