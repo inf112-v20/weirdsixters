@@ -13,8 +13,8 @@ public class Robot {
     public Vector2 direction;
     public int nextFlag;
 
-    private int health;
     private int lives;
+    private int health;
 
     public Robot(Vector2 startPos, Color color) {
         this.startPos = new Vector2(startPos);
@@ -75,5 +75,9 @@ public class Robot {
 
     public Card removeCard(int index) {
         return registers.remove(index);
+    }
+
+    public int getLives(){
+        return this.lives;
     }
 }

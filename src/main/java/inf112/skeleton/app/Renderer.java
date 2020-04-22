@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -38,7 +39,9 @@ public class Renderer {
 
         //offset camera to make space for card slots
         camera.viewportHeight = mapSize.y+4;
-        camera.position.set(new Vector3(mapSize.x/2, mapSize.y/3, 0));
+        camera.viewportWidth = mapSize.x+4;
+        camera.position.set(new Vector3(mapSize.x/2+2, mapSize.y/3, 0));
+
 
         camera.update();
 
@@ -152,5 +155,12 @@ public class Renderer {
         }
         System.out.println("unknown card..");
         return new Vector2();
+    }
+
+    public void drawLives(Vector2 pos, int count, Color color){
+        for (int i = 0; i < count ; i++) {
+            Vector2 newPos = Linear.add(pos, new Vector2(i,0));
+            drawTileSprite(playerTexture, Vector2.Zero, newPos, 0, color);
+        }
     }
 }

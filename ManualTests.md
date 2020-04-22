@@ -19,6 +19,7 @@ Vi har testet executeCard() fra game.java ved å:
  - Gjøre det flere ganger, og i tillegg printe en melding når vi treffer hullet. Dette for å forsikre oss om at alt stemmer mtp. at tile-typen stemmer.
  - Forsikre oss om at roboten faller tilbake til startposisjon om den prøver å gå ut av brettet.
  - Når man bruker moveCards som har mer en ett steg, så skal man ikke kunne gå gjennom hull, men falle i det.
+ - Livene oppe til høyre skal reflektere hvor mange liv jeg har, ettersom jeg mister de.
 
 ## Playersprite rotates with player
 Vi har testet den grafiske roteringen til spiller ved å:
