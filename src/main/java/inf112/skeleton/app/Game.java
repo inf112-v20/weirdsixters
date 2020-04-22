@@ -147,7 +147,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         executeMovementCards(index);
         board.updateBelts();
         rotateGears();
-        //fireLasers();
+        fireLasers();
         board.registerFlags();
     }
 
@@ -295,6 +295,40 @@ public class Game extends InputAdapter implements ApplicationListener {
             return;
         }
         board.move((int)pos.x, (int)pos.y, (int)dir.x, (int)dir.y);
+    }
+
+    private void fireLasers() {
+        for(Vector2 laser : lasers) {
+            fireLaser(laser);
+        }
+        //fire robotlasers
+    }
+
+    private void fireLaser(Vector2 laser) {
+        Tile tile = board.getTile(laser);
+        Vector2 fireDir = Linear.mul(tile.direction.toVector2(), new Vector2(-1, -1));
+        Vector2 start = laser;
+        Vector2 end = laser;
+
+        //go through laser trajectory
+        while (true) {
+            Vector2 currentPos = Linear.add(end, fireDir);
+            Tile currentTile = board.getTile(currentPos);
+
+            //check if laser should stop (outOfBounds, hits wall, hits robot)
+            if (board.getTile(currentPos) == null) break;
+            if (currentTile.kind == TileKind.wall && currentTile.direction == tile.direction) break;
+            if (board.getRobot(currentPos) != null) {
+                Robot robot = board.getRobot(currentPos);
+                robot.dealDamage();
+                System.out.println("did a laser");
+                break;
+            }
+            if (currentTile.kind == TileKind.wall && currentTile.direction.toVector2() == fireDir) break;
+
+            end = currentPos;
+        }
+        //call drawLine(start, end)
     }
 
     private void rotateGears(){
