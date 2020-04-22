@@ -85,13 +85,18 @@ public class Renderer {
      * @param position is the board coordinate
      */
     public void drawTileSprite(Texture tex, Vector2 texIndex, Vector2 position, float rotation) {
+        drawTileSprite(tex, texIndex, position, rotation, Color.WHITE);
+    }
+
+    public void drawTileSprite(Texture tex, Vector2 texIndex, Vector2 position, float rotation, Color color) {
         Vector2 coord = Linear.floor(position);
         TextureRegion subTex = getSubTexture(tex, texIndex);
+        spriteBatch.setColor(color);
         spriteBatch.draw(subTex, coord.x, coord.y, 0.5f, 0.5f, 1, 1, 1, 1, rotation);
     }
 
     public void drawRobot(Robot robot, Vector2 pos) {
-        drawTileSprite(playerTexture, new Vector2(), pos, robot.direction.angle());
+        drawTileSprite(playerTexture, new Vector2(), pos, robot.direction.angle(), robot.color);
     }
 
     public void drawCard(Card card, int row, int column) {
