@@ -288,6 +288,8 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void rotateGears(){
         for (Player p : players){
             Vector2 pos = board.getRobotPosition(p.robot);
+            if (pos == null)
+                continue;
             Tile tile = board.getTile(pos);
             if (tile == null)
                 continue;

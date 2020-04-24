@@ -5,9 +5,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class TileTest {
+public class TileTests {
     @Test
-    public void blocksDir_empty_notBlocking() {
+    public void emptyTileDoesNotBlock() {
         Tile tile = new Tile(TileKind.empty);
         for (Direction enumDir : Direction.values()) {
             Vector2 dir = enumDir.toVector2();
@@ -17,7 +17,7 @@ public class TileTest {
     }
 
     @Test
-    public void blocksDir_singleRightWall_blocksOneDir() {
+    public void singleRightWallBlocksOneDir() {
         Tile tile = new Tile(TileKind.wall, Direction.RIGHT, false);
         assertTrue(tile.blocksDir(Direction.RIGHT.toVector2(), false));
         assertFalse(tile.blocksDir(Direction.LEFT.toVector2(), false));
@@ -25,7 +25,7 @@ public class TileTest {
         assertFalse(tile.blocksDir(Direction.DOWN.toVector2(), false));
     }
     @Test
-    public void blocksDir_doubleRightWall_blocksTwoDirs() {
+    public void doubleRightWallBlocksTwoDirs() {
         Tile tile = new Tile(TileKind.wall, Direction.RIGHT, true);
         assertTrue(tile.blocksDir(Direction.RIGHT.toVector2(), false));
         assertFalse(tile.blocksDir(Direction.LEFT.toVector2(), false));
