@@ -74,7 +74,7 @@ public class TileImporter {
 
             // 3rd row
             new Tile(TileKind.belt, Direction.DOWN, 90, 1),
-            new Tile(TileKind.belt, Direction.UP, 90, 1),
+            new Tile(TileKind.belt, Direction.LEFT, 90, 1),
             new Tile(TileKind.belt, Direction.RIGHT, -90, 1),
             new Tile(TileKind.belt, Direction.DOWN, -90, 1),
             new Tile(TileKind.belt, Direction.DOWN, true),
