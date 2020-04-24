@@ -28,7 +28,7 @@ public class TileImporter {
     }
 
 
-    private static Tile getTile(int id) {
+    public static Tile getTile(int id) {
         if (id <= 0 || id > tiles.length)
             return new Tile(TileKind.empty);
         return tiles[id - 1];
