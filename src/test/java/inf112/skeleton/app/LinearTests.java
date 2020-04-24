@@ -6,9 +6,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class LinearTest {
+public class LinearTests {
     @Test
-    public void Linear_someNumbers_correctResult(){
+    public void everythingWorks(){
         assertEquals(new Vector2(0,1), Linear.add(new Vector2(0,0), new Vector2(0,1)));
         assertEquals(new Vector2(0,-2), Linear.add(new Vector2(0,-1), new Vector2(0,-1)));
         assertEquals(new Vector2(3,-8), Linear.mul(new Vector2(1,2), new Vector2(3,-4)));
