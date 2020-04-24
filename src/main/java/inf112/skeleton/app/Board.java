@@ -198,7 +198,7 @@ public class Board {
         }
 
         public MoveAction(Vector2 pos, Vector2 dir) {
-            this((int) pos.y, (int) pos.x, (int) dir.x, (int) dir.y);
+            this((int) pos.x, (int) pos.y, (int) dir.x, (int) dir.y);
         }
     }
 }
