@@ -60,7 +60,6 @@ public class Game extends InputAdapter implements ApplicationListener {
             }
         }
 
-
         state = GameState.WAITING_FOR_PLAYERS_TO_JOIN;
     }
 
@@ -306,7 +305,8 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void fireLaser(Vector2 laser) {
         Tile tile = board.getTile(laser);
-        Vector2 fireDir = Linear.mul(tile.direction.toVector2(), new Vector2(-1, -1));
+        //Vector2 fireDir = Linear.mul(tile.direction.toVector2(), new Vector2(-1, -1));
+        Vector2 fireDir = Linear.neg(tile.direction.toVector2());
         Vector2 start = laser;
         Vector2 end = laser;
 
@@ -316,15 +316,14 @@ public class Game extends InputAdapter implements ApplicationListener {
             Tile currentTile = board.getTile(currentPos);
 
             //check if laser should stop (outOfBounds, hits wall, hits robot)
-            if (board.getTile(currentPos) == null) break;
+            if (currentTile == null) break;
             if (currentTile.kind == TileKind.wall && currentTile.direction == tile.direction) break;
             if (board.getRobot(currentPos) != null) {
                 Robot robot = board.getRobot(currentPos);
                 robot.dealDamage();
-                System.out.println("did a laser");
                 break;
             }
-            if (currentTile.kind == TileKind.wall && currentTile.direction.toVector2() == fireDir) break;
+            if (currentTile.kind == TileKind.wall && currentTile.direction == Direction.fromVector2(fireDir)) break;
 
             end = currentPos;
         }
