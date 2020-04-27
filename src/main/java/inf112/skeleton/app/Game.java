@@ -305,7 +305,6 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void fireLaser(Vector2 laser) {
         Tile tile = board.getTile(laser);
-        //Vector2 fireDir = Linear.mul(tile.direction.toVector2(), new Vector2(-1, -1));
         Vector2 fireDir = Linear.neg(tile.direction.toVector2());
         Vector2 start = laser;
         Vector2 end = laser;
@@ -325,9 +324,11 @@ public class Game extends InputAdapter implements ApplicationListener {
             }
             if (currentTile.kind == TileKind.wall && currentTile.direction == Direction.fromVector2(fireDir)) break;
 
+            //update end-position
             end = currentPos;
         }
-        //call drawLine(start, end)
+        //draw laser
+        renderer.drawLine(start, end);
     }
 
     private void rotateGears(){

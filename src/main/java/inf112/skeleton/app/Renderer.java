@@ -8,12 +8,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import javafx.scene.shape.Line;
+
+import static java.lang.Thread.sleep;
 
 // TODO: Rename to GameRenderer
 public class Renderer {
@@ -25,6 +29,7 @@ public class Renderer {
     private BitmapFont font;
     private Texture playerTexture;
     private Texture cardTexture;
+    private ShapeRenderer sr;
 
     // private as it should only be called from @create
     private Renderer(TiledMap map) {
@@ -56,6 +61,10 @@ public class Renderer {
 
         playerTexture = new Texture("player.png");
         cardTexture = new Texture("cards.png");
+
+        //Shape renderer
+        sr = new ShapeRenderer();
+        sr.setProjectionMatrix(camera.combined);
     }
 
     // need this for a matching pair of @create and @dispose
@@ -106,6 +115,14 @@ public class Renderer {
         Vector2 texIndex = cardTextureIndex(card);
         Vector2 coord = new Vector2(column, -1 - row);
         drawTileSprite(cardTexture, texIndex, coord, 0);
+    }
+
+    public void drawLine(Vector2 start, Vector2 end) {
+        sr.setColor(Color.RED);
+        sr.begin(ShapeRenderer.ShapeType.Line);
+        sr.line(start, end);
+        sr.end();
+        //code is run but line wont show.
     }
 
     private void clearFramebuffer(){
