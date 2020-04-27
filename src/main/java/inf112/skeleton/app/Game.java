@@ -160,14 +160,13 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void render() {
         update();
 
-        renderer.begin();
         drawRobotLives();
 
         // draw robots
         for (Player player : players) {
             Robot robot = player.robot;
             Vector2 pos = board.getRobotPosition(robot);
-            renderer.drawRobot(robot, pos);
+            renderer.drawRobot(pos, robot.direction.angle(), robot.color);
         }
 
         // draw player1's robot registers
@@ -178,7 +177,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         for (int i = 0; i < player1.cards.size(); i++)
             renderer.drawCard(player1.cards.get(i), 1, i);
 
-        renderer.end();
+        renderer.render();
     }
 
     @Override
@@ -327,8 +326,7 @@ public class Game extends InputAdapter implements ApplicationListener {
             //update end-position
             end = currentPos;
         }
-        //draw laser
-        renderer.drawLine(start, end);
+        renderer.drawLaser(start, end);
     }
 
     private void rotateGears(){

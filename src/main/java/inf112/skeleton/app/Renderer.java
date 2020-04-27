@@ -12,12 +12,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import javafx.scene.shape.Line;
 
-import static java.lang.Thread.sleep;
+import java.util.ArrayList;
 
 // TODO: Rename to GameRenderer
 public class Renderer {
@@ -27,9 +25,11 @@ public class Renderer {
     private OrthogonalTiledMapRenderer tilemapRenderer;
     private SpriteBatch spriteBatch;
     private BitmapFont font;
-    private Texture playerTexture;
+    private Texture robotTexture;
     private Texture cardTexture;
     private ShapeRenderer sr;
+    private ArrayList<Line> lines = new ArrayList<>();
+    private ArrayList<TileSprite> tileSprites = new ArrayList<>();
 
     // private as it should only be called from @create
     private Renderer(TiledMap map) {
@@ -41,13 +41,12 @@ public class Renderer {
         OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false, mapSize.x, mapSize.y);
         camera.position.x = mapSize.x / 2;
-
-        //offset camera to make space for card slots
-        camera.viewportHeight = mapSize.y+4;
-        camera.viewportWidth = mapSize.x+4;
-        camera.position.set(new Vector3(mapSize.x/2+2, mapSize.y/3, 0));
-
-
+        {
+            //offset camera to make space for card slots
+            camera.viewportHeight = mapSize.y+4;
+            camera.viewportWidth = mapSize.x+4;
+            camera.position.set(new Vector3(mapSize.x/2+2, mapSize.y/3, 0));
+        }
         camera.update();
 
         tilemapRenderer = new OrthogonalTiledMapRenderer(map, pixelsPerTile);
@@ -59,7 +58,7 @@ public class Renderer {
         font = new BitmapFont();
         font.setColor(Color.RED);
 
-        playerTexture = new Texture("player.png");
+        robotTexture = new Texture("player.png");
         cardTexture = new Texture("cards.png");
 
         //Shape renderer
@@ -78,15 +77,37 @@ public class Renderer {
         font.dispose();
     }
 
-    public void begin() {
-        clearFramebuffer();
-        tilemapRenderer.render();
-        spriteBatch.begin();
+    // region public draw/render methods
+
+    public void drawCard(Card card, int row, int column) {
+        Vector2 texIndex = cardTextureIndex(card);
+        Vector2 coord = new Vector2(column, -1 - row);
+        drawTileSprite(cardTexture, texIndex, coord, 0);
     }
 
-    public void end() {
-        spriteBatch.end();
+    public void drawLaser(Vector2 start, Vector2 end) {
+        drawLine(start, end, Color.RED);
     }
+
+    public void drawLives(Vector2 pos, int count, Color color){
+        for (int i = 0; i < count ; i++) {
+            Vector2 newPos = Linear.add(pos, new Vector2(i,0));
+            drawTileSprite(robotTexture, Vector2.Zero, newPos, 0, color);
+        }
+    }
+
+    public void drawRobot(Vector2 pos, float angle, Color color) {
+        drawTileSprite(robotTexture, new Vector2(), pos, angle, color);
+    }
+
+    public void render() {
+        clearFramebuffer();
+        tilemapRenderer.render();
+        renderSprites();
+        renderLines();
+    }
+
+    // endregion
 
     /**
      * @summary draws a sprite with the same camera transform as the map,
@@ -96,33 +117,40 @@ public class Renderer {
      * @param texIndex is the sub-texture index
      * @param position is the board coordinate
      */
-    public void drawTileSprite(Texture tex, Vector2 texIndex, Vector2 position, float rotation) {
+    private void drawTileSprite(Texture tex, Vector2 texIndex, Vector2 position, float rotation) {
         drawTileSprite(tex, texIndex, position, rotation, Color.WHITE);
     }
 
-    public void drawTileSprite(Texture tex, Vector2 texIndex, Vector2 position, float rotation, Color color) {
+    private void drawTileSprite(Texture tex, Vector2 texIndex, Vector2 position, float rotation, Color color) {
         Vector2 coord = Linear.floor(position);
         TextureRegion subTex = getSubTexture(tex, texIndex);
-        spriteBatch.setColor(color);
-        spriteBatch.draw(subTex, coord.x, coord.y, 0.5f, 0.5f, 1, 1, 1, 1, rotation);
+        tileSprites.add(new TileSprite(subTex, coord, rotation, color));
     }
 
-    public void drawRobot(Robot robot, Vector2 pos) {
-        drawTileSprite(playerTexture, new Vector2(), pos, robot.direction.angle(), robot.color);
+    private void drawLine(Vector2 start, Vector2 end, Color color) {
+        lines.add(new Line(start, end, color));
     }
 
-    public void drawCard(Card card, int row, int column) {
-        Vector2 texIndex = cardTextureIndex(card);
-        Vector2 coord = new Vector2(column, -1 - row);
-        drawTileSprite(cardTexture, texIndex, coord, 0);
+    private void renderLines() {
+        for (Line line : lines) {
+            sr.setColor(line.color);
+            sr.begin(ShapeRenderer.ShapeType.Line);
+            sr.line(line.p0, line.p1);
+            sr.end();
+        }
     }
 
-    public void drawLine(Vector2 start, Vector2 end) {
-        sr.setColor(Color.RED);
-        sr.begin(ShapeRenderer.ShapeType.Line);
-        sr.line(start, end);
-        sr.end();
-        //code is run but line wont show.
+    private void renderSprites() {
+        spriteBatch.begin();
+        for (TileSprite spr : tileSprites) {
+            TextureRegion tex = spr.subTexture;
+            float x = spr.coord.x;
+            float y = spr.coord.y;
+            float angle = spr.rotation;
+            spriteBatch.setColor(spr.color);
+            spriteBatch.draw(tex, x, y, 0.5f, 0.5f, 1, 1, 1, 1, angle);
+        }
+        spriteBatch.end();
     }
 
     private void clearFramebuffer(){
@@ -174,10 +202,32 @@ public class Renderer {
         return new Vector2();
     }
 
-    public void drawLives(Vector2 pos, int count, Color color){
-        for (int i = 0; i < count ; i++) {
-            Vector2 newPos = Linear.add(pos, new Vector2(i,0));
-            drawTileSprite(playerTexture, Vector2.Zero, newPos, 0, color);
+    // region private classes
+
+    class Line {
+        final Vector2 p0, p1;
+        final Color color;
+
+        public Line(Vector2 p0, Vector2 p1, Color color) {
+            this.p0 = p0;
+            this.p1 = p1;
+            this.color = color;
         }
     }
+
+    class TileSprite {
+        final TextureRegion subTexture;
+        final Vector2 coord;
+        final float rotation;
+        final Color color;
+
+        public TileSprite(TextureRegion subTexture, Vector2 position, float rotation, Color color) {
+            this.subTexture = subTexture;
+            this.coord = position;
+            this.rotation = rotation;
+            this.color = color;
+        }
+    }
+
+    // endregion
 }
