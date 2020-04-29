@@ -4,11 +4,11 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.graphics.Color;
 
 import java.util.ArrayList;
 
@@ -37,10 +37,13 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void create() {
         Gdx.input.setInputProcessor(this);
 
+        int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
+
         TiledMap map = new TmxMapLoader().load("newBoard.tmx");
         TiledMapTileLayer objLayer = (TiledMapTileLayer)map.getLayers().get("Tiles");
         Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
-        renderer = Renderer.create(map);
+        renderer = Renderer.create(width, height, map);
 
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
@@ -171,6 +174,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public void resize(int width, int height) {
+        renderer.onWindowResized(width, height);
     }
 
     @Override

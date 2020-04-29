@@ -11,56 +11,68 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Align;
+
+import java.util.ArrayList;
 
 // TODO: Rename to GameRenderer
 public class Renderer {
     private final Vector2 tileSize;
     private final Vector2 mapSize;
 
+    private Vector2 screenSize;
     private OrthogonalTiledMapRenderer tilemapRenderer;
     private SpriteBatch spriteBatch;
-    private BitmapFont font;
     private Texture playerTexture;
     private Texture cardTexture;
 
+    private SpriteBatch screenBatch = new SpriteBatch();
+    private BitmapFont font = new BitmapFont();
+    private OrthographicCamera screenCamera = new OrthographicCamera();
+    private ArrayList<TextCmd> textCmds = new ArrayList<>();
+
     // private as it should only be called from @create
-    private Renderer(TiledMap map) {
+    private Renderer(int width, int height, TiledMap map) {
+        onWindowResized(width, height);
+
         TiledMapTileLayer firstLayer = (TiledMapTileLayer) map.getLayers().get(0);
         tileSize = getLayerTileSize(firstLayer);
         mapSize = getLayerSize(firstLayer);
         float pixelsPerTile = 1 / tileSize.x;
 
-        OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false, mapSize.x, mapSize.y);
-        camera.position.x = mapSize.x / 2;
+        OrthographicCamera tileCamera = new OrthographicCamera();
+        tileCamera.setToOrtho(false, mapSize.x, mapSize.y);
+        tileCamera.position.x = mapSize.x / 2;
 
         //offset camera to make space for card slots
-        camera.viewportHeight = mapSize.y+4;
-        camera.viewportWidth = mapSize.x+4;
-        camera.position.set(new Vector3(mapSize.x/2+2, mapSize.y/3, 0));
+        tileCamera.viewportHeight = mapSize.y+4;
+        tileCamera.viewportWidth = mapSize.x+4;
+        tileCamera.position.set(new Vector3(mapSize.x/2+2, mapSize.y/3, 0));
 
-
-        camera.update();
+        tileCamera.update();
 
         tilemapRenderer = new OrthogonalTiledMapRenderer(map, pixelsPerTile);
-        tilemapRenderer.setView(camera);
+        tilemapRenderer.setView(tileCamera);
 
         spriteBatch = new SpriteBatch();
-        spriteBatch.setProjectionMatrix(camera.combined);
-
-        font = new BitmapFont();
-        font.setColor(Color.RED);
+        spriteBatch.setProjectionMatrix(tileCamera.combined);
 
         playerTexture = new Texture("player.png");
         cardTexture = new Texture("cards.png");
     }
 
+    public void onWindowResized(int width, int height) {
+        screenSize = new Vector2(width, height);
+        screenCamera.setToOrtho(false, width, height);
+        screenBatch.setProjectionMatrix(screenCamera.combined);
+        font.getData().setScale(Linear.min(screenSize) * 0.01f);
+    }
+
     // need this for a matching pair of @create and @dispose
-    public static Renderer create(TiledMap map) {
-        return new Renderer(map);
+    public static Renderer create(int width, int height, TiledMap map) {
+        return new Renderer(width, height, map);
     }
 
     // need this to "destruct" libGDX stuff
@@ -77,6 +89,20 @@ public class Renderer {
 
     public void end() {
         spriteBatch.end();
+        screenBatch.begin();
+        renderTexts();
+        screenBatch.end();
+    }
+
+    private void renderTexts() {
+        for (TextCmd cmd : textCmds) {
+            font.setColor(cmd.color);
+            float w = screenSize.x * 2/3;
+            Vector2 pos = Linear.scl(screenSize, 0.5f);
+            pos.x -= w/2;
+            font.draw(screenBatch, cmd.text, pos.x, pos.y, w, Align.center, false);
+        }
+        textCmds.clear();
     }
 
     /**
@@ -106,6 +132,10 @@ public class Renderer {
         Vector2 texIndex = cardTextureIndex(card);
         Vector2 coord = new Vector2(column, -1 - row);
         drawTileSprite(cardTexture, texIndex, coord, 0);
+    }
+
+    public void drawAnnouncement(String text, Color color) {
+        textCmds.add(new TextCmd(text, color));
     }
 
     private void clearFramebuffer(){
@@ -161,6 +191,16 @@ public class Renderer {
         for (int i = 0; i < count ; i++) {
             Vector2 newPos = Linear.add(pos, new Vector2(i,0));
             drawTileSprite(playerTexture, Vector2.Zero, newPos, 0, color);
+        }
+    }
+
+    class TextCmd {
+        final String text;
+        final Color color;
+
+        TextCmd(String text, Color color) {
+            this.text = text;
+            this.color = color;
         }
     }
 }
