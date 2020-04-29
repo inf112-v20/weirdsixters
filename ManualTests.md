@@ -1,7 +1,7 @@
 # Manual tests
 
 ## Movement på brettet
-Bruk piltastene for å se at roboten beveger seg der den skal og at den kolliderer med vegger. I tillegg ser vi at brettet ser ut slik som vi forventet og at kollisjonene tilsvarer med de synlige veggene.
+Bruk WASD for å velge faste bevegelseskort. W er move 1 forward, A er turn left, S er move 1 backwards, D er turn right. Vi ser at roboten kolliderer med vegger og at den beveger seg der den skal. I tillegg ser vi at brettet ser ut slik som vi forventet og at kollisjonene tilsvarer med de synlige veggene.
 
 ## Game.executeCard
 Vi har testet executeCard() fra game.java ved å:
