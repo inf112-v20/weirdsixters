@@ -105,6 +105,7 @@ public class Renderer {
         tilemapRenderer.render();
         renderSprites();
         renderLines();
+        clearQueues();
     }
 
     // endregion
@@ -151,6 +152,11 @@ public class Renderer {
             spriteBatch.draw(tex, x, y, 0.5f, 0.5f, 1, 1, 1, 1, angle);
         }
         spriteBatch.end();
+    }
+
+    private void clearQueues() {
+        lines.clear();
+        tileSprites.clear();
     }
 
     private void clearFramebuffer(){
