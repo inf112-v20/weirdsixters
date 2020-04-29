@@ -32,6 +32,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     private ArrayList<Player> players = new ArrayList<>();
     private GameState state;
     private int phaseIndex;
+    private Announcer announcer = new Announcer();
 
     @Override
     public void create() {
@@ -49,8 +50,8 @@ public class Game extends InputAdapter implements ApplicationListener {
         deck = new Deck(Card.programCards);
 
         player1 = addPlayer(new Vector2(0,0));
-        addPlayer(new Vector2(0,4));
-        addPlayer(new Vector2(0,5));
+        //addPlayer(new Vector2(0,4));
+        //addPlayer(new Vector2(0,5));
 
         state = GameState.START;
     }
@@ -69,9 +70,13 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     private void update() {
+        double time = getTime();
+        announcer.update(time);
+
         switch (state) {
             case START:
                 setState(GameState.DEALING_CARDS);
+                announcer.announce("Game start");
                 break;
             case DEALING_CARDS:
                 for(Player p : players)
@@ -98,6 +103,10 @@ public class Game extends InputAdapter implements ApplicationListener {
                 }
                 break;
         }
+    }
+
+    private double getTime() {
+        return System.currentTimeMillis() / 1000.0;
     }
 
     private void startTurn() {
@@ -152,6 +161,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         update();
 
         renderer.begin();
+
         drawRobotLives();
 
         // draw robots
@@ -168,6 +178,8 @@ public class Game extends InputAdapter implements ApplicationListener {
         // draw player1 cards
         for (int i = 0; i < player1.cards.size(); i++)
             renderer.drawCard(player1.cards.get(i), 1, i);
+
+        announcer.draw(renderer);
 
         renderer.end();
     }
