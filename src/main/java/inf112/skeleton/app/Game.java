@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import static java.lang.Thread.sleep;
 
 enum GameState {
-    WAITING_FOR_PLAYERS_TO_JOIN,
+    START,
     DEALING_CARDS,
     STAGING_CARDS,
     COMMITTED,
@@ -49,7 +49,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         addPlayer(new Vector2(0,4));
         addPlayer(new Vector2(0,5));
 
-        state = GameState.WAITING_FOR_PLAYERS_TO_JOIN;
+        state = GameState.START;
     }
 
     @Override
@@ -67,9 +67,8 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void update() {
         switch (state) {
-            case WAITING_FOR_PLAYERS_TO_JOIN:
-                if (players.size() > 1)
-                    setState(GameState.DEALING_CARDS);
+            case START:
+                setState(GameState.DEALING_CARDS);
                 break;
             case DEALING_CARDS:
                 for(Player p : players)
