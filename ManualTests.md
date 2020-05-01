@@ -1,22 +1,16 @@
 # Manual tests
 
 ## Movement på brettet
-Bruk piltastene for å se at roboten beveger seg der den skal og at den kolliderer med vegger. I tillegg ser vi at brettet ser ut slik som vi forventet og at kollisjonene tilsvarer med de synlige veggene.
+Bruk WASD for å velge faste bevegelseskort. W er move 1 forward, A er turn left, S er move 1 backwards, D er turn right. Vi ser at roboten kolliderer med vegger og at den beveger seg der den skal. I tillegg ser vi at brettet ser ut slik som vi forventet og at kollisjonene tilsvarer med de synlige veggene.
 
 ## Game.executeCard
-Vi har testet executeCard() fra game.java ved å:
- - Kjøre spillet og så først trykke W, sett at vi beveger oss to ruter oppover.
- - Ha trykket D og så W og sett at vi beveger oss to ruter mot høyre. 
- - Ha trykket vi A og W og sett at vi bevegde oss to ruter oppover. 
- - Ha trykket F og så W og sett at vi beveger oss to ruter nedover. 
- - Ha trykket S og sett at vi beveger oss en rute oppover. 
- Dette testet at vår metode executeCard() fungerer med forskjellige typer kort og at movePlayer flytter riktig i forhold til tilgitte argumenter.
+Vi har testet executeCard() fra game.java ved å velge fem kort med talltastene fra 1-9 og så trykke enter. Vi ser at det funker når roboten gjør slik som kortene sier. Dette testet at vår metode executeCard() fungerer med forskjellige typer kort og at movePlayer flytter riktig i forhold til tilgitte argumenter.
  
- ## Loose condition
+ ## Lose condition
  Vi har testet lose condition ved å;
  - Bevege roboten mot hullet ved hjelp av piltastene.
  - Forsikre oss om at roboten returnerer til gitt "startpoint" når den treffer hullet.
- - Gjøre det flere ganger, og i tillegg printe en melding når vi treffer hullet. Dette for å forsikre oss om at alt stemmer mtp. at tile-typen stemmer.
+ - Gjøre det flere ganger, og i tillegg printe en melding når vi treffer hullet. Dette for å forsikre oss om at alt stemmer med tanke på at tile-typen stemmer.
  - Forsikre oss om at roboten faller tilbake til startposisjon om den prøver å gå ut av brettet.
  - Når man bruker moveCards som har mer en ett steg, så skal man ikke kunne gå gjennom hull, men falle i det.
  - Livene oppe til høyre skal reflektere hvor mange liv jeg har, ettersom jeg mister de.

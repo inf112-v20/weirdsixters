@@ -11,7 +11,6 @@
 
 - Currently throws "WARNING: An illegal reflective access operation has occurred", 
 when the java version used is >8. This has no effect on Windows machines, but you may have to use Java 8 on Linux.
-- Blue belts turning left have the wrong direction.
 
 ## Testing
 

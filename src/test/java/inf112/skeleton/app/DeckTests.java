@@ -6,23 +6,23 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-public class DeckTest {
+public class DeckTests {
 
     @Test
-    public void drawCard_zero_zeroCards() {
+    public void drawCardsWorksWithZero() {
         Deck deck = new Deck(Card.programCards);
         assertEquals(0, deck.drawCards(0).size());
     }
 
     @Test
-    public void drawCard_nine_nineCards() {
+    public void drawCardsReturnsCorrectNumberOfCards() {
         Deck deck = new Deck(Card.programCards);
         ArrayList<Card> cards = deck.drawCards(9);
         assertEquals(9, cards.size());
     }
 
     @Test
-    public void drawCard_countOverCapacity_doesNotRunDry() {
+    public void drawCardsDoesNotRunDry() {
         int n = Card.programCards.size();
         Deck deck = new Deck(Card.programCards);
         ArrayList<Card> cards = deck.drawCards(n-1);
