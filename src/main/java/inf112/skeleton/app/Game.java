@@ -315,13 +315,19 @@ public class Game extends InputAdapter implements ApplicationListener {
 
             //check if laser should stop (outOfBounds, hits wall, hits robot)
             if (currentTile == null) break;
-            if (currentTile.kind == TileKind.wall && currentTile.direction == tile.direction) break;
+            if (currentTile.kind == TileKind.wall) {
+                if (currentTile.direction == tile.direction) break;
+                if (currentTile.level > 0 && currentTile.secondDirection == tile.direction) break;
+            }
             if (board.getRobot(currentPos) != null) {
                 Robot robot = board.getRobot(currentPos);
                 robot.dealDamage();
                 break;
             }
-            if (currentTile.kind == TileKind.wall && currentTile.direction == Direction.fromVector2(fireDir)) break;
+            if (currentTile.kind == TileKind.wall && currentTile.direction == Direction.fromVector2(fireDir)) {
+                if (currentTile.direction == Direction.fromVector2(fireDir)) break;
+                if (currentTile.level > 0 && currentTile.secondDirection == Direction.fromVector2(fireDir)) break;
+            }
 
             //update end-position
             end = currentPos;
