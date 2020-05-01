@@ -86,7 +86,8 @@ public class Renderer {
     }
 
     public void drawLaser(Vector2 start, Vector2 end) {
-        drawLine(start, end, Color.RED);
+        Vector2 off = new Vector2(0.5f, 0.5f);
+        drawLine(Linear.add(start, off), Linear.add(end, off), Color.RED);
     }
 
     public void drawLives(Vector2 pos, int count, Color color){
