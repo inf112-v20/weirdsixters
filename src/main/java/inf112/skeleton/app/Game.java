@@ -37,7 +37,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void create() {
         Gdx.input.setInputProcessor(this);
 
-        TiledMap map = new TmxMapLoader().load("newBoard.tmx");
+        TiledMap map = new TmxMapLoader().load("Board.tmx");
         TiledMapTileLayer objLayer = (TiledMapTileLayer)map.getLayers().get("Tiles");
         Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
         renderer = Renderer.create(map);
