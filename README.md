@@ -25,7 +25,7 @@ Runtime assertions can be enabled with the Java VM flag "-ea".
 
 ## Controls
 
-- WASD + F: Manual movement card injection (for debugging).
+- WASD: Manual movement card injection (for debugging).
 - 1-9: Stage cards
 - Shift + 1-5: Unstage cards
 - Return: Commit cards
