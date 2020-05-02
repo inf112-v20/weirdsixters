@@ -27,7 +27,6 @@ public class TileImporter {
         }
     }
 
-
     public static Tile getTile(int id) {
         if (id <= 0 || id > tiles.length)
             return new Tile(TileKind.empty);
@@ -171,6 +170,56 @@ public class TileImporter {
             new Tile(TileKind.laserWall, Direction.LEFT, true),
             new Tile(TileKind.laserWall, Direction.UP, true),
             new Tile(TileKind.laserWall, Direction.RIGHT, true),
+            new Tile(TileKind.empty),
+
+            // 13th row
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+
+            // 14th row
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+
+            // 15th row
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+
+            // 16th row
+            new Tile(TileKind.spawn, 0),
+            new Tile(TileKind.spawn, 1),
+            new Tile(TileKind.spawn, 2),
+            new Tile(TileKind.spawn, 3),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+
+            // 17th row (the last row)
+            new Tile(TileKind.spawn, 4),
+            new Tile(TileKind.spawn, 5),
+            new Tile(TileKind.spawn, 6),
+            new Tile(TileKind.spawn, 7),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
+            new Tile(TileKind.empty),
             new Tile(TileKind.empty),
     };
 }
