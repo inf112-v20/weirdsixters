@@ -36,7 +36,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void create() {
         Gdx.input.setInputProcessor(this);
 
-        TiledMap map = new TmxMapLoader().load("newBoard.tmx");
+        TiledMap map = new TmxMapLoader().load("Board.tmx");
         TiledMapTileLayer objLayer = (TiledMapTileLayer)map.getLayers().get("Tiles");
         Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
         renderer = Renderer.create(map);
@@ -44,9 +44,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
 
-        player1 = addPlayer(new Vector2(0,0));
-        addPlayer(new Vector2(0,4));
-        addPlayer(new Vector2(0,5));
+        player1 = addPlayer();
+        for (int i = 1; i < 8; i++)
+            addPlayer();
 
         state = GameState.WAITING_FOR_PLAYERS_TO_JOIN;
     }
@@ -56,9 +56,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer.dispose();
     }
 
-    private Player addPlayer(Vector2 pos) {
+    private Player addPlayer() {
         int number = players.size() + 1;
-        Robot robot = board.addRobot((int)pos.x, (int)pos.y);
+        Robot robot = board.addRobot();
         Player player = new Player(number, robot);
         players.add(player);
         return player;
