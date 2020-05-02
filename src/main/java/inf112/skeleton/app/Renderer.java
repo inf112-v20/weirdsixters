@@ -85,9 +85,11 @@ public class Renderer {
         drawTileSprite(cardTexture, texIndex, coord, 0);
     }
 
-    public void drawLaser(Vector2 start, Vector2 end) {
+    public void drawLaser(Vector2 start, Vector2 end, Vector2 dir) {
         Vector2 off = new Vector2(0.5f, 0.5f);
-        drawLine(Linear.add(start, off), Linear.add(end, off), Color.RED);
+        Vector2 p0 = Linear.add(Linear.add(start, off), Linear.scl(dir, -0.5f));
+        Vector2 p1 = Linear.add(Linear.add(end, off), Linear.scl(dir, 0.5f));
+        drawLine(p0, p1, Color.RED);
     }
 
     public void drawLives(Vector2 pos, int count, Color color){

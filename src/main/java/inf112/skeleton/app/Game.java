@@ -8,7 +8,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.graphics.Color;
 
 import java.util.ArrayList;
 
@@ -30,7 +29,6 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Deck deck;
     private Player player1;
     private ArrayList<Player> players = new ArrayList<>();
-    private ArrayList<Vector2> lasers = new ArrayList<>();
     private GameState state;
     private int phaseIndex;
 
@@ -49,16 +47,6 @@ public class Game extends InputAdapter implements ApplicationListener {
         player1 = addPlayer(new Vector2(0,0));
         addPlayer(new Vector2(0,4));
         addPlayer(new Vector2(0,5));
-
-
-        //loop through board and populate lasers. to be moved to own method?
-        for(int y = 0; y < board.height; y++) {
-            for(int x = 0; x < board.width; x++) {
-                if (board.getTile(x, y).kind == TileKind.laserWall) {
-                    lasers.add(new Vector2(x, y));
-                }
-            }
-        }
 
         state = GameState.WAITING_FOR_PLAYERS_TO_JOIN;
     }
@@ -142,11 +130,11 @@ public class Game extends InputAdapter implements ApplicationListener {
         } catch (InterruptedException e) {
         }
 
-        //revealCards();
+        // TODO: revealCards();
         executeMovementCards(index);
         board.updateBelts();
         rotateGears();
-        fireLasers();
+        board.fireLasers();
         board.registerFlags();
     }
 
@@ -177,6 +165,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         for (int i = 0; i < player1.cards.size(); i++)
             renderer.drawCard(player1.cards.get(i), 1, i);
 
+        board.draw(renderer);
         renderer.render();
     }
 
@@ -293,46 +282,6 @@ public class Game extends InputAdapter implements ApplicationListener {
             return;
         }
         board.move((int)pos.x, (int)pos.y, (int)dir.x, (int)dir.y);
-    }
-
-    private void fireLasers() {
-        for(Vector2 laser : lasers) {
-            fireLaser(laser);
-        }
-        //fire robotlasers
-    }
-
-    private void fireLaser(Vector2 laser) {
-        Tile tile = board.getTile(laser);
-        Vector2 fireDir = Linear.neg(tile.direction.toVector2());
-        Vector2 start = laser;
-        Vector2 end = laser;
-
-        //go through laser trajectory
-        while (true) {
-            Vector2 currentPos = Linear.add(end, fireDir);
-            Tile currentTile = board.getTile(currentPos);
-
-            //check if laser should stop (outOfBounds, hits wall, hits robot)
-            if (currentTile == null) break;
-            if (currentTile.kind == TileKind.wall) {
-                if (currentTile.direction == tile.direction) break;
-                if (currentTile.level > 0 && currentTile.secondDirection == tile.direction) break;
-            }
-            if (board.getRobot(currentPos) != null) {
-                Robot robot = board.getRobot(currentPos);
-                robot.dealDamage();
-                break;
-            }
-            if (currentTile.kind == TileKind.wall && currentTile.direction == Direction.fromVector2(fireDir)) {
-                if (currentTile.direction == Direction.fromVector2(fireDir)) break;
-                if (currentTile.level > 0 && currentTile.secondDirection == Direction.fromVector2(fireDir)) break;
-            }
-
-            //update end-position
-            end = currentPos;
-        }
-        renderer.drawLaser(start, end);
     }
 
     private void rotateGears(){
