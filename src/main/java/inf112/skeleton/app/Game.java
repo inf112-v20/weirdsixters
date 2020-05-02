@@ -8,7 +8,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.graphics.Color;
 
 import java.util.ArrayList;
 
@@ -131,11 +130,11 @@ public class Game extends InputAdapter implements ApplicationListener {
         } catch (InterruptedException e) {
         }
 
-        //revealCards();
+        // TODO: revealCards();
         executeMovementCards(index);
         board.updateBelts();
         rotateGears();
-        //fireLasers();
+        board.fireLasers();
         board.registerFlags();
     }
 
@@ -149,14 +148,13 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void render() {
         update();
 
-        renderer.begin();
         drawRobotLives();
 
         // draw robots
         for (Player player : players) {
             Robot robot = player.robot;
             Vector2 pos = board.getRobotPosition(robot);
-            renderer.drawRobot(robot, pos);
+            renderer.drawRobot(pos, robot.direction.angle(), robot.color);
         }
 
         // draw player1's robot registers
@@ -167,7 +165,8 @@ public class Game extends InputAdapter implements ApplicationListener {
         for (int i = 0; i < player1.cards.size(); i++)
             renderer.drawCard(player1.cards.get(i), 1, i);
 
-        renderer.end();
+        board.draw(renderer);
+        renderer.render();
     }
 
     @Override

@@ -8,10 +8,12 @@ import java.util.ArrayList;
 public class Board {
     public final int width, height, size;
 
+    public ArrayList<LaserRay> laserRays = new ArrayList<>();
+
     private Color[] robotColors;
     private Robot[][] robotGrid;
     private Tile[][] tileGrid;
-    private ArrayList<Vector2> belts, flags;
+    private ArrayList<Vector2> belts, flags, laserCannons;
     private Vector2[] spawns = new Vector2[8];
 
     private int robotCount;
@@ -28,6 +30,7 @@ public class Board {
         // process tiles
         belts = new ArrayList<>();
         flags = new ArrayList<>();
+        laserCannons = new ArrayList<>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Vector2 pos = new Vector2(x, y);
@@ -39,11 +42,15 @@ public class Board {
                     case flag:
                         flags.add(pos);
                         break;
+                    case laserWall:
+                        laserCannons.add(pos);
+                        break;
                     case spawn:
                         spawns[tile.level] = pos;
                 }
             }
         }
+
         robotColors = new Color[]{
                 Color.RED, Color.GOLD, Color.CYAN, Color.CHARTREUSE,
                 Color.WHITE, Color.PINK, Color.PURPLE, Color.FOREST};
@@ -149,9 +156,54 @@ public class Board {
         }
     }
 
+    // TODO: robot lasers
+    public void fireLasers() {
+        laserRays.clear();
+        for (Vector2 pos : laserCannons) {
+            Tile originTile = getTile(pos);
+            Vector2 dir = Linear.neg(originTile.direction.toVector2());
+            laserRays.add(traceLaserRay(pos, dir));
+        }
+    }
+
+    public void draw(Renderer rnd) {
+        laserRays.forEach(x -> rnd.drawLaser(x.start, x.end, x.dir));
+    }
+
     // endregion
 
     // region private methods
+
+    private LaserRay traceLaserRay(Vector2 laserPos, Vector2 laserDir) {
+        Vector2 start = laserPos;
+        Vector2 end = new Vector2(start);
+        boolean firstTile = true;
+        while (true) {
+            Vector2 nextPos = Linear.add(end, laserDir);
+            Tile tile = getTile(nextPos);
+
+            // moving into tile
+            if (!firstTile) {
+                if (tile == null || tile.blocksDir(laserDir, true))
+                    break;
+            }
+            assert(tile != null);
+            end = nextPos;
+
+            // hitting robots
+            Robot robot = getRobot(end);
+            if (robot != null) {
+                robot.dealDamage();
+                break;
+            }
+
+            // moving out of tile
+            if (tile.blocksDir(laserDir, false))
+                break;
+            firstTile = false;
+        }
+        return new LaserRay(start, end, laserDir);
+    }
 
     // return false on blocked or invalid moves
     private boolean canMove(int x, int y, int dx, int dy) {
@@ -209,6 +261,16 @@ public class Board {
 
         public MoveAction(Vector2 pos, Vector2 dir) {
             this((int) pos.x, (int) pos.y, (int) dir.x, (int) dir.y);
+        }
+    }
+
+    private class LaserRay {
+        public final Vector2 start, end, dir;
+
+        private LaserRay(Vector2 start, Vector2 end, Vector2 dir) {
+            this.start = new Vector2(start);
+            this.end = new Vector2(end);
+            this.dir = new Vector2(dir);
         }
     }
 }
