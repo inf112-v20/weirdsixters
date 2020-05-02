@@ -12,6 +12,7 @@ public class Board {
     private Robot[][] robotGrid;
     private Tile[][] tileGrid;
     private ArrayList<Vector2> belts, flags;
+    private Vector2[] spawns = new Vector2[8];
 
     private int robotCount;
 
@@ -38,12 +39,21 @@ public class Board {
                     case flag:
                         flags.add(pos);
                         break;
+                    case spawn:
+                        spawns[tile.level] = pos;
                 }
             }
         }
         robotColors = new Color[]{
                 Color.RED, Color.GOLD, Color.CYAN, Color.CHARTREUSE,
-                Color.FIREBRICK, Color.GREEN, Color.PURPLE, Color.YELLOW};
+                Color.WHITE, Color.PINK, Color.PURPLE, Color.FOREST};
+    }
+
+    public Robot addRobot() {
+        Vector2 pos = spawns[robotCount];
+        int x = (int) pos.x;
+        int y = (int) pos.y;
+        return addRobot(x, y);
     }
 
     public Robot addRobot(int x, int y) {

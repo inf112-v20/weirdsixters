@@ -3,7 +3,7 @@ package inf112.skeleton.app;
 import com.badlogic.gdx.math.Vector2;
 
 enum TileKind {
-    empty, belt, flag, gear, hole, laserWall, wall, wrench
+    empty, belt, flag, gear, hole, laserWall, spawn, wall, wrench
 }
 
 /**
