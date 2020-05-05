@@ -93,6 +93,11 @@ public class Renderer {
 
     // region public draw/render methods
 
+    public void drawAnnouncement(String text, Color color) {
+        Vector2 pos = new Vector2(0,0);
+        textCmds.add(new TextCmd(text, pos, color));
+    }
+
     public void drawCard(Card card, int row, int column) {
         Vector2 texIndex = cardTextureIndex(card);
         Vector2 coord = new Vector2(column, -1 - row);
@@ -187,11 +192,6 @@ public class Renderer {
     private void clearQueues() {
         lines.clear();
         tileSprites.clear();
-    }
-
-    public void drawAnnouncement(String text, Color color) {
-        Vector2 pos = new Vector2(0,0);
-        textCmds.add(new TextCmd(text, pos, color));
     }
 
     private void clearFramebuffer(){
