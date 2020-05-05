@@ -1,48 +1,49 @@
 package inf112.skeleton.app;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
-
-import java.util.ArrayList;
+import com.badlogic.gdx.utils.Queue;
 
 public class Announcer {
-    private static final float DURATION = 3.0f;
+    private static final double DURATION = 3.0;
 
-    private ArrayList<Announcement> announcements = new ArrayList<>();
-    private double time;
+    private Queue<Announcement> announcements = new Queue<>();
+    private double time, lastDuration;
 
     public void announce(String text) {
-        announcements.add(new Announcement(text, time));
+        hasten();
+        announcements.addLast(new Announcement(text, DURATION));
+        lastDuration = 0;
     }
 
     public void update(double time) {
+        double dt = time - this.time;
         this.time = time;
-        for (int i = announcements.size()-1; i >= 0; i--) {
-            Announcement a = announcements.get(i);
-            if ((time - a.time) > DURATION)
-                del(i);
-        }
+        if (announcements.isEmpty())
+            return;
+
+        lastDuration += dt;
+        if (lastDuration > announcements.first().duration)
+            announcements.removeFirst();
     }
 
     public void draw(Renderer rnd) {
-        for (Announcement a : announcements)
-            rnd.drawAnnouncement(a.text, Color.RED);
+        if (announcements.isEmpty())
+            return;
+        Announcement a = announcements.first();
+        rnd.drawAnnouncement(a.text, Color.RED);
     }
 
-    // move last elem to elem at @i
-    private void del(int i) {
-        int hi = announcements.size() - 1;
-        announcements.set(i, announcements.get(hi));
-        announcements.remove(hi);
+    private void hasten() {
+        announcements.forEach(a -> a.duration = Math.min(a.duration, 0.5));
     }
 
     class Announcement {
         final String text;
-        final double time;
+        double duration;
 
-        public Announcement(String text, double time) {
+        public Announcement(String text, double duration) {
             this.text = text;
-            this.time = time;
+            this.duration = duration;
         }
     }
 }
