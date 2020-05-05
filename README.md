@@ -9,8 +9,9 @@
 
 ## Known bugs
 
-- Currently throws "WARNING: An illegal reflective access operation has occurred", 
-when the java version used is >8. This has no effect on Windows machines, but you may have to use Java 8 on Linux.
+- Currently throws "WARNING: An illegal reflective access operation has occurred",
+  when the java version used is >8. This has no effect on Windows machines, but you may have to use Java 8 on Linux.
+- Robots may some times teleport to another tile than intended when moving...
 
 ## Testing
 
