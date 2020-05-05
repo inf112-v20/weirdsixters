@@ -23,6 +23,7 @@ public class Renderer {
     private final Vector2 tileSize;
     private final Vector2 mapSize;
 
+    private float fontSize;
     private Vector2 screenSize;
     private OrthogonalTiledMapRenderer tilemapRenderer;
     private SpriteBatch spriteBatch;
@@ -75,7 +76,8 @@ public class Renderer {
         screenSize = new Vector2(width, height);
         screenCamera.setToOrtho(false, width, height);
         screenBatch.setProjectionMatrix(screenCamera.combined);
-        font.getData().setScale(Linear.min(screenSize) * 0.01f);
+        fontSize = Linear.min(screenSize) * 0.003f;
+        font.getData().setScale(fontSize);
     }
 
     // need this for a matching pair of @create and @dispose
@@ -174,10 +176,9 @@ public class Renderer {
         screenBatch.begin();
         for (TextCmd cmd : textCmds) {
             font.setColor(cmd.color);
-            float w = screenSize.x * 2/3;
-            Vector2 pos = Linear.scl(screenSize, 0.5f);
-            pos.x -= w/2;
-            font.draw(screenBatch, cmd.text, pos.x, pos.y, w, Align.center, false);
+            float x = cmd.pos.x;
+            float y = cmd.pos.y + fontSize * 14; // with magic factor that just works
+            font.draw(screenBatch, cmd.text, x, y, 0, Align.bottomLeft, false);
         }
         textCmds.clear();
         screenBatch.end();
@@ -189,7 +190,8 @@ public class Renderer {
     }
 
     public void drawAnnouncement(String text, Color color) {
-        textCmds.add(new TextCmd(text, color));
+        Vector2 pos = new Vector2(0,0);
+        textCmds.add(new TextCmd(text, pos, color));
     }
 
     private void clearFramebuffer(){
@@ -270,10 +272,12 @@ public class Renderer {
 
     class TextCmd {
         final String text;
+        final Vector2 pos;
         final Color color;
 
-        TextCmd(String text, Color color) {
+        TextCmd(String text, Vector2 pos, Color color) {
             this.text = text;
+            this.pos = pos;
             this.color = color;
         }
     }
