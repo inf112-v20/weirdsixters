@@ -47,6 +47,8 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer = Renderer.create(width, height, map);
 
         board = new Board(tileGrid);
+        board.onRobotKilled = robot -> announcer.announce(robot.name + " died");
+
         deck = new Deck(Card.programCards);
 
         player1 = addPlayer();
@@ -63,7 +65,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private Player addPlayer() {
         int number = players.size() + 1;
-        Robot robot = board.addRobot();
+        Robot robot = board.addRobot("Player " + number);
         Player player = new Player(number, robot);
         players.add(player);
         return player;

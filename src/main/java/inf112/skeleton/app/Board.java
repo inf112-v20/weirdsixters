@@ -6,8 +6,13 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 
 public class Board {
+    public interface RobotCallback {
+        void call(Robot robot);
+    }
+
     public final int width, height, size;
 
+    public RobotCallback onRobotKilled;
     public ArrayList<LaserRay> laserRays = new ArrayList<>();
 
     private Color[] robotColors;
@@ -56,15 +61,19 @@ public class Board {
                 Color.WHITE, Color.PINK, Color.PURPLE, Color.FOREST};
     }
 
-    public Robot addRobot() {
+    public Robot addRobot(int x, int y) {
+        return addRobot("anon", x, y);
+    }
+
+    public Robot addRobot(String name) {
         Vector2 pos = spawns[robotCount];
         int x = (int) pos.x;
         int y = (int) pos.y;
-        return addRobot(x, y);
+        return addRobot(name, x, y);
     }
 
-    public Robot addRobot(int x, int y) {
-        Robot robot = new Robot(new Vector2(x, y), robotColors[robotCount]);
+    public Robot addRobot(String name, int x, int y) {
+        Robot robot = new Robot(name, new Vector2(x, y), robotColors[robotCount]);
         assert (robotGrid[y][x] == null);
         robotGrid[y][x] = robot;
         robotCount++;
@@ -257,6 +266,8 @@ public class Board {
         }
 
         robotGrid[y][x] = robot;
+        if (onRobotKilled != null)
+            onRobotKilled.call(robot);
     }
 
     private boolean isInside(int x, int y) {
