@@ -41,7 +41,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
 
-        TiledMap map = new TmxMapLoader().load("newBoard.tmx");
+        TiledMap map = new TmxMapLoader().load("Board.tmx");
         TiledMapTileLayer objLayer = (TiledMapTileLayer)map.getLayers().get("Tiles");
         Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
         renderer = Renderer.create(width, height, map);
@@ -49,9 +49,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         board = new Board(tileGrid);
         deck = new Deck(Card.programCards);
 
-        player1 = addPlayer(new Vector2(0,0));
-        //addPlayer(new Vector2(0,4));
-        //addPlayer(new Vector2(0,5));
+        player1 = addPlayer();
+        for (int i = 1; i < 8; i++)
+            addPlayer();
 
         state = GameState.START;
     }
@@ -61,9 +61,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer.dispose();
     }
 
-    private Player addPlayer(Vector2 pos) {
+    private Player addPlayer() {
         int number = players.size() + 1;
-        Robot robot = board.addRobot((int)pos.x, (int)pos.y);
+        Robot robot = board.addRobot();
         Player player = new Player(number, robot);
         players.add(player);
         return player;
@@ -142,11 +142,11 @@ public class Game extends InputAdapter implements ApplicationListener {
         } catch (InterruptedException e) {
         }
 
-        //revealCards();
+        // TODO: revealCards();
         executeMovementCards(index);
         board.updateBelts();
         rotateGears();
-        //fireLasers();
+        board.fireLasers();
         board.registerFlags();
     }
 
@@ -160,15 +160,13 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void render() {
         update();
 
-        renderer.begin();
-
         drawRobotLives();
 
         // draw robots
         for (Player player : players) {
             Robot robot = player.robot;
             Vector2 pos = board.getRobotPosition(robot);
-            renderer.drawRobot(robot, pos);
+            renderer.drawRobot(pos, robot.direction.angle(), robot.color);
         }
 
         // draw player1's robot registers
@@ -181,7 +179,8 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         announcer.draw(renderer);
 
-        renderer.end();
+        board.draw(renderer);
+        renderer.render();
     }
 
     @Override

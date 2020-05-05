@@ -11,7 +11,6 @@
 
 - Currently throws "WARNING: An illegal reflective access operation has occurred", 
 when the java version used is >8. This has no effect on Windows machines, but you may have to use Java 8 on Linux.
-- Blue belts turning left have the wrong direction.
 
 ## Testing
 
@@ -26,8 +25,7 @@ Runtime assertions can be enabled with the Java VM flag "-ea".
 
 ## Controls
 
-- Arrow keys: Manually move player
-- WASD + F: Manually execute movement cards
+- WASD: Manual movement card injection (for debugging).
 - 1-9: Stage cards
 - Shift + 1-5: Unstage cards
 - Return: Commit cards
