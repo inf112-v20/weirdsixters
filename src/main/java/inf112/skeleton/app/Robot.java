@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 
 public class Robot {
+    public static final int HEALTH = 9;
+    public static final int LIVES = 3;
     public static final int REGISTER_SIZE = 5;
 
     public final String name;
@@ -24,21 +26,30 @@ public class Robot {
         this.startPos = new Vector2(startPos);
         this.color = color;
         direction = new Vector2(1, 0);
+        reset();
+    }
+
+    public void reset() {
         nextFlag = 1;
-        health = 9;
-        lives = 3;
+        lives = LIVES;
+        resetHealth();
     }
 
     public void kill() {
         registers.clear();
         direction.setAngle(0);
         lives--;
+        resetHealth();
     }
 
     public void dealDamage(){
-        health--;
-        if (health <= 0)
+        assert(health > 0);
+        if (--health == 0)
             kill();
+    }
+
+    public boolean hasWon(){
+        return nextFlag > 4;
     }
 
     public boolean isDead(){
@@ -81,7 +92,12 @@ public class Robot {
         return registers.remove(index);
     }
 
-    public int getLives(){
+    public int getLives() {
+        assert this.lives >= 0;
         return this.lives;
+    }
+
+    private void resetHealth() {
+        health = HEALTH;
     }
 }

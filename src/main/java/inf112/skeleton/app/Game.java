@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -20,6 +19,7 @@ enum GameState {
     STAGING_CARDS,
     COMMITTED,
     TURN,
+    GAME_OVER,
 }
 
 public class Game extends InputAdapter implements ApplicationListener {
@@ -48,11 +48,12 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         board = new Board(tileGrid);
         board.onRobotKilled = robot -> announcer.announce(robot.name + " died");
+        board.onRobotFlag = robot -> announcer.announce(robot.name + " got a flag!");
 
         deck = new Deck(Card.programCards);
 
         player1 = addPlayer();
-        for (int i = 1; i < 8; i++)
+        for (int i = 1; i < 4; i++)
             addPlayer();
 
         state = GameState.START;
@@ -77,6 +78,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         switch (state) {
             case START:
+                resetGame();
                 setState(GameState.DEALING_CARDS);
                 break;
             case DEALING_CARDS:
@@ -97,14 +99,46 @@ public class Game extends InputAdapter implements ApplicationListener {
                 }
                 break;
             case TURN:
-                if (phaseIndex >= PHASE_COUNT) {
+                Player winner = getWinner();
+                if (winner != null) {
+                    setState(GameState.GAME_OVER);
+                    if (winner == player1)
+                        announcer.announce("You won!");
+                    else
+                        announcer.announce("AI won, you lost!");
+                    break;
+                }
+                if (player1.robot.isDead()) {
+                    setState(GameState.GAME_OVER);
+                    announcer.announce("You lost!");
+                } else if (phaseIndex >= PHASE_COUNT) {
                     endTurn();
                     setState(GameState.DEALING_CARDS);
                 } else {
                     doPhase(phaseIndex++);
                 }
                 break;
+            case GAME_OVER:
+                delay();
+                setState(GameState.START);
+                break;
         }
+    }
+
+    // kill and reset any robots
+    private void resetGame() {
+        players.forEach(p -> {
+            board.resetRobotPosition(p.robot);
+            p.robot.reset();
+        });
+    }
+
+    private Player getWinner() {
+        for (Player p : players) {
+            if (p.robot.hasWon())
+                return p;
+        }
+        return null;
     }
 
     private double getTime() {
@@ -141,10 +175,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void doPhase(int index) {
         System.out.println("Phase " + (index + 1));
-        try {
-            sleep(1000);
-        } catch (InterruptedException e) {
-        }
+        delay();
 
         // TODO: revealCards();
         executeMovementCards(index);
@@ -152,6 +183,13 @@ public class Game extends InputAdapter implements ApplicationListener {
         rotateGears();
         board.fireLasers();
         board.registerFlags();
+    }
+
+    private void delay() {
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+        }
     }
 
     private void executeMovementCards(int index) {
