@@ -122,6 +122,14 @@ public class Board {
         return true;
     }
 
+    public boolean move(Vector2 pos, Vector2 dir) {
+        int px = (int)pos.x;
+        int py = (int)pos.y;
+        int dx = (int)dir.x;
+        int dy = (int)dir.y;
+        return move(px, py, dx, dy);
+    }
+
     public void updateBelts() {
         // move actions must be queued to avoid them affecting each other
         ArrayList<MoveAction> moves = new ArrayList<>();
@@ -231,12 +239,23 @@ public class Board {
         robotGrid[y2][x2] = robot;
     }
 
-    // FIXME, doesn't handle being reset on top of another robot
     private void resetRobot(Robot robot) {
         robot.kill();
         int x = (int) robot.startPos.x;
         int y = (int) robot.startPos.y;
-        assert (robotGrid[y][x] == null);
+
+        // may reset on top of another robot
+        // current workaround is to push the occupying robot away
+        Robot other = robotGrid[y][x];
+        if (other != null) {
+            for (Direction direction : Direction.values()) {
+                Vector2 pos = new Vector2(x, y);
+                Vector2 dir = direction.toVector2();
+                if (move(pos, dir))
+                    break;
+            }
+        }
+
         robotGrid[y][x] = robot;
     }
 
