@@ -22,8 +22,10 @@ public class Announcer {
             return;
 
         lastDuration += dt;
-        if (lastDuration > announcements.first().duration)
+        if (lastDuration > announcements.first().duration) {
             announcements.removeFirst();
+            lastDuration = 0;
+        }
     }
 
     public void draw(Renderer rnd) {
@@ -34,7 +36,7 @@ public class Announcer {
     }
 
     private void hasten() {
-        announcements.forEach(a -> a.duration = Math.min(a.duration, 0.5));
+        announcements.forEach(a -> a.duration = Math.min(a.duration, 1.0));
     }
 
     class Announcement {
