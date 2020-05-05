@@ -78,12 +78,12 @@ public class Game extends InputAdapter implements ApplicationListener {
         switch (state) {
             case START:
                 setState(GameState.DEALING_CARDS);
-                announcer.announce("Game start");
                 break;
             case DEALING_CARDS:
                 for(Player p : players)
                     dealCards(deck, p);
                 setState(GameState.STAGING_CARDS);
+                announcer.announce("Programming phase");
                 break;
             case STAGING_CARDS:
                 if (player1.committed)
@@ -113,6 +113,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void startTurn() {
         phaseIndex = 0;
+        announcer.announce("Round start");
     }
 
     private void endTurn() {
@@ -120,6 +121,7 @@ public class Game extends InputAdapter implements ApplicationListener {
             p.robot.clearRegisters();
             p.committed = false;
         }
+        announcer.announce("Round end");
     }
 
     private void autoCommitOtherPlayers() {
