@@ -28,9 +28,14 @@ Vi har testet flagg ved å:
  - Dette ble gjort flere ganger fra forskjellige vinkler. Hver gang funket det som det skulle og riktig melding ble printet ut i terminalen. 
  
 ## Belter
-Vi har testet belter ved å;
+Vi har testet belter ved å:
  - bevege spilleren to plasser til rett frem slik at den står på et belte.
  - se at den blir dyttet tilbake mot den veien pilene peker.
+ 
+## Rotasjonsbånd
+Vi har testet rotasjonsbånd ved å:
+ - bevege spilleren 6 plasser nedover på kartet og 3 plasser mot høyre slik at den står på et rotasjonsbånd.
+ - se at spilleren roterer med klokken 90 grader.
  
 
 ## Game.stageCard
