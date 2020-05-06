@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 
 public class Board {
+
     public interface RobotCallback {
         void call(Robot robot);
     }
@@ -18,7 +19,7 @@ public class Board {
     private Color[] robotColors;
     private Robot[][] robotGrid;
     private Tile[][] tileGrid;
-    private ArrayList<Vector2> belts, flags, laserCannons;
+    private ArrayList<Vector2> belts, flags, laserCannons, wrenches;
     private Vector2[] spawns = new Vector2[8];
 
     private int robotCount;
@@ -36,6 +37,7 @@ public class Board {
         belts = new ArrayList<>();
         flags = new ArrayList<>();
         laserCannons = new ArrayList<>();
+        wrenches = new ArrayList<>();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Vector2 pos = new Vector2(x, y);
@@ -46,9 +48,13 @@ public class Board {
                         break;
                     case flag:
                         flags.add(pos);
+                        wrenches.add(pos);
                         break;
                     case laserWall:
                         laserCannons.add(pos);
+                        break;
+                    case wrench:
+                        wrenches.add(pos);
                         break;
                     case spawn:
                         spawns[tile.level] = pos;
@@ -81,8 +87,8 @@ public class Board {
     }
 
     public void resetRobotPosition(Robot robot) {
-        int x = (int) robot.startPos.x;
-        int y = (int) robot.startPos.y;
+        int x = (int) robot.backupPos.x;
+        int y = (int) robot.backupPos.y;
 
         // may reset on top of another robot
         // current workaround is to push the occupying robot away
@@ -180,6 +186,15 @@ public class Board {
             move(ma.x, ma.y, ma.dx, ma.dy);
     }
 
+    public void moveBackup() {
+        for (Vector2 pos: wrenches){
+            Robot robot = getRobot(pos);
+            if (robot == null)
+                continue;
+            robot.backupPos = pos;
+        }
+    }
+
     public void registerFlags() {
         for (Vector2 pos : flags) {
             Robot robot = getRobot(pos);
@@ -195,6 +210,7 @@ public class Board {
             }
         }
     }
+
 
     // TODO: robot lasers
     public void fireLasers() {

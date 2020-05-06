@@ -11,11 +11,11 @@ public class Robot {
     public static final int REGISTER_SIZE = 5;
 
     public final String name;
-    public final Vector2 startPos;
     public final Color color;
 
     public ArrayList<Card> registers = new ArrayList<>();
     public Vector2 direction;
+    public Vector2 backupPos;
     public int nextFlag;
 
     private int lives;
@@ -23,7 +23,7 @@ public class Robot {
 
     public Robot(String name, Vector2 startPos, Color color) {
         this.name = name;
-        this.startPos = new Vector2(startPos);
+        this.backupPos = new Vector2(startPos);
         this.color = color;
         direction = new Vector2(1, 0);
         reset();
