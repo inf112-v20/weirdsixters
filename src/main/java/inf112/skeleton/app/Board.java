@@ -12,7 +12,7 @@ public class Board {
 
     public final int width, height, size;
 
-    public RobotCallback onRobotKilled, onRobotFlag;
+    public RobotCallback onRobotFlag;
     public ArrayList<LaserRay> laserRays = new ArrayList<>();
 
     private Color[] robotColors;
@@ -104,11 +104,9 @@ public class Board {
         robotGrid[y][x] = robot;
     }
 
-    private void killRobot(Robot robot) {
-        robot.kill();
+    public void respawnRobot(Robot robot) {
+        robot.respawn();
         resetRobotPosition(robot);
-        if (onRobotKilled != null)
-            onRobotKilled.call(robot);
     }
 
     public Robot getRobot(int x, int y) {
@@ -238,7 +236,7 @@ public class Board {
             // hitting robots
             Robot robot = getRobot(end);
             if (robot != null) {
-                robot.dealDamage();
+                robot.hit();
                 break;
             }
 
@@ -270,7 +268,7 @@ public class Board {
             return;
         robotGrid[y1][x1] = null;
         if (!isInside(x2, y2) || getTile(x2, y2).kind == TileKind.hole) {
-            killRobot(robot);
+            robot.kill();
             return;
         }
         robotGrid[y2][x2] = robot;
