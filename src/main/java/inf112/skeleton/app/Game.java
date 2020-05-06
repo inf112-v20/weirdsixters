@@ -47,7 +47,6 @@ public class Game extends InputAdapter implements ApplicationListener {
         renderer = Renderer.create(width, height, map);
 
         board = new Board(tileGrid);
-        board.onRobotKilled = robot -> announcer.announce(robot.name + " died");
         board.onRobotFlag = robot -> announcer.announce(robot.name + " got a flag!");
 
         deck = new Deck(Card.programCards);
@@ -108,7 +107,7 @@ public class Game extends InputAdapter implements ApplicationListener {
                         announcer.announce("AI won, you lost!");
                     break;
                 }
-                if (player1.robot.isDead()) {
+                if (player1.robot.getLives() <= 0) {
                     setState(GameState.GAME_OVER);
                     announcer.announce("You lost!");
                 } else if (phaseIndex >= PHASE_COUNT) {
@@ -183,6 +182,16 @@ public class Game extends InputAdapter implements ApplicationListener {
         rotateGears();
         board.fireLasers();
         board.registerFlags();
+        killDeadRobots();
+    }
+
+    private void killDeadRobots() {
+        players.forEach(p -> {
+            if (p.robot.getHealth() <= 0) {
+                board.respawnRobot(p.robot);
+                announcer.announce(p.robot.name + " died");
+            }
+        });
     }
 
     private void delay() {
@@ -257,9 +266,6 @@ public class Game extends InputAdapter implements ApplicationListener {
 
             // commit staged cards
             case Input.Keys.ENTER: commitCards(player1);
-
-            // deal damage (for debugging)
-            case Input.Keys.G: robot.dealDamage(); break;
 
             // inject movement cards (for debugging)
             case Input.Keys.W: robot.addCard(new Card(CardKind.FORWARD, 1, 0)); break;
