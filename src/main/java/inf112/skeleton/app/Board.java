@@ -84,10 +84,15 @@ public class Board {
         int x = (int) robot.startPos.x;
         int y = (int) robot.startPos.y;
 
+        // remove from old pos
+        Vector2 lastPos = getRobotPosition(robot);
+        if (lastPos != null)
+            robotGrid[(int)lastPos.y][(int)lastPos.x] = null;
+
         // may reset on top of another robot
         // current workaround is to push the occupying robot away
         Robot other = robotGrid[y][x];
-        if (other != null) {
+        if (other != null && other != robot) {
             for (Direction direction : Direction.values()) {
                 Vector2 pos = new Vector2(x, y);
                 Vector2 dir = direction.toVector2();
