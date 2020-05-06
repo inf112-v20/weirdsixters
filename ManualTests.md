@@ -29,8 +29,9 @@ Vi har testet flagg ved å:
  
 ## Belter
 Vi har testet belter ved å;
- - bevege spilleren to plasser til høyre slik at den står på et belte.
- - se at den beveger seg der pilene peker med omtrent ett sekunds mellomrom mellom hver bevegelse.
+ - bevege spilleren to plasser til rett frem slik at den står på et belte.
+ - se at den blir dyttet tilbake mot den veien pilene peker.
+ 
 
 ## Game.stageCard
 Vi testet stageCard() ved å:
