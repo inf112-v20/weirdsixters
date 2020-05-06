@@ -14,7 +14,7 @@ Gjennom denne iterasjonen satte vi oss et mål om å ha et ferdigstilt spill. Vi
 
 Vi har skrevet brukerhistorier, akseptansekriterier og arbeidsoppgaver i issues der det blir relevant.
 
-MVP forblir ca slik som vi skrev i  under høynivåkrav. Gjennom hele prosjektet så har MVP holdt seg mer eller mindre uendret og hvis vi endrer MVP så er det hovedsaklig for å  ta bort funksjonalitet som vi har nedprioritert i vår versjon av spillet.
+MVP forblir ca slik som vi skrev i  under høynivåkrav. Gjennom hele prosjektet så har MVP holdt seg mer eller mindre uendret, men vi har valgt å ta bort kort-prioritet og at selve robotene skyter laser. Dette er fordi etter vår mening er spillet ganske kaotisk på grunn av måten vi viser hva som skjer på, og det å legge til flere lasere vil bare gjøre spillet mer kaotisk.
 
 Vi har dokumentert våre bugs i README filen.
 
