@@ -181,6 +181,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         board.updateBelts();
         rotateGears();
         board.fireLasers();
+        board.moveBackup();
         board.registerFlags();
         killDeadRobots();
     }
