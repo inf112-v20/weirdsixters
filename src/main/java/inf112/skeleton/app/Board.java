@@ -13,7 +13,7 @@ public class Board {
 
     public final int width, height, size;
 
-    public RobotCallback onRobotKilled, onRobotFlag;
+    public RobotCallback onRobotFlag;
     public ArrayList<LaserRay> laserRays = new ArrayList<>();
 
     private Color[] robotColors;
@@ -90,10 +90,15 @@ public class Board {
         int x = (int) robot.backupPos.x;
         int y = (int) robot.backupPos.y;
 
+        // remove from old pos
+        Vector2 lastPos = getRobotPosition(robot);
+        if (lastPos != null)
+            robotGrid[(int)lastPos.y][(int)lastPos.x] = null;
+
         // may reset on top of another robot
         // current workaround is to push the occupying robot away
         Robot other = robotGrid[y][x];
-        if (other != null) {
+        if (other != null && other != robot) {
             for (Direction direction : Direction.values()) {
                 Vector2 pos = new Vector2(x, y);
                 Vector2 dir = direction.toVector2();
@@ -105,11 +110,9 @@ public class Board {
         robotGrid[y][x] = robot;
     }
 
-    private void killRobot(Robot robot) {
-        robot.kill();
+    public void respawnRobot(Robot robot) {
+        robot.respawn();
         resetRobotPosition(robot);
-        if (onRobotKilled != null)
-            onRobotKilled.call(robot);
     }
 
     public Robot getRobot(int x, int y) {
@@ -249,7 +252,7 @@ public class Board {
             // hitting robots
             Robot robot = getRobot(end);
             if (robot != null) {
-                robot.dealDamage();
+                robot.hit();
                 break;
             }
 
@@ -281,7 +284,7 @@ public class Board {
             return;
         robotGrid[y1][x1] = null;
         if (!isInside(x2, y2) || getTile(x2, y2).kind == TileKind.hole) {
-            killRobot(robot);
+            robot.kill();
             return;
         }
         robotGrid[y2][x2] = robot;

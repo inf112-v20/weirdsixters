@@ -30,30 +30,37 @@ public class Robot {
     }
 
     public void reset() {
+        registers.clear();
+        direction.setAngle(0);
         nextFlag = 1;
         lives = LIVES;
-        resetHealth();
+        health = HEALTH;
+    }
+
+    public void respawn() {
+        int nextLives = --lives;
+        reset();
+        lives = nextLives;
+    }
+
+    public void hit() {
+        health--;
     }
 
     public void kill() {
-        registers.clear();
-        direction.setAngle(0);
-        lives--;
-        resetHealth();
-    }
-
-    public void dealDamage(){
-        assert(health > 0);
-        if (--health == 0)
-            kill();
+        health = 0;
     }
 
     public boolean hasWon(){
         return nextFlag > 4;
     }
 
-    public boolean isDead(){
-        return lives < 1;
+    public int getHealth() {
+        return health;
+    }
+
+    public int getLives() {
+        return lives;
     }
 
     /**
@@ -90,14 +97,5 @@ public class Robot {
 
     public Card removeCard(int index) {
         return registers.remove(index);
-    }
-
-    public int getLives() {
-        assert this.lives >= 0;
-        return this.lives;
-    }
-
-    private void resetHealth() {
-        health = HEALTH;
     }
 }
