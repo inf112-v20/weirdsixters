@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 
@@ -22,53 +23,66 @@ public class Renderer {
     private final Vector2 tileSize;
     private final Vector2 mapSize;
 
+    private float fontSize;
+    private Vector2 screenSize;
     private OrthogonalTiledMapRenderer tilemapRenderer;
     private SpriteBatch spriteBatch;
-    private BitmapFont font;
     private Texture robotTexture;
     private Texture cardTexture;
     private ShapeRenderer sr;
+
     private ArrayList<Line> lines = new ArrayList<>();
     private ArrayList<TileSprite> tileSprites = new ArrayList<>();
+    private SpriteBatch screenBatch = new SpriteBatch();
+    private BitmapFont font = new BitmapFont();
+    private OrthographicCamera screenCamera = new OrthographicCamera();
+    private ArrayList<TextCmd> textCmds = new ArrayList<>();
 
     // private as it should only be called from @create
-    private Renderer(TiledMap map) {
+    private Renderer(int width, int height, TiledMap map) {
+        onWindowResized(width, height);
+
         TiledMapTileLayer firstLayer = (TiledMapTileLayer) map.getLayers().get(0);
         tileSize = getLayerTileSize(firstLayer);
         mapSize = getLayerSize(firstLayer);
         float pixelsPerTile = 1 / tileSize.x;
 
-        OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false, mapSize.x, mapSize.y);
-        camera.position.x = mapSize.x / 2;
-        {
-            //offset camera to make space for card slots
-            camera.viewportHeight = mapSize.y+4;
-            camera.viewportWidth = mapSize.x+4;
-            camera.position.set(new Vector3(mapSize.x/2+2, mapSize.y/3, 0));
-        }
-        camera.update();
+        OrthographicCamera tileCamera = new OrthographicCamera();
+        tileCamera.setToOrtho(false, mapSize.x, mapSize.y);
+        tileCamera.position.x = mapSize.x / 2;
+
+        //offset camera to make space for card slots
+        tileCamera.viewportHeight = mapSize.y+4;
+        tileCamera.viewportWidth = mapSize.x+4;
+        tileCamera.position.set(new Vector3(mapSize.x/2+2, mapSize.y/3, 0));
+
+        tileCamera.update();
 
         tilemapRenderer = new OrthogonalTiledMapRenderer(map, pixelsPerTile);
-        tilemapRenderer.setView(camera);
+        tilemapRenderer.setView(tileCamera);
 
         spriteBatch = new SpriteBatch();
-        spriteBatch.setProjectionMatrix(camera.combined);
-
-        font = new BitmapFont();
-        font.setColor(Color.RED);
+        spriteBatch.setProjectionMatrix(tileCamera.combined);
 
         robotTexture = new Texture("player.png");
         cardTexture = new Texture("cards.png");
 
         //Shape renderer
         sr = new ShapeRenderer();
-        sr.setProjectionMatrix(camera.combined);
+        sr.setProjectionMatrix(tileCamera.combined);
+    }
+
+    public void onWindowResized(int width, int height) {
+        screenSize = new Vector2(width, height);
+        screenCamera.setToOrtho(false, width, height);
+        screenBatch.setProjectionMatrix(screenCamera.combined);
+        fontSize = Linear.min(screenSize) * 0.003f;
+        font.getData().setScale(fontSize);
     }
 
     // need this for a matching pair of @create and @dispose
-    public static Renderer create(TiledMap map) {
-        return new Renderer(map);
+    public static Renderer create(int width, int height, TiledMap map) {
+        return new Renderer(width, height, map);
     }
 
     // need this to "destruct" libGDX stuff
@@ -78,6 +92,11 @@ public class Renderer {
     }
 
     // region public draw/render methods
+
+    public void drawAnnouncement(String text, Color color) {
+        Vector2 pos = new Vector2(0,0);
+        textCmds.add(new TextCmd(text, pos, color));
+    }
 
     public void drawCard(Card card, int row, int column) {
         Vector2 texIndex = cardTextureIndex(card);
@@ -108,6 +127,7 @@ public class Renderer {
         tilemapRenderer.render();
         renderSprites();
         renderLines();
+        renderTexts();
         clearQueues();
     }
 
@@ -155,6 +175,18 @@ public class Renderer {
             spriteBatch.draw(tex, x, y, 0.5f, 0.5f, 1, 1, 1, 1, angle);
         }
         spriteBatch.end();
+    }
+
+    private void renderTexts() {
+        screenBatch.begin();
+        for (TextCmd cmd : textCmds) {
+            font.setColor(cmd.color);
+            float x = cmd.pos.x;
+            float y = cmd.pos.y + fontSize * 14; // with magic factor that just works
+            font.draw(screenBatch, cmd.text, x, y, 0, Align.bottomLeft, false);
+        }
+        textCmds.clear();
+        screenBatch.end();
     }
 
     private void clearQueues() {
@@ -234,6 +266,18 @@ public class Renderer {
             this.subTexture = subTexture;
             this.coord = position;
             this.rotation = rotation;
+            this.color = color;
+        }
+    }
+
+    class TextCmd {
+        final String text;
+        final Vector2 pos;
+        final Color color;
+
+        TextCmd(String text, Vector2 pos, Color color) {
+            this.text = text;
+            this.pos = pos;
             this.color = color;
         }
     }

@@ -118,7 +118,7 @@ public class TileImporter {
             new Tile(TileKind.belt, Direction.RIGHT, false),
             new Tile(TileKind.gear, null, 90, 0),
             new Tile(TileKind.gear, null, -90, 0),
-            new Tile(TileKind.flag, null, 0, 1),
+            new Tile(TileKind.flag, 0),
             new Tile(TileKind.empty),
 
             // 8th row
@@ -129,7 +129,7 @@ public class TileImporter {
             new Tile(TileKind.belt, Direction.LEFT, false),
             new Tile(TileKind.belt, Direction.RIGHT, false),
             new Tile(TileKind.belt, Direction.DOWN, false),
-            new Tile(TileKind.flag, 2),
+            new Tile(TileKind.flag, 1),
             new Tile(TileKind.empty),
 
             // 9th row
@@ -139,7 +139,7 @@ public class TileImporter {
             new Tile(TileKind.belt, Direction.LEFT, false),
             new Tile(TileKind.belt, Direction.UP, false),
             new Tile(TileKind.belt, Direction.LEFT, false),
-            new Tile(TileKind.flag, 3),
+            new Tile(TileKind.flag, 2),
             new Tile(TileKind.empty),
 
             // 10th row
@@ -149,7 +149,7 @@ public class TileImporter {
             new Tile(TileKind.belt, Direction.LEFT, true),
             new Tile(TileKind.belt, Direction.UP, true),
             new Tile(TileKind.belt, Direction.RIGHT, true),
-            new Tile(TileKind.flag, 4),
+            new Tile(TileKind.flag, 3),
             new Tile(TileKind.empty),
 
             // 11th row

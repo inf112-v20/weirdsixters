@@ -14,11 +14,12 @@ import java.util.ArrayList;
 import static java.lang.Thread.sleep;
 
 enum GameState {
-    WAITING_FOR_PLAYERS_TO_JOIN,
+    START,
     DEALING_CARDS,
     STAGING_CARDS,
     COMMITTED,
     TURN,
+    GAME_OVER,
 }
 
 public class Game extends InputAdapter implements ApplicationListener {
@@ -31,24 +32,31 @@ public class Game extends InputAdapter implements ApplicationListener {
     private ArrayList<Player> players = new ArrayList<>();
     private GameState state;
     private int phaseIndex;
+    private Announcer announcer = new Announcer();
 
     @Override
     public void create() {
         Gdx.input.setInputProcessor(this);
 
+        int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
+
         TiledMap map = new TmxMapLoader().load("Board.tmx");
         TiledMapTileLayer objLayer = (TiledMapTileLayer)map.getLayers().get("Tiles");
         Tile[][] tileGrid = TileImporter.importTiledMapTileLayer(objLayer);
-        renderer = Renderer.create(map);
+        renderer = Renderer.create(width, height, map);
 
         board = new Board(tileGrid);
+        board.onRobotKilled = robot -> announcer.announce(robot.name + " died");
+        board.onRobotFlag = robot -> announcer.announce(robot.name + " got a flag!");
+
         deck = new Deck(Card.programCards);
 
         player1 = addPlayer();
-        for (int i = 1; i < 8; i++)
+        for (int i = 1; i < 4; i++)
             addPlayer();
 
-        state = GameState.WAITING_FOR_PLAYERS_TO_JOIN;
+        state = GameState.START;
     }
 
     @Override
@@ -58,22 +66,26 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private Player addPlayer() {
         int number = players.size() + 1;
-        Robot robot = board.addRobot();
+        Robot robot = board.addRobot("Player " + number);
         Player player = new Player(number, robot);
         players.add(player);
         return player;
     }
 
     private void update() {
+        double time = getTime();
+        announcer.update(time);
+
         switch (state) {
-            case WAITING_FOR_PLAYERS_TO_JOIN:
-                if (players.size() > 1)
-                    setState(GameState.DEALING_CARDS);
+            case START:
+                resetGame();
+                setState(GameState.DEALING_CARDS);
                 break;
             case DEALING_CARDS:
                 for(Player p : players)
                     dealCards(deck, p);
                 setState(GameState.STAGING_CARDS);
+                announcer.announce("Programming phase");
                 break;
             case STAGING_CARDS:
                 if (player1.committed)
@@ -87,18 +99,55 @@ public class Game extends InputAdapter implements ApplicationListener {
                 }
                 break;
             case TURN:
-                if (phaseIndex >= PHASE_COUNT) {
+                Player winner = getWinner();
+                if (winner != null) {
+                    setState(GameState.GAME_OVER);
+                    if (winner == player1)
+                        announcer.announce("You won!");
+                    else
+                        announcer.announce("AI won, you lost!");
+                    break;
+                }
+                if (player1.robot.isDead()) {
+                    setState(GameState.GAME_OVER);
+                    announcer.announce("You lost!");
+                } else if (phaseIndex >= PHASE_COUNT) {
                     endTurn();
                     setState(GameState.DEALING_CARDS);
                 } else {
                     doPhase(phaseIndex++);
                 }
                 break;
+            case GAME_OVER:
+                delay();
+                setState(GameState.START);
+                break;
         }
+    }
+
+    // kill and reset any robots
+    private void resetGame() {
+        players.forEach(p -> {
+            board.resetRobotPosition(p.robot);
+            p.robot.reset();
+        });
+    }
+
+    private Player getWinner() {
+        for (Player p : players) {
+            if (p.robot.hasWon())
+                return p;
+        }
+        return null;
+    }
+
+    private double getTime() {
+        return System.currentTimeMillis() / 1000.0;
     }
 
     private void startTurn() {
         phaseIndex = 0;
+        announcer.announce("Round start");
     }
 
     private void endTurn() {
@@ -106,6 +155,7 @@ public class Game extends InputAdapter implements ApplicationListener {
             p.robot.clearRegisters();
             p.committed = false;
         }
+        announcer.announce("Round end");
     }
 
     private void autoCommitOtherPlayers() {
@@ -125,10 +175,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void doPhase(int index) {
         System.out.println("Phase " + (index + 1));
-        try {
-            sleep(1000);
-        } catch (InterruptedException e) {
-        }
+        delay();
 
         // TODO: revealCards();
         executeMovementCards(index);
@@ -136,6 +183,13 @@ public class Game extends InputAdapter implements ApplicationListener {
         rotateGears();
         board.fireLasers();
         board.registerFlags();
+    }
+
+    private void delay() {
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+        }
     }
 
     private void executeMovementCards(int index) {
@@ -165,12 +219,15 @@ public class Game extends InputAdapter implements ApplicationListener {
         for (int i = 0; i < player1.cards.size(); i++)
             renderer.drawCard(player1.cards.get(i), 1, i);
 
+        announcer.draw(renderer);
+
         board.draw(renderer);
         renderer.render();
     }
 
     @Override
     public void resize(int width, int height) {
+        renderer.onWindowResized(width, height);
     }
 
     @Override

@@ -6,8 +6,13 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 
 public class Board {
+    public interface RobotCallback {
+        void call(Robot robot);
+    }
+
     public final int width, height, size;
 
+    public RobotCallback onRobotKilled, onRobotFlag;
     public ArrayList<LaserRay> laserRays = new ArrayList<>();
 
     private Color[] robotColors;
@@ -56,19 +61,49 @@ public class Board {
                 Color.WHITE, Color.PINK, Color.PURPLE, Color.FOREST};
     }
 
-    public Robot addRobot() {
+    public Robot addRobot(int x, int y) {
+        return addRobot("anon", x, y);
+    }
+
+    public Robot addRobot(String name) {
         Vector2 pos = spawns[robotCount];
         int x = (int) pos.x;
         int y = (int) pos.y;
-        return addRobot(x, y);
+        return addRobot(name, x, y);
     }
 
-    public Robot addRobot(int x, int y) {
-        Robot robot = new Robot(new Vector2(x, y), robotColors[robotCount]);
+    public Robot addRobot(String name, int x, int y) {
+        Robot robot = new Robot(name, new Vector2(x, y), robotColors[robotCount]);
         assert (robotGrid[y][x] == null);
         robotGrid[y][x] = robot;
         robotCount++;
         return robot;
+    }
+
+    public void resetRobotPosition(Robot robot) {
+        int x = (int) robot.startPos.x;
+        int y = (int) robot.startPos.y;
+
+        // may reset on top of another robot
+        // current workaround is to push the occupying robot away
+        Robot other = robotGrid[y][x];
+        if (other != null) {
+            for (Direction direction : Direction.values()) {
+                Vector2 pos = new Vector2(x, y);
+                Vector2 dir = direction.toVector2();
+                if (move(pos, dir))
+                    break;
+            }
+        }
+
+        robotGrid[y][x] = robot;
+    }
+
+    private void killRobot(Robot robot) {
+        robot.kill();
+        resetRobotPosition(robot);
+        if (onRobotKilled != null)
+            onRobotKilled.call(robot);
     }
 
     public Robot getRobot(int x, int y) {
@@ -122,6 +157,14 @@ public class Board {
         return true;
     }
 
+    public boolean move(Vector2 pos, Vector2 dir) {
+        int px = (int)pos.x;
+        int py = (int)pos.y;
+        int dx = (int)dir.x;
+        int dy = (int)dir.y;
+        return move(px, py, dx, dy);
+    }
+
     public void updateBelts() {
         // move actions must be queued to avoid them affecting each other
         ArrayList<MoveAction> moves = new ArrayList<>();
@@ -145,14 +188,11 @@ public class Board {
             Tile tile = getTile(pos);
             assert (tile.kind == TileKind.flag);
             int flag = tile.level + 1;
-            if (flag != robot.nextFlag)
-                return;
-            robot.nextFlag++;
-            System.out.println("You've landed on flag " + flag);
-            if (robot.nextFlag == 5)
-                System.out.println("You've won!");
-            else
-                System.out.println("The next flag you need is " + robot.nextFlag);
+            if (flag == robot.nextFlag) {
+                robot.nextFlag++;
+                if (onRobotFlag != null)
+                    onRobotFlag.call(robot);
+            }
         }
     }
 
@@ -225,19 +265,10 @@ public class Board {
             return;
         robotGrid[y1][x1] = null;
         if (!isInside(x2, y2) || getTile(x2, y2).kind == TileKind.hole) {
-            resetRobot(robot);
+            killRobot(robot);
             return;
         }
         robotGrid[y2][x2] = robot;
-    }
-
-    // FIXME, doesn't handle being reset on top of another robot
-    private void resetRobot(Robot robot) {
-        robot.kill();
-        int x = (int) robot.startPos.x;
-        int y = (int) robot.startPos.y;
-        assert (robotGrid[y][x] == null);
-        robotGrid[y][x] = robot;
     }
 
     private boolean isInside(int x, int y) {
