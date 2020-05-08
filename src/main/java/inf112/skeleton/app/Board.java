@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Board {
 
@@ -195,6 +196,7 @@ public class Board {
             if (robot == null)
                 continue;
             robot.backupPos = pos;
+            robot.heal();
         }
     }
 
@@ -213,7 +215,6 @@ public class Board {
             }
         }
     }
-
 
     // TODO: robot lasers
     public void fireLasers() {
