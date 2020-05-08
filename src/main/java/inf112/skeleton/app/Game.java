@@ -152,7 +152,6 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void endTurn() {
         for (Player p : players) {
             p.robot.clearRegisters();
-            p.robot.poweredDown = false;
             p.committed = false;
         }
         announcer.announce("Round end");
@@ -205,11 +204,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void executeMovementCards(int index) {
         for (Player p : players) {
-            if (p == player1) {
-                if (!p.robot.poweredDown) executeCard(p.robot, p.robot.getCard(index));
-                else p.robot.setHealth(9);
-            }
-            else executeCard(p.robot, p.robot.getCard(index));
+            executeCard(p.robot, p.robot.getCard(index));
         }
     }
 
@@ -257,11 +252,6 @@ public class Game extends InputAdapter implements ApplicationListener {
     public boolean keyDown(int key) {
         if (player1.committed)
             return false;
-
-        if (key == Input.Keys.BACKSPACE) {
-            player1.robot.poweredDown = true;
-            player1.committed = true;
-        }
 
         // stage/unstage card
         if (key >= Input.Keys.NUM_1 && key <= Input.Keys.NUM_9) {

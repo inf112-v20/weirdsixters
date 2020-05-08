@@ -17,7 +17,6 @@ public class Robot {
     public Vector2 direction;
     public Vector2 backupPos;
     public int nextFlag;
-    public boolean poweredDown;
 
     private int lives;
     private int health;
@@ -27,7 +26,6 @@ public class Robot {
         this.backupPos = new Vector2(startPos);
         this.color = color;
         direction = new Vector2(1, 0);
-        poweredDown = false;
         reset();
     }
 
@@ -47,7 +45,6 @@ public class Robot {
 
     public void hit() {
         health--;
-        System.out.println("Health: " + health);
     }
 
     public void kill() {
@@ -61,8 +58,6 @@ public class Robot {
     public void heal() {
         health++;
     }
-
-    public void setHealth(int newHealth) { this.health = newHealth; }
 
     public int getHealth() {
         return health;
