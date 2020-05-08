@@ -4,7 +4,7 @@
 Bruk WASD for å velge faste bevegelseskort. W er move 1 forward, A er turn left, S er move 1 backwards, D er turn right. Vi ser at roboten kolliderer med vegger og at den beveger seg der den skal. I tillegg ser vi at brettet ser ut slik som vi forventet og at kollisjonene tilsvarer med de synlige veggene.
 
 ## Game.executeCard
-Vi har testet executeCard() fra game.java ved å velge fem kort med talltastene fra 1-9 og så trykke enter. Vi ser at det funker når roboten gjør slik som kortene sier. Dette testet at vår metode executeCard() fungerer med forskjellige typer kort og at movePlayer flytter riktig i forhold til tilgitte argumenter.
+Vi har testet executeCard() fra game.java ved å velge fem kort med talltastene fra 1-9 og så trykke enter. Vi ser at det funker når roboten gjør slik som kortene sier. Dette testet at vår metode executeCard() fungerer med forskjellige typer kort og at roboten flytter seg riktig.
  
  ## Lose condition
  Vi har testet lose condition ved å;
