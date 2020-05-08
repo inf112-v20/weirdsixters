@@ -11,7 +11,7 @@
 
 - Currently throws "WARNING: An illegal reflective access operation has occurred",
   when the java version used is >8. This has no effect on Windows machines, but you may have to use Java 8 on Linux.
-- Winning/losing may not reset the game properly.
+- Winning/losing may not reset the game properly. if you want to play to consecutive games, we suggest you close the window and start again.
 
 ## Testing
 
