@@ -55,6 +55,10 @@ public class Robot {
         return nextFlag > 4;
     }
 
+    public void heal() {
+        health++;
+    }
+
     public int getHealth() {
         return health;
     }
