@@ -34,7 +34,7 @@ public class Robot {
         direction.setAngle(0);
         nextFlag = 1;
         lives = LIVES;
-        health = HEALTH;
+        restoreHealth();
     }
 
     public void respawn() {
@@ -43,8 +43,11 @@ public class Robot {
         lives = nextLives;
     }
 
+    public boolean isPoweredDown() { return registers.isEmpty(); }
+
     public void hit() {
         health--;
+        System.out.println("Health: " + health);
     }
 
     public void kill() {
@@ -58,6 +61,8 @@ public class Robot {
     public void heal() {
         health++;
     }
+
+    public void restoreHealth() { health = HEALTH; }
 
     public int getHealth() {
         return health;
@@ -92,7 +97,7 @@ public class Robot {
      * @return true if the robot has been fully programmed.
      */
     public boolean isReady() {
-        return registers.size() == REGISTER_SIZE;
+        return (registers.size() == REGISTER_SIZE) || isPoweredDown();
     }
 
     public int cardCount() {
