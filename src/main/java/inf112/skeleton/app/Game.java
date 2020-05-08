@@ -205,8 +205,11 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void executeMovementCards(int index) {
         for (Player p : players) {
-            if (!p.robot.poweredDown) executeCard(p.robot, p.robot.getCard(index));
-            else p.robot.setHealth(9);
+            if (p == player1) {
+                if (!p.robot.poweredDown) executeCard(p.robot, p.robot.getCard(index));
+                else p.robot.setHealth(9);
+            }
+            else executeCard(p.robot, p.robot.getCard(index));
         }
     }
 
