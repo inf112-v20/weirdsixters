@@ -8,11 +8,9 @@ Vi har testet executeCard() fra game.java ved å velge fem kort med talltastene 
  
  ## Lose condition
  Vi har testet lose condition ved å;
- - Bevege roboten mot hullet ved hjelp av piltastene.
- - Forsikre oss om at roboten returnerer til gitt "startpoint" når den treffer hullet.
- - Gjøre det flere ganger, og i tillegg printe en melding når vi treffer hullet. Dette for å forsikre oss om at alt stemmer med tanke på at tile-typen stemmer.
- - Forsikre oss om at roboten faller tilbake til startposisjon om den prøver å gå ut av brettet.
- - Når man bruker moveCards som har mer en ett steg, så skal man ikke kunne gå gjennom hull, men falle i det.
+ - Bevege roboten mot hullet ved hjelp av kortene.
+ - Forsikre oss om at roboten returnerer til backup posisjonen når den dør. 
+ - Når man bruker movement cards som har mer en ett steg, så skal man ikke kunne gå gjennom hull, men falle i det.
  - Livene oppe til høyre skal reflektere hvor mange liv jeg har, ettersom jeg mister de.
 
 ## Playersprite rotates with player
