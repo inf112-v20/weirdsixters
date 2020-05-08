@@ -204,7 +204,10 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void executeMovementCards(int index) {
         for (Player p : players) {
-            executeCard(p.robot, p.robot.getCard(index));
+            if (p.robot.isPoweredDown()) {
+                p.robot.restoreHealth();
+            }
+            else executeCard(p.robot, p.robot.getCard(index));
         }
     }
 
@@ -266,7 +269,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         switch (key){
 
             // commit staged cards
-            case Input.Keys.ENTER: commitCards(player1);
+            case Input.Keys.ENTER: commitCards(player1); break;
 
             // inject movement cards (for debugging)
             case Input.Keys.W: robot.addCard(new Card(CardKind.FORWARD, 1, 0)); break;
@@ -282,6 +285,9 @@ public class Game extends InputAdapter implements ApplicationListener {
             return;
         player.committed = true;
         System.out.println("Player " + player.number + " committed!");
+        if (player.robot.isPoweredDown()) {
+            announcer.announce(player.robot.name + " Powered Down");
+        }
     }
 
     /**
